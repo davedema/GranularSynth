@@ -2,6 +2,9 @@
 
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="La Grana\Source\Audio">
+      <UniqueIdentifier>{ABC1CCE3-D0A0-033B-906C-E4FB9279A9C6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="La Grana\Source">
       <UniqueIdentifier>{CFCFDA4B-A09E-BD5E-EAD3-EE6E9EBF3D02}</UniqueIdentifier>
     </Filter>
@@ -466,6 +469,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Grain.cpp">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GrainCreator.cpp">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GrainWindow.cpp">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LFO.cpp">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Scheduler.cpp">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>La Grana\Source</Filter>
     </ClCompile>
@@ -2646,6 +2664,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Grain.h">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GrainCreator.h">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GrainWindow.h">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LFO.h">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Scheduler.h">
+      <Filter>La Grana\Source\Audio</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>La Grana\Source</Filter>
     </ClInclude>

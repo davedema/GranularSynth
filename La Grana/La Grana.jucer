@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="uDaQq6" name="La Grana" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="cZs3we" name="La Grana">
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
+      <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI"/>
+      <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
+        <FILE id="Y8xRvN" name="Grain.h" compile="0" resource="0" file="Source/Grain.h"/>
+        <FILE id="CP0Yio" name="GrainCreator.cpp" compile="1" resource="0"
+              file="Source/GrainCreator.cpp"/>
+        <FILE id="Wreu08" name="GrainCreator.h" compile="0" resource="0" file="Source/GrainCreator.h"/>
+        <FILE id="kMLGXn" name="GrainWindow.cpp" compile="1" resource="0" file="Source/GrainWindow.cpp"/>
+        <FILE id="OghkPc" name="GrainWindow.h" compile="0" resource="0" file="Source/GrainWindow.h"/>
+        <FILE id="b1KupQ" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
+        <FILE id="uFAB4g" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
+        <FILE id="g0Z1lQ" name="Scheduler.cpp" compile="1" resource="0" file="Source/Scheduler.cpp"/>
+        <FILE id="tOa08n" name="Scheduler.h" compile="0" resource="0" file="Source/Scheduler.h"/>
+      </GROUP>
       <FILE id="IaUD9G" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="douCxW" name="PluginProcessor.h" compile="0" resource="0"
@@ -55,4 +70,7 @@
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>
