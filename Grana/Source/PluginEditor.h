@@ -14,7 +14,9 @@
 //==============================================================================
 /**
 */
-class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
+class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, 
+                                     public juce::ChangeListener,
+                                     public juce::FileDragAndDropTarget
 {
 public:
     LaGranaAudioProcessorEditor (LaGranaAudioProcessor&);
@@ -51,6 +53,11 @@ private:
     void transportSourceChanged();
 
     void thumbnailChanged();
+
+   // DRAG AND DROP 
+    bool isInterestedInFileDrag(const StringArray& files) override;
+    void filesDropped(const StringArray& files, int x, int y) override;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };
