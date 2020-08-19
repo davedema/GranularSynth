@@ -181,16 +181,6 @@ void LaGranaAudioProcessor::setStateInformation (const void* data, int sizeInByt
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void LaGranaAudioProcessor::fileLoader(const juce::String& gpath)
-{
-    auto file = juce::File(gpath);
-    mFormatReader = mFormatManager.createReaderFor(file);
-
-    if (mFormatReader != nullptr) {
-        //mformatReader.read(actual_sample);
-    }
-}
-
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

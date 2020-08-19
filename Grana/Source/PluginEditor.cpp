@@ -88,21 +88,21 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
         {},
         "*.wav");                                        // [7]
 
-    if (chooser.browseForFileToOpen())                                          // [8]
+    if (chooser.browseForFileToOpen())
     {
-        auto file = chooser.getResult();                                        // [9]
-        auto* reader = formatManager.createReaderFor(file);                    // [10]
+        auto file = chooser.getResult();
+        auto* reader = formatManager.createReaderFor(file);
 
-        if (reader != nullptr)
-        {
-            std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true)); // [11]
-            transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);                                 // [12]                                                                           // [13]
-            thumbnail->setSource(new juce::FileInputSource(file));
-            readerSource.reset(newSource.release());                                                                    // [14]
-
-            
-        }
+        if (reader != nullptr) { loadWaveform(file, reader); }
     }
+}
+
+void LaGranaAudioProcessorEditor::loadWaveform(juce::File file, juce::AudioFormatReader* reader)
+{
+    std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));
+    transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);                                                                                                            // [13]
+    thumbnail->setSource(new juce::FileInputSource(file));
+    readerSource.reset(newSource.release());
 }
 
 void LaGranaAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
@@ -132,6 +132,17 @@ bool LaGranaAudioProcessorEditor::isInterestedInFileDrag(const juce::StringArray
 void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, int x, int y)
 {
     if (isInterestedInFileDrag(files)) {
-        audioProcessor.fileLoader(files[0]);
+        fileLoader(files[0]);
+    }
+}
+
+void LaGranaAudioProcessorEditor::fileLoader(const juce::String& gpath)
+{
+    auto file = juce::File(gpath);
+    auto* formatReader = formatManager.createReaderFor(file);
+
+    if (formatReader != nullptr) {
+        loadWaveform(file, formatReader);
+            //mformatReader.read(actual_sample);
     }
 }

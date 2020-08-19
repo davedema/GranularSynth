@@ -46,7 +46,7 @@ private:
 
     void loadBtnClicked();
 
-
+    void loadWaveform(juce::File file, juce::AudioFormatReader* reader);
 
     void transportSourceChanged();
 
@@ -55,6 +55,7 @@ private:
     // DRAG AND DROP 
     bool isInterestedInFileDrag(const juce::StringArray& files) override;
     void filesDropped(const juce::StringArray& files, int x, int y) override;
+    void fileLoader(const juce::String& gpath);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };
