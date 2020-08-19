@@ -54,14 +54,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-
-    AudioBuffer<float>& actual_sample
-    // DRAG&DROP
-    AudioFormatManager mFormatManager;
-    AudioFormatReader* mFormatReader{ nullptr };
-    void fileLoader(const String& gpath);
-
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)
-
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessor)
 };

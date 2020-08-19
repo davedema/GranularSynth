@@ -19,10 +19,13 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     loadBtn->onClick = [this] {loadBtnClicked();};
     loadBtn->setBounds(10, 10, 50, 25);
 
+
+
     thumbnailCache = new juce::AudioThumbnailCache(5);
     thumbnail = new  juce::AudioThumbnail(512, formatManager, *thumbnailCache);
 
     thumbnail->addChangeListener(this);
+
 
     setSize (400, 300);
 }
@@ -97,6 +100,7 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
             thumbnail->setSource(new juce::FileInputSource(file));
             readerSource.reset(newSource.release());                                                                    // [14]
 
+            
         }
     }
 }
@@ -115,20 +119,4 @@ void LaGranaAudioProcessorEditor::transportSourceChanged()
 void LaGranaAudioProcessorEditor::thumbnailChanged()
 {
     repaint();
-}
-
-
-// DRAG AND DROP
-bool LaGranaAudioProcessorEditor::isInterestedInFileDrag(const StringArray& files)
-{
-    if (files[0].contains('.wav') || files[0].contains('.mp3')) return true;
-
-    return false;
-}
-
-void LaGranaAudioProcessorEditor::filesDropped(const StringArray& files, int x, int y)
-{
-    if (isInterestedInFileDrag(files)) {
-        audioProcessor.fileLoader(files);
-    }
 }
