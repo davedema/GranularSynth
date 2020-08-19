@@ -8,4 +8,4 @@
   ==============================================================================
 */
 
-#pragma once
+enum class WindowType { hamm, hann, blackman, rect, gauss };

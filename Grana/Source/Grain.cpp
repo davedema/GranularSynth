@@ -9,3 +9,15 @@
 */
 
 #include "Grain.h"
+
+
+WindowType Grain::getWinType() const
+{
+    return winType;
+}
+
+void Grain::setWinType(WindowType winType)
+{
+    this->winType = winType;
+}
+
