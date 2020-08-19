@@ -24,5 +24,5 @@ public:
 
     Grain(WindowType type) : AudioBuffer() { winType = type; };
     WindowType getWinType() const;
-    void setWinType(WindowType winType);   
+    void setWinType(WindowType winType);
 };

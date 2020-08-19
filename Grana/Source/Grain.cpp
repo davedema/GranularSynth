@@ -20,4 +20,3 @@ void Grain::setWinType(WindowType winType)
 {
     this->winType = winType;
 }
-
