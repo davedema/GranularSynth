@@ -120,3 +120,18 @@ void LaGranaAudioProcessorEditor::thumbnailChanged()
 {
     repaint();
 }
+
+// DRAG AND DROP
+bool LaGranaAudioProcessorEditor::isInterestedInFileDrag(const juce::StringArray& files)
+{
+    if (files[0].contains(".wav") || files[0].contains(".mp3")) return true;
+
+    return false;
+}
+
+void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, int x, int y)
+{
+    if (isInterestedInFileDrag(files)) {
+        audioProcessor.fileLoader(files[0]);
+    }
+}

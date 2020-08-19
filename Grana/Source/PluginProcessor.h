@@ -53,7 +53,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //DRAG & DROP FUNCTION
+    void fileLoader(const juce::String& gpath);
+
 private:
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)
+
+    juce::AudioFormatManager mFormatManager;
+    juce::AudioFormatReader* mFormatReader{ nullptr };
+
 };
+ 
