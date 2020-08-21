@@ -7,6 +7,8 @@
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
       <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI"/>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="h3IyQX" name="FileLoader.cpp" compile="1" resource="0" file="Source/FileLoader.cpp"/>
+        <FILE id="KqUnco" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
         <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
         <FILE id="Y8xRvN" name="Grain.h" compile="0" resource="0" file="Source/Grain.h"/>
         <FILE id="CP0Yio" name="GrainCreator.cpp" compile="1" resource="0"

@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "FileLoader.h"
 
 //==============================================================================
 /**
@@ -32,12 +33,14 @@ private:
     LaGranaAudioProcessor& audioProcessor;
 
     juce::TextButton *loadBtn;
-    juce::AudioFormatManager formatManager;
-    juce::AudioTransportSource transportSource;
-    std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
+    juce::AudioFormatManager *formatManager;
+    juce::AudioTransportSource *transportSource;
 
     juce::AudioThumbnailCache* thumbnailCache;                  // [1]
     juce::AudioThumbnail* thumbnail;                            // [2]
+
+
+    FileLoader *loader;
 
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
@@ -46,16 +49,13 @@ private:
 
     void loadBtnClicked();
 
-    void loadWaveform(juce::File file, juce::AudioFormatReader* reader);
-
-    void transportSourceChanged();
-
     void thumbnailChanged();
 
-    // DRAG AND DROP 
     bool isInterestedInFileDrag(const juce::StringArray& files) override;
     void filesDropped(const juce::StringArray& files, int x, int y) override;
-    void fileLoader(const juce::String& gpath);
+
+
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };

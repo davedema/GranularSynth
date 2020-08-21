@@ -12,17 +12,21 @@
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): AudioProcessorEditor (&p), audioProcessor (p){
 
-    formatManager.registerBasicFormats();
+    loader = FileLoader::getInstance();
+
+    formatManager = loader->getFormatManager();
+   // transportSource = loader->getTransportSource();
+    thumbnail = loader->getThumbnail();
+    thumbnailCache = loader->getThumbnailCache();
+
+
+    formatManager->registerBasicFormats();
     loadBtn = new juce::TextButton();
     addAndMakeVisible(loadBtn);
     loadBtn->setButtonText("Open...");
     loadBtn->onClick = [this] {loadBtnClicked();};
     loadBtn->setBounds(10, 10, 50, 25);
 
-
-
-    thumbnailCache = new juce::AudioThumbnailCache(5);
-    thumbnail = new  juce::AudioThumbnail(512, formatManager, *thumbnailCache);
 
     thumbnail->addChangeListener(this);
 
@@ -91,35 +95,25 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
     if (chooser.browseForFileToOpen())
     {
         auto file = chooser.getResult();
-        auto* reader = formatManager.createReaderFor(file);
+        auto* reader = formatManager->createReaderFor(file);
 
-        if (reader != nullptr) { loadWaveform(file, reader); }
+        if (reader != nullptr) { loader->loadWaveform(file); }
     }
 }
 
-void LaGranaAudioProcessorEditor::loadWaveform(juce::File file, juce::AudioFormatReader* reader)
-{
-    std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));
-    transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);                                                                                                            // [13]
-    thumbnail->setSource(new juce::FileInputSource(file));
-    readerSource.reset(newSource.release());
-}
 
 void LaGranaAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    if (source == &transportSource) transportSourceChanged();
+    //if (source == &transportSource) transportSourceChanged();
     if (source == thumbnail)       thumbnailChanged();
 }
 
-void LaGranaAudioProcessorEditor::transportSourceChanged()
-{
-    //changeState(transportSource.isPlaying() ? Playing : Stopped);
-}
 
 void LaGranaAudioProcessorEditor::thumbnailChanged()
 {
     repaint();
 }
+
 
 // DRAG AND DROP
 bool LaGranaAudioProcessorEditor::isInterestedInFileDrag(const juce::StringArray& files)
@@ -132,17 +126,6 @@ bool LaGranaAudioProcessorEditor::isInterestedInFileDrag(const juce::StringArray
 void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, int x, int y)
 {
     if (isInterestedInFileDrag(files)) {
-        fileLoader(files[0]);
-    }
-}
-
-void LaGranaAudioProcessorEditor::fileLoader(const juce::String& gpath)
-{
-    auto file = juce::File(gpath);
-    auto* formatReader = formatManager.createReaderFor(file);
-
-    if (formatReader != nullptr) {
-        loadWaveform(file, formatReader);
-            //mformatReader.read(actual_sample);
+        loader->loadFile(files[0]);
     }
 }
