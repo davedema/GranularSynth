@@ -1,15 +1,11 @@
 /*
   ==============================================================================
 
-    Scheduler.cpp
-    Created: 17 Aug 2020 11:50:43am
-    Author:  daveg
+    RectangularWindow.cpp
+    Created: 15 Sep 2020 2:51:48pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-#include "Scheduler.h"
-
-void Scheduler::synthetize()
-{
-}
+#include "RectangularWindow.h"

@@ -1,15 +1,11 @@
 /*
   ==============================================================================
 
-    Scheduler.cpp
-    Created: 17 Aug 2020 11:50:43am
-    Author:  daveg
+    MasterEnvelope.cpp
+    Created: 15 Sep 2020 2:53:43pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-#include "Scheduler.h"
-
-void Scheduler::synthetize()
-{
-}
+#include "MasterEnvelope.h"

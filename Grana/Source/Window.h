@@ -1,15 +1,23 @@
 /*
   ==============================================================================
 
-    Scheduler.cpp
-    Created: 17 Aug 2020 11:50:43am
-    Author:  daveg
+    Window.h
+    Created: 15 Sep 2020 2:49:49pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-#include "Scheduler.h"
+#pragma once
 
-void Scheduler::synthetize()
-{
-}
+class Window {
+
+
+private:
+
+
+
+public:
+
+   virtual float* synthetize() = 0;
+};

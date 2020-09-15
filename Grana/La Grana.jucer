@@ -7,6 +7,30 @@
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
       <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI"/>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="VfCygS" name="MasterEnvelope.cpp" compile="1" resource="0"
+              file="Source/MasterEnvelope.cpp"/>
+        <FILE id="dvTsPl" name="MasterEnvelope.h" compile="0" resource="0"
+              file="Source/MasterEnvelope.h"/>
+        <GROUP id="{4319CCE1-3102-FCFE-E6BD-FFD9D2354BE2}" name="Windows">
+          <FILE id="NbxT7x" name="GaussianWindow.cpp" compile="1" resource="0"
+                file="Source/GaussianWindow.cpp"/>
+          <FILE id="hSnwgF" name="RaisedCosineBellWindow.cpp" compile="1" resource="0"
+                file="Source/RaisedCosineBellWindow.cpp"/>
+          <FILE id="ZJlmvV" name="RaisedCosineBellWindow.h" compile="0" resource="0"
+                file="Source/RaisedCosineBellWindow.h"/>
+          <FILE id="qBsAwm" name="GaussianWindow.h" compile="0" resource="0"
+                file="Source/GaussianWindow.h"/>
+          <FILE id="XmWBb2" name="RectangularWindow.cpp" compile="1" resource="0"
+                file="Source/RectangularWindow.cpp"/>
+          <FILE id="GW7hmL" name="RectangularWindow.h" compile="0" resource="0"
+                file="Source/RectangularWindow.h"/>
+          <FILE id="BGKbzu" name="TrapezoidalWindow.cpp" compile="1" resource="0"
+                file="Source/TrapezoidalWindow.cpp"/>
+          <FILE id="KDlOzu" name="TrapezoidalWindow.h" compile="0" resource="0"
+                file="Source/TrapezoidalWindow.h"/>
+          <FILE id="Vr275Z" name="Window.cpp" compile="1" resource="0" file="Source/Window.cpp"/>
+          <FILE id="wQxMt8" name="Window.h" compile="0" resource="0" file="Source/Window.h"/>
+        </GROUP>
         <FILE id="h3IyQX" name="FileLoader.cpp" compile="1" resource="0" file="Source/FileLoader.cpp"/>
         <FILE id="KqUnco" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
         <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
@@ -15,6 +39,10 @@
               file="Source/GrainCreator.cpp"/>
         <FILE id="Wreu08" name="GrainCreator.h" compile="0" resource="0" file="Source/GrainCreator.h"/>
         <FILE id="kMLGXn" name="GrainWindow.cpp" compile="1" resource="0" file="Source/GrainWindow.cpp"/>
+        <FILE id="IfurWP" name="SequenceStrategy.cpp" compile="1" resource="0"
+              file="Source/SequenceStrategy.cpp"/>
+        <FILE id="dyO24f" name="SequenceStrategy.h" compile="0" resource="0"
+              file="Source/SequenceStrategy.h"/>
         <FILE id="OghkPc" name="GrainWindow.h" compile="0" resource="0" file="Source/GrainWindow.h"/>
         <FILE id="b1KupQ" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
         <FILE id="uFAB4g" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>

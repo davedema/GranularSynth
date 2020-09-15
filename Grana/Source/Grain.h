@@ -17,12 +17,17 @@ class Grain : public juce::AudioBuffer<int>{
 
 
 private:
+
     WindowType winType;
 
 
 public:
 
     Grain(WindowType type) : AudioBuffer() { winType = type; };
+
     WindowType getWinType() const;
     void setWinType(WindowType winType);
+
+    void activate();
+    void synthetize();
 };
