@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "FileLoader.h"
+#include "KnobSection.h"
 
 //==============================================================================
 /**
@@ -42,6 +43,8 @@ private:
 
     FileLoader *loader;
 
+    KnobSection* provaKnob;
+
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
 
@@ -53,7 +56,6 @@ private:
 
     bool isInterestedInFileDrag(const juce::StringArray& files) override;
     void filesDropped(const juce::StringArray& files, int x, int y) override;
-
 
 
 

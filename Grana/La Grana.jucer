@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uDaQq6" name="La Grana" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+<JUCERPROJECT id="uDaQq6" name="La Grana" projectType="audioplug" useAppConfig="1"
+              addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              includeBinaryInJuceHeader="1">
   <MAINGROUP id="cZs3we" name="La Grana">
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
-      <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI"/>
+      <GROUP id="{FB54BA8B-3FB5-7DF9-0AC6-A1B7809CEC26}" name="images">
+        <FILE id="knkXOu" name="BIGDADDY.png" compile="0" resource="1" file="images/BIGDADDY.png"/>
+        <FILE id="deU5Z5" name="Carbon.png" compile="0" resource="1" file="images/Carbon.png"/>
+        <FILE id="eqqFwv" name="Envelope.PNG" compile="0" resource="1" file="images/Envelope.PNG"/>
+        <FILE id="xecdu2" name="Filter.PNG" compile="0" resource="1" file="images/Filter.PNG"/>
+        <FILE id="u3C8F5" name="Matrix_Interface.PNG" compile="0" resource="1"
+              file="images/Matrix_Interface.PNG"/>
+        <FILE id="lwmLGJ" name="min_switch.png" compile="0" resource="1" file="images/min_switch.png"/>
+        <FILE id="PeNgT1" name="Oscillator_Interface.PNG" compile="0" resource="1"
+              file="images/Oscillator_Interface.PNG"/>
+        <FILE id="ZUoLyy" name="Scd_interface.PNG" compile="0" resource="1"
+              file="images/Scd_interface.PNG"/>
+      </GROUP>
+      <GROUP id="{EB544908-457C-4825-D5BF-E7DB0507A1E6}" name="fonts">
+        <FILE id="pkZfIV" name="Asgalt-Regular.ttf" compile="0" resource="1"
+              file="fonts/Asgalt-Regular.ttf"/>
+        <FILE id="Ou9bR8" name="Brotherline.ttf" compile="0" resource="1" file="fonts/Brotherline.ttf"/>
+        <FILE id="Cmi8Qh" name="LaksOner.ttf" compile="0" resource="1" file="fonts/LaksOner.ttf"/>
+        <FILE id="lwCHhW" name="neuropol.ttf" compile="0" resource="1" file="fonts/neuropol.ttf"/>
+        <FILE id="S9Y3DM" name="neuropolxrg.ttf" compile="0" resource="1" file="fonts/neuropolxrg.ttf"/>
+        <FILE id="HYDhTe" name="Quicksand_Bold.otf" compile="0" resource="1"
+              file="fonts/Quicksand_Bold.otf"/>
+        <FILE id="EmmrvQ" name="spaceage.ttf" compile="0" resource="1" file="fonts/spaceage.ttf"/>
+        <FILE id="EOQ28C" name="steelfish.ttf" compile="0" resource="1" file="fonts/steelfish.ttf"/>
+        <FILE id="xvwmen" name="UrbanBrushZone.ttf" compile="0" resource="1"
+              file="fonts/UrbanBrushZone.ttf"/>
+      </GROUP>
+      <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI">
+        <FILE id="M2pWGZ" name="KnobLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/KnobLookAndFeel.cpp"/>
+        <FILE id="KxeUyY" name="KnobLookAndFeel.h" compile="0" resource="0"
+              file="Source/KnobLookAndFeel.h"/>
+        <FILE id="VDCmMQ" name="KnobSection.cpp" compile="1" resource="0" file="Source/KnobSection.cpp"/>
+        <FILE id="s97rVh" name="KnobSection.h" compile="0" resource="0" file="Source/KnobSection.h"/>
+        <FILE id="Uko2e4" name="MyKnob.cpp" compile="1" resource="0" file="Source/MyKnob.cpp"/>
+        <FILE id="H7gU3I" name="MyKnob.h" compile="0" resource="0" file="Source/MyKnob.h"/>
+      </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
         <FILE id="VfCygS" name="MasterEnvelope.cpp" compile="1" resource="0"
               file="Source/MasterEnvelope.cpp"/>

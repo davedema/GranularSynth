@@ -12,6 +12,7 @@
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): AudioProcessorEditor (&p), audioProcessor (p){
 
+    setSize(800, 350);
     loader = FileLoader::getInstance();
 
     formatManager = loader->getFormatManager();
@@ -29,22 +30,25 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 
 
     thumbnail->addChangeListener(this);
+    provaKnob = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, 4);
+    provaKnob->setMyBounds();
+    addAndMakeVisible(provaKnob);
 
 
-    setSize (400, 300);
+
 }
 
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
-    delete thumbnailCache, thumbnail;
+    delete thumbnailCache, thumbnail, provaKnob;
 }
 
 //==============================================================================
 void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 {
 
-    juce::Rectangle<int> thumbnailBounds(40, 100, getWidth() - 20, getHeight() - 120);
+    juce::Rectangle<int> thumbnailBounds(40, 40, getWidth() - 80, getHeight() / 2); 
 
     if (thumbnail->getNumChannels() == 0)
         paintIfNoFileLoaded(g, thumbnailBounds);
