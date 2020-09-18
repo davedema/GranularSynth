@@ -9,6 +9,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+// define constant values for knobs
+#define GRAIN_MIN 0.2f //in Hz
+#define GRAIN_MAX 100.0f //in Hz
+
 //==============================================================================
 LaGranaAudioProcessor::LaGranaAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -19,9 +23,17 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    // constructors
+    treeState(*this, nullptr, Identifier ("CURRENT_STATE"),
+        {
+        std::make_unique<AudioParameterFloat>("grain", "Grain", GRAIN_MIN, GRAIN_MAX, 60.0f), // id, name, min,max, initial value
+        std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
+})
 #endif
-{
+{ 
+    grainParameter = treeState.getRawParameterValue("grain");
+    filePosParameter = treeState.getRawParameterValue("filepos");
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
@@ -173,12 +185,20 @@ void LaGranaAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto state = treeState.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void LaGranaAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(treeState.state.getType()))
+            treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
 //==============================================================================

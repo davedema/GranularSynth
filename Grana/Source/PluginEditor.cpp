@@ -10,11 +10,11 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): AudioProcessorEditor (&p), audioProcessor (p){
+LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
+    AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.treeState){
 
     setSize(800, 350);
     loader = FileLoader::getInstance();
-
     formatManager = loader->getFormatManager();
    // transportSource = loader->getTransportSource();
     thumbnail = loader->getThumbnail();
