@@ -53,12 +53,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    AudioProcessorValueTreeState* getValueTreeState();
+
+
+private:
+    std::atomic<float>* grainParameter = nullptr; //atomic allows different threads to operate on the instance
+    std::atomic<float>* filePosParameter = nullptr;
 
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
 
-private:
-    std::atomic<float>* grainParameter = nullptr;
-    std::atomic<float>* filePosParameter = nullptr;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)
 };
