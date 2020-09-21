@@ -28,7 +28,7 @@ FileLoader::FileLoader()
 FileLoader::~FileLoader() 
 {
     delete formatManager;
-    delete readerSource;
+    readerSource->reset(nullptr);
     delete thumbnailCache;
     delete thumbnail;
     delete instance;
