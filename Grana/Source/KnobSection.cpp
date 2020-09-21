@@ -51,7 +51,7 @@ KnobSection::KnobSection(int x, int y, int w, int h, int nKnob, tSection type, i
     addKnobs(nKnob, row, listener);
 }
 
-KnobSection::KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts) // nKnob is the length of ids
+KnobSection::KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts) : xPos{ x }, yPos{ y }, width{ w }, height{ h } // nKnob is the length of ids
 {
     checkDirection();
     addKnobs(ids, apvts);
