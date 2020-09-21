@@ -14,27 +14,27 @@
 
 FileLoader* FileLoader::instance = 0;
 
-FileLoader::FileLoader(){
+// Constructor
+FileLoader::FileLoader()
+{
     formatManager = new juce::AudioFormatManager();
-   // transportSource = new juce::AudioTransportSource();
     readerSource = new std::unique_ptr<juce::AudioFormatReaderSource>();
-
     thumbnailCache = new juce::AudioThumbnailCache(5);
     thumbnail = new juce::AudioThumbnail(512, *formatManager, *thumbnailCache);
     buffer = new juce::AudioBuffer<float>();
-
 }
 
-
-FileLoader::~FileLoader() {
+// Destructor
+FileLoader::~FileLoader() 
+{
     delete formatManager;
-   // delete transportSource;
     delete readerSource;
     delete thumbnailCache;
     delete thumbnail;
     delete instance;
 }
 
+// Get the instance of FileLoader
 FileLoader* FileLoader::getInstance()
 {
     if (!instance)
@@ -42,41 +42,33 @@ FileLoader* FileLoader::getInstance()
     return instance;
 }
 
-
+// Read the file and loads it in the thumbnail (to display) and in the buffer
 void FileLoader::loadWaveform(juce::File file)
 {
-
     juce::AudioFormatReader* reader = formatManager->createReaderFor(file);
-    std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));
-    //transportSource->setSource(newSource.get(), 0, nullptr, reader->sampleRate);                                                                                                            // [13]
+    std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));                                                                                                          // [13]
     thumbnail->setSource(new juce::FileInputSource(file));
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
     reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
-
-    buffer;
-
 }
 
-
-
-
+// Drag & Drop funztion (calls loadWaveform to load the file)
 void FileLoader::loadFile(const juce::String& gpath)
 {
     auto file = juce::File(gpath);
     auto* formatReader = formatManager->createReaderFor(file);
-
     if (formatReader != nullptr) {
         loadWaveform(file);
-        //mformatReader.read(actual_sample);
     }
 }
+
+// GETTERS
 
 juce::AudioFormatManager *FileLoader::getFormatManager() const
 {
     return formatManager;
 }
-
 
 std::unique_ptr<juce::AudioFormatReaderSource> *FileLoader::getReaderSource() const
 {
@@ -88,13 +80,10 @@ juce::AudioThumbnailCache* FileLoader::getThumbnailCache() const
     return thumbnailCache;
 }
 
-
 juce::AudioThumbnail* FileLoader::getThumbnail() const
 {
     return thumbnail;
 }
-
-
 
 juce::AudioBuffer<float> *FileLoader::getAudioBuffer() const
 {

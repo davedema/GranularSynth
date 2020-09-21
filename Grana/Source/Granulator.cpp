@@ -1,15 +1,11 @@
 /*
   ==============================================================================
 
-    Scheduler.cpp
-    Created: 17 Aug 2020 11:50:43am
-    Author:  daveg
+    Granulator.cpp
+    Created: 20 Sep 2020 11:16:43am
+    Author:  gabri
 
   ==============================================================================
 */
 
-#include "Scheduler.h"
-
-void Scheduler::synthesize()
-{
-}
+#include "Granulator.h"

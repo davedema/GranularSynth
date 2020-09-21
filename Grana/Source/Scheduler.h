@@ -16,19 +16,20 @@
 
 #include "SequenceStrategy.h"
 #include "Grain.h"
+#include "FileLoader.h"
 #pragma once
 
 
 class Scheduler {
-
 
 private:
  
     SequenceStrategy strategy;
     std::vector<Grain*> grains;
 
+    
 public:
 
-    void synthetize();
+    void synthesize();
 
 };

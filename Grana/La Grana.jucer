@@ -44,6 +44,8 @@
         <FILE id="H7gU3I" name="MyKnob.h" compile="0" resource="0" file="Source/MyKnob.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="KByKoB" name="Granulator.cpp" compile="1" resource="0" file="Source/Granulator.cpp"/>
+        <FILE id="Q8juSn" name="Granulator.h" compile="0" resource="0" file="Source/Granulator.h"/>
         <FILE id="VfCygS" name="MasterEnvelope.cpp" compile="1" resource="0"
               file="Source/MasterEnvelope.cpp"/>
         <FILE id="dvTsPl" name="MasterEnvelope.h" compile="0" resource="0"
