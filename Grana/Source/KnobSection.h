@@ -33,7 +33,7 @@ public:
     KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row);
     KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row, Slider::Listener* listener);
 
-    KnobSection(int x, int y, int w, int h, std::vector<const String> ids, AudioProcessorValueTreeState* apvts);
+    KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
 
     ~KnobSection();
 
@@ -51,7 +51,7 @@ public:
     void addKnobs(int nKnob, int row);
     void addKnobs(int nKnob, int row, Slider::Listener* listener);
 
-    void addKnobs(std::vector<const String> ids, AudioProcessorValueTreeState* apvts);
+    void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
 
     void setMyOscillatorRange();
 

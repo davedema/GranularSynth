@@ -37,8 +37,8 @@ void MyKnob::setRow(int row)
 }
 
 
-void MyKnob::setAttachment(AudioProcessorValueTreeState& apvts, const String* id)
+void MyKnob::setAttachment(AudioProcessorValueTreeState& apvts, const String& id)
 {
     // knobValue = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(apvts, id, this);
-    attachment.reset(new AudioProcessorValueTreeState::SliderAttachment(apvts, id, this));
+    attachment.reset(new AudioProcessorValueTreeState::SliderAttachment(apvts, id, *this));
 }

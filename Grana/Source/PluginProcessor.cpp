@@ -27,7 +27,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     // constructors
     treeState(*this, nullptr, Identifier ("CURRENT_STATE"),
         {
-        std::make_unique<AudioParameterFloat>("grain", "Grain", GRAIN_MIN, GRAIN_MAX, 60.0f), // id, name, min,max, initial value
+        std::make_unique<AudioParameterFloat>("grains", "Grains", GRAIN_MIN, GRAIN_MAX, 60.0f), // id, name, min,max, initial value
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
 })
 #endif

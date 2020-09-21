@@ -32,7 +32,7 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     LaGranaAudioProcessor& audioProcessor;
-    AudioProcessorValueTreeState& valueTreeState;
+    AudioProcessorValueTreeState* valueTreeState;
 
     juce::TextButton *loadBtn;
     juce::AudioFormatManager *formatManager;

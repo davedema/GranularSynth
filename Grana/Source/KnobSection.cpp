@@ -51,7 +51,7 @@ KnobSection::KnobSection(int x, int y, int w, int h, int nKnob, tSection type, i
     addKnobs(nKnob, row, listener);
 }
 
-KnobSection::KnobSection(int x, int y, int w, int h, std::vector<const String> ids, AudioProcessorValueTreeState* apvts) // nKnob is the length of ids
+KnobSection::KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts) // nKnob is the length of ids
 {
     checkDirection();
     addKnobs(ids, apvts);
@@ -85,12 +85,13 @@ void KnobSection::addKnobs(int nKnob, int row, Slider::Listener* listener)
  
 }
 
-void KnobSection::addKnobs(std::vector<const String> ids, AudioProcessorValueTreeState* apvts)
+void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts)
 {
     MyKnob* temp;
     String knobName = "general";
 
-    for (size_t i = 0; i < ids.size(); ++i) {
+
+    for (size_t i = 0; i < ids->size(); ++i) {
         temp = new MyKnob(Slider::RotaryHorizontalVerticalDrag, Slider::TextBoxBelow);
         temp->setTextBoxIsEditable(true);
         temp->setRange(0, 10, 0.1);
@@ -98,7 +99,8 @@ void KnobSection::addKnobs(std::vector<const String> ids, AudioProcessorValueTre
         temp->setName(knobName); //set name to send to socket
         temp->setLookAndFeel(&KnobLAF);
         //TO DO connect to audio processor
-        temp->setAttachment(*apvts, &ids[i]);
+        const String &id = ids->at(i);
+        temp->setAttachment(*apvts, id);
         addAndMakeVisible(temp); // makes visible each knob
         knobs.push_back(temp);
     }

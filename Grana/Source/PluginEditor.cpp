@@ -31,10 +31,12 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     thumbnail->addChangeListener(this);
     
 
-    std::vector<const String> grainids;
+    /*std::vector<const String> grainids;
     grainids.push_back("grains");
     grainids.push_back("filepos"); 
-    grainSection = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, grainids, valueTreeState);
+    */
+    const std::vector<String> grainids = {"grains", "filepos"}, *point = &grainids;
+    grainSection = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, point, p.getValueTreeState());
     grainSection->setMyBounds();
     addAndMakeVisible(grainSection);
 
