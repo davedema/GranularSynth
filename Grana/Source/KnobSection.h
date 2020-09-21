@@ -14,12 +14,14 @@
 #include "KnobLookAndFeel.h"
 #include "MyKnob.h"
 
+typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
+
 //==============================================================================
 /*
 */
 
 enum class direction { horizontal, vertical };
-enum class tSection { general };
+enum class tSection { grain };
 
 class KnobSection : public Component, public Slider::Listener
 {
@@ -30,6 +32,8 @@ public:
     KnobSection(int x, int y, int w, int h, int nKnob, tSection type);
     KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row);
     KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row, Slider::Listener* listener);
+
+    KnobSection(int x, int y, int w, int h, std::vector<const String> ids, AudioProcessorValueTreeState* apvts);
 
     ~KnobSection();
 
@@ -47,6 +51,8 @@ public:
     void addKnobs(int nKnob, int row);
     void addKnobs(int nKnob, int row, Slider::Listener* listener);
 
+    void addKnobs(std::vector<const String> ids, AudioProcessorValueTreeState* apvts);
+
     void setMyOscillatorRange();
 
 private:
@@ -56,8 +62,6 @@ private:
     int width;
     int height;
     direction dir;
-
-
 
     void arrange();
     void checkDirection();

@@ -201,6 +201,11 @@ void LaGranaAudioProcessor::setStateInformation (const void* data, int sizeInByt
             treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
+AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
+{
+    return &treeState;
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

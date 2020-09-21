@@ -21,12 +21,14 @@ public:
     MyKnob() : Slider() {};
     MyKnob(Slider::SliderStyle style, TextEntryBoxPosition textBoxPos) : Slider(style, textBoxPos) {};
 
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> attachment; // knob value
 
     knobType getType() const;
     void setType(knobType type);
-
     int getRow() const;
     void setRow(int row);
+
+    void setAttachment(AudioProcessorValueTreeState& apvts, const String* id); //attach knob value to audio processor state
 
 private:
     knobType type;

@@ -11,7 +11,7 @@
 
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
-    AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.treeState){
+    AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState()){
 
     setSize(800, 350);
     loader = FileLoader::getInstance();
@@ -28,11 +28,15 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     loadBtn->onClick = [this] {loadBtnClicked();};
     loadBtn->setBounds(10, 10, 50, 25);
 
-
     thumbnail->addChangeListener(this);
-    provaKnob = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, 4);
-    provaKnob->setMyBounds();
-    addAndMakeVisible(provaKnob);
+    
+
+    std::vector<const String> grainids;
+    grainids.push_back("grains");
+    grainids.push_back("filepos"); 
+    grainSection = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, grainids, valueTreeState);
+    grainSection->setMyBounds();
+    addAndMakeVisible(grainSection);
 
 
 
@@ -41,7 +45,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
-    delete thumbnailCache, thumbnail, provaKnob;
+    delete thumbnailCache, thumbnail, grainSection;
 }
 
 //==============================================================================

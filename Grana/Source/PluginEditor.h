@@ -44,7 +44,7 @@ private:
 
     FileLoader *loader;
 
-    KnobSection* provaKnob;
+    KnobSection* grainSection;
 
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);

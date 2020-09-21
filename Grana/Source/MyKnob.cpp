@@ -25,6 +25,7 @@ void MyKnob::setType(knobType type)
     this->type = type;
 }
 
+
 int MyKnob::getRow() const
 {
     return row;
@@ -35,3 +36,9 @@ void MyKnob::setRow(int row)
     this->row = row;
 }
 
+
+void MyKnob::setAttachment(AudioProcessorValueTreeState& apvts, const String* id)
+{
+    // knobValue = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(apvts, id, this);
+    attachment.reset(new AudioProcessorValueTreeState::SliderAttachment(apvts, id, this));
+}
