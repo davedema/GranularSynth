@@ -22,7 +22,7 @@ public:
     MyKnob(Slider::SliderStyle style, TextEntryBoxPosition textBoxPos) : Slider(style, textBoxPos) {};
     ~MyKnob();
 
-    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> attachment; // knob value
+    
 
     knobType getType() const;
     void setType(knobType type);
@@ -33,6 +33,7 @@ public:
 
 private:
     knobType type;
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> attachment; // knob value
     int row;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MyKnob)
 
