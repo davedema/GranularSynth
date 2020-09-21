@@ -15,6 +15,12 @@
 
 
 
+MyKnob::~MyKnob()
+{
+    attachment.reset(nullptr);
+    
+}
+
 knobType MyKnob::getType() const
 {
     return type;

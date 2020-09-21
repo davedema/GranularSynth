@@ -20,6 +20,7 @@ class MyKnob : public Slider
 public:
     MyKnob() : Slider() {};
     MyKnob(Slider::SliderStyle style, TextEntryBoxPosition textBoxPos) : Slider(style, textBoxPos) {};
+    ~MyKnob();
 
     std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> attachment; // knob value
 
