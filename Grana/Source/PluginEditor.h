@@ -36,7 +36,7 @@ private:
 
     juce::TextButton *loadBtn;
     juce::AudioFormatManager *formatManager;
-    juce::AudioTransportSource *transportSource;
+    juce::AudioTransportSource *transportSource;        
 
     juce::AudioThumbnailCache* thumbnailCache;                  // [1]
     juce::AudioThumbnail* thumbnail;                            // [2]

@@ -13,15 +13,15 @@
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState()){
 
-    setSize(800, 350);
-    loader = FileLoader::getInstance();
+    setSize(800, 350);                                    
+    loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
    // transportSource = loader->getTransportSource();
     thumbnail = loader->getThumbnail();
     thumbnailCache = loader->getThumbnailCache();
 
 
-    formatManager->registerBasicFormats();
+    formatManager->registerBasicFormats();                         //register formats
     loadBtn = new juce::TextButton();
     addAndMakeVisible(loadBtn);
     loadBtn->setButtonText("Open...");
@@ -35,9 +35,16 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     grainids.push_back("grains");
     grainids.push_back("filepos"); 
     */
-    const std::vector<String> grainids = {"grains", "filepos"}, *point = &grainids;
-    grainSection = new KnobSection(40, getHeight() * 3 / 4, getWidth() - 80, getHeight() / 4 - 5, point, p.getValueTreeState());
-    grainSection->setMyBounds();
+    const std::vector<String> grainids = {"grains", "filepos"},    //knob ids
+        *point = &grainids;                                        //pointer to knob ids
+    grainSection = new KnobSection(                                //new knobsection
+        40, 
+        getHeight() * 3 / 4,
+        getWidth() - 80, getHeight() / 4 - 5,
+        point,
+        p.getValueTreeState()
+    );
+    grainSection->setMyBounds();                                    //set bounds
     addAndMakeVisible(grainSection);
 
 

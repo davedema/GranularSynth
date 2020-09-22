@@ -27,11 +27,6 @@ class KnobSection : public Component, public Slider::Listener
 {
 public:
     KnobSection();
-    KnobSection(int x, int y, int w, int h);
-    KnobSection(int x, int y, int w, int h, int nKnob);
-    KnobSection(int x, int y, int w, int h, int nKnob, tSection type);
-    KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row);
-    KnobSection(int x, int y, int w, int h, int nKnob, tSection type, int row, Slider::Listener* listener);
 
     KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
 
@@ -47,9 +42,7 @@ public:
 
 
     void setMyBounds();
-    void addKnobs(int nKnob);
     void addKnobs(int nKnob, int row);
-    void addKnobs(int nKnob, int row, Slider::Listener* listener);
 
     void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
 
