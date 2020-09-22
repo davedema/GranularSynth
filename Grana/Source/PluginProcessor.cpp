@@ -10,8 +10,14 @@
 #include "PluginEditor.h"
 
 // define constant values for knobs
-#define GRAIN_MIN 0.2f //in Hz
-#define GRAIN_MAX 100.0f //in Hz
+// GRAIN DURATIONS
+#define GRAIN_MIN 5.0f //in ms
+#define GRAIN_MAX 100.0f //in ms
+
+// GRAIN DENSITY
+#define GRAIN_DENSITY_MIN 2.0f // in #
+#define GRAIN_DENSITY_MAX 200.0f //in #
+
 
 //==============================================================================
 LaGranaAudioProcessor::LaGranaAudioProcessor()
@@ -27,7 +33,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     // constructors
     treeState(*this, nullptr, Identifier ("CURRENT_STATE"),
         {
-        std::make_unique<AudioParameterFloat>("grains", "Grains", GRAIN_MIN, GRAIN_MAX, 60.0f), // id, name, min,max, initial value
+        std::make_unique<AudioParameterFloat>("grain_durations", "Grain_Durations", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value
+        std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f ),
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
 })
 #endif

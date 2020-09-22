@@ -35,7 +35,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     grainids.push_back("grains");
     grainids.push_back("filepos"); 
     */
-    const std::vector<String> grainids = {"grains", "filepos"},    //knob ids
+    const std::vector<String> grainids = {"grain_durations", "grain_density", "filepos"},    //knob ids
         *point = &grainids;                                        //pointer to knob ids
     grainSection = new KnobSection(                                //new knobsection
         40, 
