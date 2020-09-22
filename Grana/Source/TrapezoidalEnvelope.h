@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    GrainWindow.h
-    Created: 17 Aug 2020 11:30:50am
-    Author:  daveg
+    TrapezoidalEnvelope.h
+    Created: 22 Sep 2020 5:27:29pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-enum class WindowType { hamm, hann, blackman, rect, gauss };
+#pragma once

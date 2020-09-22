@@ -1,23 +1,11 @@
 /*
   ==============================================================================
 
-    Window.h
-    Created: 15 Sep 2020 2:49:49pm
+    GrainCloud.h
+    Created: 22 Sep 2020 5:20:42pm
     Author:  jacop
 
   ==============================================================================
 */
 
 #pragma once
-
-class Window {
-
-
-private:
-
-
-
-public:
-
-   virtual float* synthetize() = 0;
-};

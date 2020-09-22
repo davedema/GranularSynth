@@ -44,49 +44,39 @@
         <FILE id="H7gU3I" name="MyKnob.h" compile="0" resource="0" file="Source/MyKnob.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="ihcXry" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>
+        <FILE id="btzDuj" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
+        <FILE id="QkKo9x" name="GrainCloud.cpp" compile="1" resource="0" file="Source/GrainCloud.cpp"/>
+        <FILE id="jMa8VN" name="GrainCloud.h" compile="0" resource="0" file="Source/GrainCloud.h"/>
         <FILE id="KByKoB" name="Granulator.cpp" compile="1" resource="0" file="Source/Granulator.cpp"/>
         <FILE id="Q8juSn" name="Granulator.h" compile="0" resource="0" file="Source/Granulator.h"/>
         <FILE id="VfCygS" name="MasterEnvelope.cpp" compile="1" resource="0"
               file="Source/MasterEnvelope.cpp"/>
         <FILE id="dvTsPl" name="MasterEnvelope.h" compile="0" resource="0"
               file="Source/MasterEnvelope.h"/>
-        <GROUP id="{4319CCE1-3102-FCFE-E6BD-FFD9D2354BE2}" name="Windows">
-          <FILE id="NbxT7x" name="GaussianWindow.cpp" compile="1" resource="0"
-                file="Source/GaussianWindow.cpp"/>
-          <FILE id="hSnwgF" name="RaisedCosineBellWindow.cpp" compile="1" resource="0"
-                file="Source/RaisedCosineBellWindow.cpp"/>
-          <FILE id="ZJlmvV" name="RaisedCosineBellWindow.h" compile="0" resource="0"
-                file="Source/RaisedCosineBellWindow.h"/>
-          <FILE id="qBsAwm" name="GaussianWindow.h" compile="0" resource="0"
-                file="Source/GaussianWindow.h"/>
-          <FILE id="XmWBb2" name="RectangularWindow.cpp" compile="1" resource="0"
-                file="Source/RectangularWindow.cpp"/>
-          <FILE id="GW7hmL" name="RectangularWindow.h" compile="0" resource="0"
-                file="Source/RectangularWindow.h"/>
-          <FILE id="BGKbzu" name="TrapezoidalWindow.cpp" compile="1" resource="0"
-                file="Source/TrapezoidalWindow.cpp"/>
-          <FILE id="KDlOzu" name="TrapezoidalWindow.h" compile="0" resource="0"
-                file="Source/TrapezoidalWindow.h"/>
-          <FILE id="Vr275Z" name="Window.cpp" compile="1" resource="0" file="Source/Window.cpp"/>
-          <FILE id="wQxMt8" name="Window.h" compile="0" resource="0" file="Source/Window.h"/>
+        <GROUP id="{4319CCE1-3102-FCFE-E6BD-FFD9D2354BE2}" name="GrainEnvelopes">
+          <FILE id="MgZ6ec" name="GaussianEnvelope.cpp" compile="1" resource="0"
+                file="Source/GaussianEnvelope.cpp"/>
+          <FILE id="ubk5jd" name="GaussianEnvelope.h" compile="0" resource="0"
+                file="Source/GaussianEnvelope.h"/>
+          <FILE id="Zj6pVi" name="GrainEnvelope.h" compile="0" resource="0" file="Source/GrainEnvelope.h"/>
+          <FILE id="GltNx9" name="RaisedCosineBellEnvelope.cpp" compile="1" resource="0"
+                file="Source/RaisedCosineBellEnvelope.cpp"/>
+          <FILE id="XOirhN" name="RaisedCosineBellEnvelope.h" compile="0" resource="0"
+                file="Source/RaisedCosineBellEnvelope.h"/>
+          <FILE id="ZDGvab" name="TrapezoidalEnvelope.cpp" compile="1" resource="0"
+                file="Source/TrapezoidalEnvelope.cpp"/>
+          <FILE id="Jkj2Ep" name="TrapezoidalEnvelope.h" compile="0" resource="0"
+                file="Source/TrapezoidalEnvelope.h"/>
         </GROUP>
         <FILE id="h3IyQX" name="FileLoader.cpp" compile="1" resource="0" file="Source/FileLoader.cpp"/>
         <FILE id="KqUnco" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
         <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
         <FILE id="Y8xRvN" name="Grain.h" compile="0" resource="0" file="Source/Grain.h"/>
-        <FILE id="CP0Yio" name="GrainCreator.cpp" compile="1" resource="0"
-              file="Source/GrainCreator.cpp"/>
-        <FILE id="Wreu08" name="GrainCreator.h" compile="0" resource="0" file="Source/GrainCreator.h"/>
-        <FILE id="kMLGXn" name="GrainWindow.cpp" compile="1" resource="0" file="Source/GrainWindow.cpp"/>
-        <FILE id="IfurWP" name="SequenceStrategy.cpp" compile="1" resource="0"
-              file="Source/SequenceStrategy.cpp"/>
         <FILE id="dyO24f" name="SequenceStrategy.h" compile="0" resource="0"
               file="Source/SequenceStrategy.h"/>
-        <FILE id="OghkPc" name="GrainWindow.h" compile="0" resource="0" file="Source/GrainWindow.h"/>
         <FILE id="b1KupQ" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
         <FILE id="uFAB4g" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
-        <FILE id="g0Z1lQ" name="Scheduler.cpp" compile="1" resource="0" file="Source/Scheduler.cpp"/>
-        <FILE id="tOa08n" name="Scheduler.h" compile="0" resource="0" file="Source/Scheduler.h"/>
       </GROUP>
       <FILE id="IaUD9G" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

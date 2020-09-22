@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    GrainCreator.cpp
-    Created: 17 Aug 2020 11:48:34am
-    Author:  daveg
+    Voice.cpp
+    Created: 22 Sep 2020 5:21:13pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-#include "GrainCreator.h"
+#include "Voice.h"

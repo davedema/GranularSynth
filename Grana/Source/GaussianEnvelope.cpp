@@ -1,24 +1,11 @@
 /*
   ==============================================================================
 
-    TrapezoidalWindow.h
-    Created: 15 Sep 2020 2:51:15pm
+    GaussianEnvelope.cpp
+    Created: 22 Sep 2020 5:26:57pm
     Author:  jacop
 
   ==============================================================================
 */
 
-#pragma once
-#include "Window.h"
-
-class TrapezoidalWindow : public Window {
-
-
-private:
-
-
-
-public:
-
-
-};
+#include "GaussianEnvelope.h"

@@ -1,15 +1,11 @@
 /*
   ==============================================================================
 
-    Scheduler.cpp
-    Created: 17 Aug 2020 11:50:43am
-    Author:  daveg
+    TrapezoidalEnvelope.cpp
+    Created: 22 Sep 2020 5:27:29pm
+    Author:  jacop
 
   ==============================================================================
 */
 
-#include "Scheduler.h"
-
-void Scheduler::synthesize()
-{
-}
+#include "TrapezoidalEnvelope.h"

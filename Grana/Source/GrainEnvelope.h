@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    RaisedCosineBellWindow.cpp
-    Created: 15 Sep 2020 2:54:45pm
+    GrainEnvelope.h
+    Created: 22 Sep 2020 5:21:55pm
     Author:  jacop
 
   ==============================================================================
 */
 
-#include "RaisedCosineBellWindow.h"
+#pragma once

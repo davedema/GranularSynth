@@ -1,24 +1,11 @@
 /*
   ==============================================================================
 
-    GaussianWindow.h
-    Created: 15 Sep 2020 2:50:42pm
+    RaisedCosineBellEnvelope.h
+    Created: 22 Sep 2020 5:27:14pm
     Author:  jacop
 
   ==============================================================================
 */
 
 #pragma once
-#include "Window.h"
-
-class GaussianWindow : public Window {
-
-
-private:
-
-
-
-public:
-
-
-};

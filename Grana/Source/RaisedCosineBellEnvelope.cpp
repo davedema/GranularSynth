@@ -1,24 +1,11 @@
 /*
   ==============================================================================
 
-    RectangularWindow.h
-    Created: 15 Sep 2020 2:51:48pm
+    RaisedCosineBellEnvelope.cpp
+    Created: 22 Sep 2020 5:27:14pm
     Author:  jacop
 
   ==============================================================================
 */
 
-#pragma once
-#include "Window.h"
-
-class RectangularWindow : public Window{
-
-
-private:
-
-
-
-public:
-
-
-};
+#include "RaisedCosineBellEnvelope.h"
