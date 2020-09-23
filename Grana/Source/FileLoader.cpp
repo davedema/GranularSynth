@@ -51,6 +51,7 @@ void FileLoader::loadWaveform(juce::File file)
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
     reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
+    sampleRate = reader->sampleRate;
 }
 
 // Drag & Drop funztion (calls loadWaveform to load the file)
@@ -88,6 +89,16 @@ juce::AudioThumbnail* FileLoader::getThumbnail() const
 juce::AudioBuffer<float> *FileLoader::getAudioBuffer() const
 {
     return buffer;
+}
+
+int FileLoader::getSampleRate()
+{
+    return this->sampleRate;
+}
+
+void FileLoader::setSampleRate(int sampleRate)
+{
+    this->sampleRate = sampleRate;
 }
 
 
