@@ -21,7 +21,7 @@
 #pragma once
 
 
-class RaisedCosineBellEnvelope : private GrainEnvelope
+class RaisedCosineBellEnvelope : public GrainEnvelope
 {
 public:
     RaisedCosineBellEnvelope(int sampleRate);

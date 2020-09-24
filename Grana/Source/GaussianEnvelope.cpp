@@ -10,6 +10,14 @@
 
 #include "GaussianEnvelope.h"
 
+
+GaussianEnvelope* GaussianEnvelope::instance = 0;
+
+
+
+GaussianEnvelope::GaussianEnvelope() : duration(0), sampleRate(0), mainLobeWidth(0.95)
+{
+}
 GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
 }
@@ -27,6 +35,36 @@ float GaussianEnvelope::currentValue(float time)
 	return GKernel[(int) time* sampleRate];
 }
 
+
+GaussianEnvelope* GaussianEnvelope::getInstance()
+{
+	if (!instance)
+		instance = new GaussianEnvelope();
+	return instance;
+}
+
+GaussianEnvelope* GaussianEnvelope::getInstance(float duration, int sampleRate, float mainLobeWidth)
+{
+	if (!instance)
+		instance = new GaussianEnvelope(duration,sampleRate,mainLobeWidth);
+	return instance;
+}
+
+void GaussianEnvelope::reset()
+{
+	if (getInstance() != nullptr) {
+		delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
+		instance = nullptr; // so GetInstance will still work.
+	}
+}
+
+void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+{
+	if (getInstance() != nullptr) {
+		delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
+		getInstance(duration, sampleRate, mainLobeWidth); // so GetInstance will still work.
+	}
+}
 
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 

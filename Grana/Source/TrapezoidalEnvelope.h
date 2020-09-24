@@ -17,7 +17,7 @@
 #pragma once
 
 
-class TrapezoidalEnvelope : private GrainEnvelope
+class TrapezoidalEnvelope : public GrainEnvelope
 {
 public:
     TrapezoidalEnvelope(int sampleRate);

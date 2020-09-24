@@ -11,17 +11,13 @@
 #include "Grain.h"
 
 
-EnvType Grain::getEnvType() const
+Grain::Grain(EnvType type, long long onset, int length, int startPos, float amp) :
+    AudioBuffer(), onset(onset), length(length), startPosition(startPos),
+    lengthRecip(1 / (float)length), amp(amp) 
 {
-    return envType;
+    fileLoader = FileLoader::getInstance();
+    float mainLobeWidth = 0.95; //connect to treestate
 }
-
-void Grain::setEnvType(EnvType envType)
-{
-    this->envType = envType;
-}
-
-
 
 inline float Grain::cubicinterp(float x, float y0, float y1, float y2, float y3)
 {
@@ -44,7 +40,7 @@ void Grain::process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuff
         float* channelData = currentBlock.getWritePointer(channel);
         const float* fileData = fileBuffer.getReadPointer(channel % fileBuffer.getNumChannels());
 
-        const float position = (time - onset) * rate;
+        const float position = (time - onset) * fileLoader->getSampleRate();
         const int iPosition = (int)std::ceil(position);
 
         // [2]
@@ -62,5 +58,22 @@ void Grain::process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuff
         currentSample = currentSample * gain * amp;
 
         channelData[time % blockNumSamples] += currentSample;
+    }
+}
+
+void Grain::changeEnvelope(EnvType type){
+
+    if (envelope != nullptr)
+        delete envelope;
+
+    switch (type) {
+    case EnvType::gaussian: envelope = new GaussianEnvelope::getInstance()(length, fileLoader->getSampleRate(), mainLobeWidth);
+        break;
+    case EnvType::raisedCosineBell: envelope = new RaisedCosineBellEnvelope(length, fileLoader->getSampleRate(), mainLobeWidth);
+        break;
+    case EnvType::trapezoidal: envelope = new TrapezoidalEnvelope(length, fileLoader->getSampleRate(), mainLobeWidth);
+        break;
+    default:
+        break;
     }
 }
