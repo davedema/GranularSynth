@@ -28,7 +28,6 @@ public:
     void setType(knobType type);
     int getRow() const;
     void setRow(int row);
-
     void setAttachment(AudioProcessorValueTreeState& apvts, const String& id); //attach knob value to audio processor state
     void addLabel(const String& id);
 

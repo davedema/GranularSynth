@@ -18,7 +18,7 @@
 MyKnob::~MyKnob()
 {
     attachment.reset(nullptr);
-    label.reset(nullptr);
+    //label.reset(nullptr);
      
 }
 
