@@ -15,9 +15,6 @@ GaussianEnvelope* GaussianEnvelope::instance = 0;
 
 
 
-GaussianEnvelope::GaussianEnvelope() : duration(0), sampleRate(0), mainLobeWidth(0.95)
-{
-}
 GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
 }
@@ -35,28 +32,66 @@ float GaussianEnvelope::currentValue(float time)
 	return GKernel[(int) time* sampleRate];
 }
 
-
 GaussianEnvelope* GaussianEnvelope::getInstance()
 {
 	if (!instance)
-		instance = new GaussianEnvelope();
-	return instance;
+		instance = new GaussianEnvelope(41000);
+	return nullptr;
 }
 
-void GaussianEnvelope::reset()
+
+GaussianEnvelope* GaussianEnvelope::reset()
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then)
 		instance = nullptr; // so GetInstance will still work.
 	}
+	return nullptr;
 }
 
-void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+GaussianEnvelope* GaussianEnvelope::resetSampleRate(int sampleRate)
+{
+	int duration = 0, mainLobeWidth = 0;
+	if (instance != nullptr) {
+		duration = instance->duration;
+		mainLobeWidth = instance->mainLobeWidth;
+		delete instance;
+	}
+	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	return instance;
+}
+
+GaussianEnvelope* GaussianEnvelope::resetDuration(int duration)
+{
+	int sampleRate = 0, mainLobeWidth = 0;
+	if (instance != nullptr) {
+		sampleRate = instance->sampleRate;
+		mainLobeWidth = instance->mainLobeWidth;
+		delete instance;
+	}
+	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	return instance;
+}
+
+GaussianEnvelope* GaussianEnvelope::resetMainLobeWidth(int mainLobeWidth)
+{
+	int duration = 0, sampleRate = 0;
+	if (instance != nullptr) {
+		duration = instance->duration;
+		sampleRate = instance->sampleRate;
+		delete instance;
+	}
+	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	return instance;
+}
+
+GaussianEnvelope* GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
 	}
 	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	return instance;
 }
 
 // C++ prgroam to generate Gaussian filter 

@@ -67,7 +67,7 @@ void Grain::changeEnvelope(EnvType type){
         delete envelope;
 
     switch (type) {
-    case EnvType::gaussian: envelope = GaussianEnvelope::getInstance();
+    case EnvType::gaussian: envelope = GaussianEnvelope::reset(this->length, fileLoader->getSampleRate(), 0.95);
         break;
     case EnvType::raisedCosineBell: envelope = new RaisedCosineBellEnvelope(length, fileLoader->getSampleRate(), 0.95);
         break;
