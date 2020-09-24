@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "FileLoader.h"
 
 // define constant values for knobs
 // GRAIN DURATIONS
@@ -45,6 +46,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
+    FileLoader::resetInstance();
 }
 
 //==============================================================================

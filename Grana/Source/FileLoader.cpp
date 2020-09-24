@@ -22,6 +22,7 @@ FileLoader::FileLoader()
     thumbnailCache = new juce::AudioThumbnailCache(5);
     thumbnail = new juce::AudioThumbnail(512, *formatManager, *thumbnailCache);
     buffer = new juce::AudioBuffer<float>();
+    sampleRate = 0;
 }
 
 // Destructor
@@ -31,7 +32,7 @@ FileLoader::~FileLoader()
     readerSource->reset(nullptr);
     delete thumbnailCache;
     delete thumbnail;
-    delete instance;
+    delete buffer;
 }
 
 // Get the instance of FileLoader
@@ -40,6 +41,14 @@ FileLoader* FileLoader::getInstance()
     if (!instance)
         instance = new FileLoader();
     return instance;
+}
+
+void FileLoader::resetInstance()
+{
+    if (getInstance() != nullptr) {
+        delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
+        instance = nullptr; // so GetInstance will still work.
+    }
 }
 
 // Read the file and loads it in the thumbnail (to display) and in the buffer

@@ -57,8 +57,6 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
-    delete thumbnailCache;
-    delete thumbnail;
     delete grainSection;
     delete envelopeList;
 }
