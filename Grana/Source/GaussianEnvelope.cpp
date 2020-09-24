@@ -38,11 +38,7 @@ void GaussianEnvelope::FilterCreation()
 	double sigma = mainLobeWidth * duration * sampleRate;
 	double r, s = 2.0 * sigma * sigma;
 
-	// sum is for normalization 
-	double sum = 0.0;
-
 	// generating kernel 
-
 
 	if ((int)duration %2 == 0) { //this is done in order to solve the problem of having an array
 								 //1 cell longer than needed when working with a even duration
@@ -50,13 +46,9 @@ void GaussianEnvelope::FilterCreation()
 	}
 
 	for (int x = -halfDuration; x <= halfDurationPositive; x++) {
-			r = sqrt(x * x);
-			GKernel.push_back((exp(-(r * r) / s)) / (M_PI * s));
-			sum += GKernel[x + halfDuration];
+			GKernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
+			GKernel[x + halfDuration] -= GKernel[0];
+			GKernel[x + halfDuration] /= 1 - GKernel[0];
 	}
-
-	// normalising the Kernel 
-	for (int i = 0; i < duration; ++i)
-			GKernel[i] /= sum;
 }
 

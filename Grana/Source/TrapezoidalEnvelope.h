@@ -8,4 +8,31 @@
   ==============================================================================
 */
 
+#define _USE_MATH_DEFINES
+#include <cmath> 
+#include "GrainEnvelope.h"
+#include <iomanip> 
+#include <vector>
+
 #pragma once
+
+
+class TrapezoidalEnvelope : private GrainEnvelope
+{
+public:
+    TrapezoidalEnvelope(int sampleRate);
+    TrapezoidalEnvelope(float duration, int sampleRate);
+    TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth);
+    float currentValue(float time) override;
+    virtual float nextValue() override;
+
+    void FilterCreation();
+
+    ~TrapezoidalEnvelope();
+
+private:
+    float duration; //duration in seconds
+    int sampleRate;
+    float mainLobeWidth;
+    std::vector<double> kernel;
+};
