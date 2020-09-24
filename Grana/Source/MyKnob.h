@@ -30,9 +30,11 @@ public:
     void setRow(int row);
 
     void setAttachment(AudioProcessorValueTreeState& apvts, const String& id); //attach knob value to audio processor state
+    void addLabel(const String& id);
 
 private:
     knobType type;
+    // std::unique_ptr<Label> label; // text label for the knob
     std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> attachment; // knob value
     int row;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MyKnob)

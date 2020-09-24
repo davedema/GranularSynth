@@ -30,24 +30,27 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 
     thumbnail->addChangeListener(this);
     
-
-    /*std::vector<const String> grainids;
-    grainids.push_back("grains");
-    grainids.push_back("filepos"); 
-    */
-    const std::vector<String> grainids = {"grain_durations", "grain_density", "filepos"},    //knob ids
+    // GRAIN SECTION
+    const std::vector<String> grainids = {"grain_durations", "grain_density"},    //knob ids
         *point = &grainids;                                        //pointer to knob ids
     grainSection = new KnobSection(                                //new knobsection
         40, 
         getHeight() * 3 / 4,
-        getWidth() - 80, getHeight() / 4 - 5,
+        getWidth() / 2 - 80, getHeight() / 4 - 5,
         point,
         p.getValueTreeState()
     );
     grainSection->setMyBounds();                                    //set bounds
     addAndMakeVisible(grainSection);
 
-
+    //ENVELOPE SECTION
+    envelopeList = new ComboBox();
+    envelopeList->setBounds(getWidth() / 2 + 50 ,getHeight() * 3 / 4, 100,30);
+    addAndMakeVisible(envelopeList);
+    envelopeList->addItem("Gaussian", 1);
+    envelopeList->addItem("RaisedCosineBell", 2);
+    envelopeList->addItem("Trapezoidal", 3);
+    envelopeList->onChange = [this] { envelopeSelected(); };
 
 }
 
@@ -57,6 +60,7 @@ LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
     delete thumbnailCache;
     delete thumbnail;
     delete grainSection;
+    delete envelopeList;
 }
 
 //==============================================================================
@@ -147,4 +151,9 @@ void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
     if (isInterestedInFileDrag(files)) {
         loader->loadFile(files[0]);
     }
+}
+
+void LaGranaAudioProcessorEditor::envelopeSelected()
+{
+    // create Envelope object
 }

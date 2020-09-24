@@ -18,6 +18,7 @@
 MyKnob::~MyKnob()
 {
     attachment.reset(nullptr);
+    label.reset(nullptr);
      
 }
 
@@ -47,4 +48,12 @@ void MyKnob::setAttachment(AudioProcessorValueTreeState& apvts, const String& id
 {
     // knobValue = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(apvts, id, this);
     attachment.reset(new AudioProcessorValueTreeState::SliderAttachment(apvts, id, *this));
+}
+
+void MyKnob::addLabel(const String& id)
+{
+   /* label.reset(new Label("title", "prova"));
+    label->attachToComponent(this, false);
+    this->addAndMakeVisible(*label, 1); */
+
 }

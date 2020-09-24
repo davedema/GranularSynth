@@ -45,17 +45,22 @@ void KnobSection::setMyBounds() {
 void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts)
 {
     MyKnob* temp;
+    Label* lab;
 
 
     for (size_t i = 0; i < ids->size(); ++i) {
         const String &id = ids->at(i);
         temp = new MyKnob(Slider::RotaryHorizontalVerticalDrag, Slider::TextBoxBelow);    //new MyKnob 
         temp->setTextBoxIsEditable(true);
-        temp->setName(id);                                                                //set name 
+        temp->setName(id);//set name 
         temp->setLookAndFeel(&KnobLAF);
-        temp->setAttachment(*apvts, id);
-        addAndMakeVisible(temp);                                                          // makes visible each knob
+        temp->setAttachment(*apvts, id); // attach knob value to audio processor tree state
+        addAndMakeVisible(temp); // makes visible each knob  
+        lab = new Label("title", id); //adds text label according to id
+        lab->attachToComponent(temp, false);
+        temp->addAndMakeVisible(lab);
         knobs.push_back(temp);
+        labels.push_back(lab);
     }
 
     arrange();

@@ -40,16 +40,15 @@ public:
     void sliderDragStarted(Slider*) override;
     void sliderDragEnded(Slider*) override;
 
-
     void setMyBounds();
-    void addKnobs(int nKnob, int row);
-
     void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
 
     void setMyOscillatorRange();
 
 private:
     std::vector<MyKnob*> knobs;
+    std::vector<Label*> labels;
+
     int xPos;
     int yPos;
     int width;

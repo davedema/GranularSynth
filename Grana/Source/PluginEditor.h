@@ -13,6 +13,11 @@
 #include "FileLoader.h"
 #include "KnobSection.h"
 
+enum class Windows { gaussian = 1,
+    raisedcosinebell,
+    trapezoidal
+};
+
 //==============================================================================
 /**
 */
@@ -45,6 +50,7 @@ private:
     FileLoader *loader;
 
     KnobSection* grainSection;
+    ComboBox* envelopeList;
 
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
@@ -57,6 +63,7 @@ private:
 
     bool isInterestedInFileDrag(const juce::StringArray& files) override;
     void filesDropped(const juce::StringArray& files, int x, int y) override;
+    void envelopeSelected();
 
 
 
