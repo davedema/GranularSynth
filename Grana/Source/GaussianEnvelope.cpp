@@ -43,27 +43,20 @@ GaussianEnvelope* GaussianEnvelope::getInstance()
 	return instance;
 }
 
-GaussianEnvelope* GaussianEnvelope::getInstance(float duration, int sampleRate, float mainLobeWidth)
-{
-	if (!instance)
-		instance = new GaussianEnvelope(duration,sampleRate,mainLobeWidth);
-	return instance;
-}
-
 void GaussianEnvelope::reset()
 {
-	if (getInstance() != nullptr) {
-		delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then)
 		instance = nullptr; // so GetInstance will still work.
 	}
 }
 
 void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
 {
-	if (getInstance() != nullptr) {
-		delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
-		getInstance(duration, sampleRate, mainLobeWidth); // so GetInstance will still work.
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
 	}
+	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
 }
 
 // C++ prgroam to generate Gaussian filter 

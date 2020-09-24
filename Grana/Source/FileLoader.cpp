@@ -45,8 +45,8 @@ FileLoader* FileLoader::getInstance()
 
 void FileLoader::resetInstance()
 {
-    if (getInstance() != nullptr) {
-        delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
+    if (instance != nullptr) {
+        delete instance; // REM : it works even if the pointer is NULL (does nothing then)
         instance = nullptr; // so GetInstance will still work.
     }
 }

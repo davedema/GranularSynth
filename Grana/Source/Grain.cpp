@@ -67,11 +67,11 @@ void Grain::changeEnvelope(EnvType type){
         delete envelope;
 
     switch (type) {
-    case EnvType::gaussian: envelope = new GaussianEnvelope::getInstance()(length, fileLoader->getSampleRate(), mainLobeWidth);
+    case EnvType::gaussian: envelope = GaussianEnvelope::getInstance();
         break;
-    case EnvType::raisedCosineBell: envelope = new RaisedCosineBellEnvelope(length, fileLoader->getSampleRate(), mainLobeWidth);
+    case EnvType::raisedCosineBell: envelope = new RaisedCosineBellEnvelope(length, fileLoader->getSampleRate(), 0.95);
         break;
-    case EnvType::trapezoidal: envelope = new TrapezoidalEnvelope(length, fileLoader->getSampleRate(), mainLobeWidth);
+    case EnvType::trapezoidal: envelope = new TrapezoidalEnvelope(length, fileLoader->getSampleRate(), 0.95);
         break;
     default:
         break;

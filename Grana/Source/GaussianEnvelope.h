@@ -44,5 +44,4 @@ private:
     float mainLobeWidth;
     std::vector<double> GKernel;
     static GaussianEnvelope* instance;
-    static GaussianEnvelope* getInstance(float duration, int sampleRate, float mainLobeWidth);
 };
