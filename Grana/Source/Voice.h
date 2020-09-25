@@ -9,3 +9,25 @@
 */
 
 #pragma once
+
+#include <JuceHeader.h>
+
+class Voice : public juce::SynthesiserVoice
+{
+private:
+
+    ADSR* envelope;         // A pointer to the global envelope (needed for rendering)
+
+public:
+    Voice(ADSR* envelope);
+    ~Voice();
+
+    // Pure virtual functions
+    bool canPlaySound(SynthesiserSound*) override;
+    void startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition) override;
+    void stopNote(float velocity, bool allowTailOff) override;
+    void pitchWheelMoved(int newPitchWheelValue) override;
+    void controllerMoved(int controllerNumber, int newControllerValue) override;
+    void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
+
+};

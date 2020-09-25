@@ -41,10 +41,12 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 { 
     grainParameter = treeState.getRawParameterValue("grain");
     filePosParameter = treeState.getRawParameterValue("filepos");
+    granulator = new Granulator();
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
+    delete this->granulator;
 }
 
 //==============================================================================
@@ -114,6 +116,9 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    granulator->setCurrentPlaybackSampleRate(sampleRate);       // Set the playback rate for the synthesizer (will automatically propagate to all voices)
+    granulator->setEnvelopeSampleRate(sampleRate);              // Set the sample rate for the global envelope of the grain cloud
 }
 
 void LaGranaAudioProcessor::releaseResources()
