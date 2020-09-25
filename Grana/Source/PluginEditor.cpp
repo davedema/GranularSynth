@@ -9,11 +9,17 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+constexpr auto GLOBAL_WIDTH = 800;
+constexpr auto GLOBAL_HEIGHT = 500;
+
+constexpr auto WAV_WIDTH = 480;
+constexpr auto WAV_HEIGHT = 160;
+
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState()){
 
-    setSize(800, 350);                                    
+    setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
    // transportSource = loader->getTransportSource();
@@ -29,15 +35,33 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     loadBtn->setBounds(10, 10, 50, 25);
 
     thumbnail->addChangeListener(this);
+
+    //FILE MANAGEMENT SECTION
+    const std::vector<String> fileids = { "filepos", "randompos" },    //knob ids
+        * fileids_ptr = &fileids;                                        //pointer to knob ids
+    const std::vector<String> filetitles = { "File position", "Random" }, * filetitles_ptr = &filetitles;
+
+    fileSection = new KnobSection(
+        WAV_WIDTH + 100,
+        WAV_HEIGHT / 2 - 10,
+        100, 70,
+        fileids_ptr,
+        filetitles_ptr,
+        p.getValueTreeState()
+        );
+    fileSection->setMyBounds();
+    addAndMakeVisible(fileSection);
     
     // GRAIN SECTION
     const std::vector<String> grainids = {"grain_durations", "grain_density"},    //knob ids
         *point = &grainids;                                        //pointer to knob ids
+    const std::vector<String> titles = { "Duration", "Density" }, *titlesp = &titles;
     grainSection = new KnobSection(                                //new knobsection
         40, 
-        getHeight() * 3 / 4,
-        getWidth() / 2 - 80, getHeight() / 4 - 5,
+        getHeight() / 2,
+        getWidth() / 3 - 80, getHeight() / 4 - 50,
         point,
+        titlesp,
         p.getValueTreeState()
     );
     grainSection->setMyBounds();                                    //set bounds
@@ -45,7 +69,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 
     //ENVELOPE SECTION
     envelopeList = new ComboBox();
-    envelopeList->setBounds(getWidth() / 2 + 50 ,getHeight() * 3 / 4, 100,30);
+    envelopeList->setBounds(getWidth() / 3 , getHeight() / 2, 100,30);
     addAndMakeVisible(envelopeList);
     envelopeList->addItem("Gaussian", 1);
     envelopeList->addItem("RaisedCosineBell", 2);
@@ -65,7 +89,7 @@ LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 {
 
-    juce::Rectangle<int> thumbnailBounds(40, 40, getWidth() - 80, getHeight() / 2); 
+    juce::Rectangle<int> thumbnailBounds(40, 40, WAV_WIDTH, WAV_HEIGHT); 
 
     if (thumbnail->getNumChannels() == 0)
         paintIfNoFileLoaded(g, thumbnailBounds);

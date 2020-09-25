@@ -50,10 +50,3 @@ void MyKnob::setAttachment(AudioProcessorValueTreeState& apvts, const String& id
     attachment.reset(new AudioProcessorValueTreeState::SliderAttachment(apvts, id, *this));
 }
 
-void MyKnob::addLabel(const String& id)
-{
-   /* label.reset(new Label("title", "prova"));
-    label->attachToComponent(this, false);
-    this->addAndMakeVisible(*label, 1); */
-
-}

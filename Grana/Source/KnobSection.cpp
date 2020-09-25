@@ -20,21 +20,25 @@ KnobSection::KnobSection()
     height = 40;
     width = 40;
     checkDirection();
-
 }
 
 
 
-KnobSection::KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts) : xPos{ x }, yPos{ y }, width{ w }, height{ h } // nKnob is the length of ids
+KnobSection::KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, const std::vector<String>* titles, AudioProcessorValueTreeState* apvts) : xPos{ x }, yPos{ y }, width{ w }, height{ h } // nKnob is the length of ids
 {
     checkDirection();
-    addKnobs(ids, apvts);
+    addKnobs(ids, apvts, titles);
 }
 
 KnobSection::~KnobSection() {
     for (auto& knob : knobs) {
         delete knob;
     }
+
+    for (auto& lab : labels) {
+        delete lab;
+    }
+
 }
 
 
@@ -42,7 +46,7 @@ void KnobSection::setMyBounds() {
     this->setBounds(xPos, yPos, width, height);
 }
 
-void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts)
+void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts, const std::vector<String>* titles)
 {
     MyKnob* temp;
     Label* lab;
@@ -50,17 +54,23 @@ void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTr
 
     for (size_t i = 0; i < ids->size(); ++i) {
         const String &id = ids->at(i);
+        const String& title = titles->at(i);
         temp = new MyKnob(Slider::RotaryHorizontalVerticalDrag, Slider::TextBoxBelow);    //new MyKnob 
         temp->setTextBoxIsEditable(true);
         temp->setName(id);//set name 
         temp->setLookAndFeel(&KnobLAF);
         temp->setAttachment(*apvts, id); // attach knob value to audio processor tree state
-        addAndMakeVisible(temp); // makes visible each knob  
-        lab = new Label("title", id); //adds text label according to id
+        lab = new Label("title", title); //adds text label according to id
         lab->attachToComponent(temp, false);
+        // lab->setBounds(0, 0, width / 2, 30);
         temp->addAndMakeVisible(lab);
+
+        lab->attachToComponent(temp, true);
+        addAndMakeVisible(temp);
         knobs.push_back(temp);
         labels.push_back(lab);
+
+
     }
 
     arrange();
@@ -127,8 +137,6 @@ void KnobSection::checkTypeAndSetRange(tSection type)
         break;
     }
 }
-
-
 
 
 void KnobSection::paint(Graphics& g)
