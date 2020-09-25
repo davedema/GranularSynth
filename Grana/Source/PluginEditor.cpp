@@ -83,6 +83,7 @@ LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
     delete loadBtn;
     delete grainSection;
     delete envelopeList;
+    delete fileSection;
 }
 
 //==============================================================================
