@@ -37,6 +37,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique<AudioParameterFloat>("grain_durations", "Grain_Durations", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value
         std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f ),
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
+        std::make_unique<AudioParameterFloat>("randompos", "Randompos", 0, 1, 0.5f)
+
 })
 #endif
 { 
