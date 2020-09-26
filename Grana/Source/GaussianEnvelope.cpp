@@ -14,10 +14,21 @@
 GaussianEnvelope* GaussianEnvelope::instance = 0;
 
 
-GaussianEnvelope::GaussianEnvelope() : sampleRate(0), duration(0), mainLobeWidth(0.95) {}
-GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95){}
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) : duration(duration), sampleRate (sampleRate), mainLobeWidth(0.95) {}
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {}
+GaussianEnvelope::GaussianEnvelope() : sampleRate(0), duration(0), mainLobeWidth(0.95) {
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95){
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) : duration(duration), sampleRate (sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
 
 
 

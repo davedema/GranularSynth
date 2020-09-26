@@ -13,11 +13,16 @@
 
 TrapezoidalEnvelope::TrapezoidalEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
+	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {}
+TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {}
+TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
 
 
 

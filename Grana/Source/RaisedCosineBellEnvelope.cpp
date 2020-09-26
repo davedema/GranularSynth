@@ -13,11 +13,16 @@
 
 RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
+	filterCreation();
 }
 
-RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {}
+RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
 
-RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {}
+RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+	filterCreation();
+}
 
 
 
