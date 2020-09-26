@@ -30,7 +30,7 @@ public:
     float currentValue(float time) override;
     virtual float nextValue() override;
 
-    void FilterCreation();
+    void filterCreation();
 
     ~RaisedCosineBellEnvelope();
 

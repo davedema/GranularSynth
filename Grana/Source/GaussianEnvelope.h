@@ -38,7 +38,7 @@ public:
     static GaussianEnvelope* getInstance();
     
 
-    void FilterCreation();
+    void filterCreation();
 
 	~GaussianEnvelope();
 

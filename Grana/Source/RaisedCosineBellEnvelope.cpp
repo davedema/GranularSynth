@@ -31,7 +31,7 @@ float RaisedCosineBellEnvelope::currentValue(float time)
 
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 
-void RaisedCosineBellEnvelope::FilterCreation()
+void RaisedCosineBellEnvelope::filterCreation()
 {
 	int sampleLength = duration * sampleRate;
 	int sustain = mainLobeWidth * sampleLength;

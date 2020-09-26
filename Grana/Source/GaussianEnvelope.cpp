@@ -92,7 +92,7 @@ GaussianEnvelope* GaussianEnvelope::reset(float duration, int sampleRate, float 
 
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 
-void GaussianEnvelope::FilterCreation()
+void GaussianEnvelope::filterCreation()
 {
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;

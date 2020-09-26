@@ -31,7 +31,7 @@ float TrapezoidalEnvelope::currentValue(float time)
 
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 
-void TrapezoidalEnvelope::FilterCreation()
+void TrapezoidalEnvelope::filterCreation()
 {
 	int sampleLength = duration * sampleRate;
 	int sustain = mainLobeWidth * sampleLength;
