@@ -50,6 +50,7 @@ private:
     FileLoader *loader;
 
     KnobSection* grainSection;
+    KnobSection* fileSection;
     ComboBox* envelopeList;
 
 

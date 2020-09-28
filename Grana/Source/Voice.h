@@ -16,10 +16,10 @@ class Voice : public juce::SynthesiserVoice
 {
 private:
 
-    ADSR* envelope;         // A pointer to the global envelope (needed for rendering)
+    ADSR envelope;         // A pointer to the global envelope (needed for rendering)
 
 public:
-    Voice(ADSR* envelope);
+    Voice(ADSR::Parameters* params);
     ~Voice();
 
     // Pure virtual functions
@@ -29,5 +29,9 @@ public:
     void pitchWheelMoved(int newPitchWheelValue) override;
     void controllerMoved(int controllerNumber, int newControllerValue) override;
     void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
+
+    // Custom functions
+    void setEnvelope(ADSR::Parameters* params);
+    void setEnvelopeSampleRate(double sampleRate);
 
 };

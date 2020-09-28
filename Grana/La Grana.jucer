@@ -59,6 +59,8 @@
                 file="Source/GaussianEnvelope.cpp"/>
           <FILE id="ubk5jd" name="GaussianEnvelope.h" compile="0" resource="0"
                 file="Source/GaussianEnvelope.h"/>
+          <FILE id="j6SqWH" name="GrainEnvelope.cpp" compile="1" resource="0"
+                file="Source/GrainEnvelope.cpp"/>
           <FILE id="Zj6pVi" name="GrainEnvelope.h" compile="0" resource="0" file="Source/GrainEnvelope.h"/>
           <FILE id="GltNx9" name="RaisedCosineBellEnvelope.cpp" compile="1" resource="0"
                 file="Source/RaisedCosineBellEnvelope.cpp"/>

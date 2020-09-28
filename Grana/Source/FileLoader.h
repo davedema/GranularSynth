@@ -32,6 +32,7 @@ public:
     FileLoader();                               // Constructor
     ~FileLoader();                              // Destructor
     static FileLoader* getInstance();           // Get the instance of FileLoader (SINGLETON)
+	static void resetInstance();
     void loadWaveform(juce::File file);         // Load the sample in the buffer (& thumbnail)
     void loadFile(const juce::String& gpath);   // Drag & Drop function
 

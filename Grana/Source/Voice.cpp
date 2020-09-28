@@ -10,9 +10,9 @@
 
 #include "Voice.h"
 
-Voice::Voice(ADSR* envelope)
+Voice::Voice(ADSR::Parameters* params)
 {
-    this->envelope = envelope;
+    this->envelope.setParameters(*params);
 }
 
 Voice::~Voice()
@@ -28,7 +28,7 @@ bool Voice::canPlaySound(SynthesiserSound*)
 // Called to start a new note.This will be called during the rendering callback, so must be fast and thread-safe.
 void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
 {
-    this->envelope->noteOn();       // Starts the attack phase of the envelope
+    this->envelope.noteOn();       // Starts the attack phase of the envelope
     // Set the playback rate of the sound
 }
 
@@ -36,7 +36,7 @@ void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* soun
 void Voice::stopNote(float velocity, bool allowTailOff)
 {
     if (allowTailOff)
-        this->envelope->noteOff();      //Starts the release phase of the envelope
+        this->envelope.noteOff();      //Starts the release phase of the envelope
     else
         clearCurrentNote();
 }
@@ -63,7 +63,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     
     if (this->isVoiceActive()) {                                                                // If the voice is playing
         for (int samplePos = startSample; samplePos < startSample + numSamples; ++samplePos) {  // Cycle trough all the samples of the buffer
-            if (this->envelope->isActive()) {                                                   // If the envelope has not finished
+            if (this->envelope.isActive()) {                                                   // If the envelope has not finished
                 auto currentSample = (float)0;                                                  // Calculate the current sample
                 for (auto i = outputBuffer.getNumChannels(); --i >= 0;)                         // For each channel of the output buffer
                     outputBuffer.addSample(i, samplePos, currentSample);                        // Write the sample. It mixes the currentSample with the one already present (written by other voices)
@@ -76,4 +76,16 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     else {              // If the voice is not playing
         return;         // Return
     }
+}
+
+// CUSTOM FUNCTIONS
+
+void Voice::setEnvelope(ADSR::Parameters* params)
+{
+    this->envelope.setParameters(*params);
+}
+
+void Voice::setEnvelopeSampleRate(double sampleRate)
+{
+    this->envelope.setSampleRate(sampleRate);
 }

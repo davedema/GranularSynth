@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "FileLoader.h"
 
 // define constant values for knobs
 // GRAIN DURATIONS
@@ -36,17 +37,18 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique<AudioParameterFloat>("grain_durations", "Grain_Durations", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value
         std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f ),
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
+        std::make_unique<AudioParameterFloat>("randompos", "Randompos", 0, 1, 0.5f)
+
 })
 #endif
 { 
     grainParameter = treeState.getRawParameterValue("grain");
     filePosParameter = treeState.getRawParameterValue("filepos");
-    granulator = new Granulator();
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
-    delete this->granulator;
+    FileLoader::resetInstance();
 }
 
 //==============================================================================
@@ -117,8 +119,8 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
-    granulator->setCurrentPlaybackSampleRate(sampleRate);       // Set the playback rate for the synthesizer (will automatically propagate to all voices)
-    granulator->setEnvelopeSampleRate(sampleRate);              // Set the sample rate for the global envelope of the grain cloud
+    granulator.setCurrentPlaybackSampleRate(sampleRate);       // Set the playback rate for the synthesizer (will automatically propagate to all voices)
+    granulator.setEnvelopeSampleRate(sampleRate);              // Set the sample rate for the global envelope of the grain cloud
 }
 
 void LaGranaAudioProcessor::releaseResources()
@@ -172,6 +174,21 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+
+    //MIDI messages managment
+    MidiMessage m;
+    int time;
+
+    for (MidiBuffer::Iterator i(midiMessages); i.getNextEvent(m, time);) {
+        //DBG(m.getDescription() + " Note:" +  to_string(m.getNoteNumber()));
+        if (m.isNoteOn()) {
+            granulator.noteOn(m.getChannel(), m.getNoteNumber(), m.getVelocity());
+        }
+        else if (m.isNoteOff()) {
+            granulator.noteOff(m.getChannel(), m.getNoteNumber(), m.getVelocity(), true);
+        }
+    }
+
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);

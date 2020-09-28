@@ -27,8 +27,7 @@ class KnobSection : public Component, public Slider::Listener
 {
 public:
     KnobSection();
-
-    KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
+    KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, const std::vector<String>* titles, AudioProcessorValueTreeState* apvts); // constructor for grain section
 
     ~KnobSection();
 
@@ -41,7 +40,7 @@ public:
     void sliderDragEnded(Slider*) override;
 
     void setMyBounds();
-    void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts);
+    void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts, const std::vector<String>* titles);
 
     void setMyOscillatorRange();
 

@@ -62,7 +62,7 @@ private:
     std::atomic<float>* filePosParameter = nullptr;
 
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
-    Granulator* granulator;
+    Granulator granulator;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)

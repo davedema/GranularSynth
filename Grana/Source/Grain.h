@@ -12,42 +12,35 @@
 #include <JuceHeader.h>
 #include "FileLoader.h"
 #include "GrainEnvelope.h"
+#include "GaussianEnvelope.h"
+#include "RaisedCosineBellEnvelope.h"
+#include "TrapezoidalEnvelope.h"
 
-enum class EnvType { RaisedCosineBell, Gaussian, Trapezoidal };
+enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
 
-class Grain : public juce::AudioBuffer<int>{
+class Grain : public juce::AudioBuffer<int> {
 
 
 private:
 
-    const long long int onset;
-    const int length;
-    const int startPosition;
-    const float lengthRecip;
-
-    const float rate;
-    const float amp;
+    long long onset;
+    int length;
+    int startPosition;
+    float lengthRecip;
+    float amp;
 
     FileLoader* fileLoader;
-
-    EnvType envType;
-
+    GrainEnvelope* envelope;
 
 public:
+    Grain(EnvType type, long long onset, int length, int startPos, float amp);
 
-    Grain(EnvType type, long long int onset, int length, int startPos, float rate, float amp) : 
-        AudioBuffer(), onset(onset), length(length), startPosition(startPos),
-        lengthRecip(1 / (float)length), rate(rate), amp(amp) { envType = type; fileLoader = FileLoader::getInstance();
-    };
 
-    float envelope(int time);
     inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
     void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
-        int fileNumSamples, long long int time);
-
-    EnvType getEnvType() const;
-    void setEnvType(EnvType envType);
+                int fileNumSamples, long long int time);
+    void changeEnvelope(EnvType type);
 
     void activate();
-    void synthetize();
+    void synthesize();
 };

@@ -19,8 +19,7 @@
 class Granulator : public juce::Synthesiser
 {
 private:
-    ADSR* envelope;
-    ADSR::Parameters* envelopeParams;       // Envelope parameters, needed for setting
+    ADSR::Parameters envelopeParams;       // Envelope parameters, needed for setting
 
 public:
     Granulator();
