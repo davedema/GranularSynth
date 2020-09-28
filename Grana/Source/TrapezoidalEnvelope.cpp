@@ -60,3 +60,8 @@ void TrapezoidalEnvelope::filterCreation()
 	}
 }
 
+TrapezoidalEnvelope* TrapezoidalEnvelope::getInstance()
+{
+	return nullptr;
+}
+

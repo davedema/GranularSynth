@@ -28,6 +28,8 @@ public:
 
     void filterCreation();
 
+    static TrapezoidalEnvelope* getInstance();
+
     ~TrapezoidalEnvelope();
 
 private:

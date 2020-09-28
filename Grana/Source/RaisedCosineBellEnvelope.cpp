@@ -34,6 +34,11 @@ float RaisedCosineBellEnvelope::currentValue(float time)
 }
 
 
+RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::getInstance()
+{
+	return nullptr;
+}
+
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 
 void RaisedCosineBellEnvelope::filterCreation()
