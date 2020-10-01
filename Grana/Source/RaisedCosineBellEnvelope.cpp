@@ -10,6 +10,13 @@
 
 #include "RaisedCosineBellEnvelope.h"
 
+RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::instance = 0;
+
+
+RaisedCosineBellEnvelope::RaisedCosineBellEnvelope() : duration(0), sampleRate(0), mainLobeWidth(0.95)
+{
+	filterCreation();
+}
 
 RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
@@ -36,7 +43,50 @@ float RaisedCosineBellEnvelope::currentValue(float time)
 
 RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::getInstance()
 {
-	return nullptr;
+	if (!instance)
+		instance = new RaisedCosineBellEnvelope();
+	return instance;
+}
+
+
+void RaisedCosineBellEnvelope::reset()
+{
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then)
+		instance = nullptr; // so GetInstance will still work.
+	}
+}
+
+RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::setSampleRate(int sampleRate)
+{
+	RaisedCosineBellEnvelope* instance = RaisedCosineBellEnvelope::getInstance();
+	instance->sampleRate = sampleRate;
+	instance->filterCreation();
+	return instance;
+}
+
+RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::setDuration(int duration)
+{
+	RaisedCosineBellEnvelope* instance = RaisedCosineBellEnvelope::getInstance();
+	instance->duration = duration;
+	instance->filterCreation();
+	return instance;
+}
+
+RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::setMainLobeWidth(int mainLobeWidth)
+{
+	RaisedCosineBellEnvelope* instance = RaisedCosineBellEnvelope::getInstance();
+	instance->mainLobeWidth = mainLobeWidth;
+	instance->filterCreation();
+	return instance;
+}
+
+void RaisedCosineBellEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+{
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
+	}
+	instance = new RaisedCosineBellEnvelope(duration, sampleRate, mainLobeWidth);
 }
 
 // C++ prgroam to generate Gaussian filter 

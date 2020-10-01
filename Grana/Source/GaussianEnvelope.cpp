@@ -47,64 +47,54 @@ GaussianEnvelope* GaussianEnvelope::getInstance()
 }
 
 
-GaussianEnvelope* GaussianEnvelope::reset()
+void GaussianEnvelope::reset()
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then)
 		instance = nullptr; // so GetInstance will still work.
 	}
-	return nullptr;
 }
 
-GaussianEnvelope* GaussianEnvelope::resetSampleRate(int sampleRate)
+GaussianEnvelope* GaussianEnvelope::setSampleRate(int sampleRate)
 {
-	int duration = 0, mainLobeWidth = 0;
-	if (instance != nullptr) {
-		duration = instance->duration;
-		mainLobeWidth = instance->mainLobeWidth;
-		delete instance;
-	}
-	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	GaussianEnvelope* instance = GaussianEnvelope::getInstance();
+	instance->sampleRate = sampleRate;
+	instance->filterCreation();
 	return instance;
 }
 
-GaussianEnvelope* GaussianEnvelope::resetDuration(int duration)
+GaussianEnvelope* GaussianEnvelope::setDuration(int duration)
 {
-	int sampleRate = 0, mainLobeWidth = 0;
-	if (instance != nullptr) {
-		sampleRate = instance->sampleRate;
-		mainLobeWidth = instance->mainLobeWidth;
-		delete instance;
-	}
-	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	GaussianEnvelope* instance = GaussianEnvelope::getInstance();
+	instance->duration = duration;
+	instance->filterCreation();
 	return instance;
 }
 
-GaussianEnvelope* GaussianEnvelope::resetMainLobeWidth(int mainLobeWidth)
+GaussianEnvelope* GaussianEnvelope::setMainLobeWidth(int mainLobeWidth)
 {
-	int duration = 0, sampleRate = 0;
-	if (instance != nullptr) {
-		duration = instance->duration;
-		sampleRate = instance->sampleRate;
-		delete instance;
-	}
-	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
+	GaussianEnvelope* instance = GaussianEnvelope::getInstance();
+	instance->mainLobeWidth = mainLobeWidth;
+	instance->filterCreation();
 	return instance;
 }
 
-GaussianEnvelope* GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
 	}
 	instance = new GaussianEnvelope(duration, sampleRate, mainLobeWidth);
-	return instance;
 }
 
 // C++ prgroam to generate Gaussian filter 
 // Function to create Gaussian filter 
 void GaussianEnvelope::filterCreation()
 {
+	if (GKernel.size() > 0) { //clear previous kernel
+		GKernel.clear();
+	}
+
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
 	// intialising standard deviation to 1.0 
