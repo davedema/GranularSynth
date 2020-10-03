@@ -20,19 +20,32 @@
 class TrapezoidalEnvelope : public GrainEnvelope
 {
 public:
-    TrapezoidalEnvelope(int sampleRate);
-    TrapezoidalEnvelope(float duration, int sampleRate);
-    TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth);
+    
     float currentValue(float time) override;
     virtual float nextValue() override;
 
-    void filterCreation();
+    static void reset();
+    static void reset(float duration, int sampleRate, float mainLobeWidth);
 
-    ~TrapezoidalEnvelope();
+    static TrapezoidalEnvelope* getInstance();
+    static TrapezoidalEnvelope* setSampleRate(int sampleRate);
+    static TrapezoidalEnvelope* setMainLobeWidth(int mainLobeWidth);
+    static TrapezoidalEnvelope* setDuration(int duration);
+
+    
 
 private:
+    TrapezoidalEnvelope();
+    TrapezoidalEnvelope(int sampleRate);
+    TrapezoidalEnvelope(float duration, int sampleRate);
+    TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth);
+    ~TrapezoidalEnvelope();
+
+    void filterCreation();
+
     float duration; //duration in seconds
     int sampleRate;
     float mainLobeWidth;
     std::vector<double> kernel;
+    static TrapezoidalEnvelope* instance;
 };

@@ -10,6 +10,13 @@
 
 #include "TrapezoidalEnvelope.h"
 
+TrapezoidalEnvelope* TrapezoidalEnvelope::instance = 0;
+
+
+TrapezoidalEnvelope::TrapezoidalEnvelope() : duration(0), sampleRate(0), mainLobeWidth(0.95)
+{
+	filterCreation();
+}
 
 TrapezoidalEnvelope::TrapezoidalEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
 {
@@ -31,6 +38,54 @@ TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float m
 float TrapezoidalEnvelope::currentValue(float time)
 {
 	return kernel[(int)time * sampleRate];
+}
+
+TrapezoidalEnvelope* TrapezoidalEnvelope::getInstance()
+{
+	if (!instance)
+		instance = new TrapezoidalEnvelope();
+	return instance;
+}
+
+
+void TrapezoidalEnvelope::reset()
+{
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then)
+		instance = nullptr; // so GetInstance will still work.
+	}
+}
+
+TrapezoidalEnvelope* TrapezoidalEnvelope::setSampleRate(int sampleRate)
+{
+	TrapezoidalEnvelope* instance = TrapezoidalEnvelope::getInstance();
+	instance->sampleRate = sampleRate;
+	instance->filterCreation();
+	return instance;
+}
+
+TrapezoidalEnvelope* TrapezoidalEnvelope::setDuration(int duration)
+{
+	TrapezoidalEnvelope* instance = TrapezoidalEnvelope::getInstance();
+	instance->duration = duration;
+	instance->filterCreation();
+	return instance;
+}
+
+TrapezoidalEnvelope* TrapezoidalEnvelope::setMainLobeWidth(int mainLobeWidth)
+{
+	TrapezoidalEnvelope* instance = TrapezoidalEnvelope::getInstance();
+	instance->mainLobeWidth = mainLobeWidth;
+	instance->filterCreation();
+	return instance;
+}
+
+void TrapezoidalEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+{
+	if (instance != nullptr) {
+		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
+	}
+	instance = new TrapezoidalEnvelope(duration, sampleRate, mainLobeWidth);
 }
 
 
