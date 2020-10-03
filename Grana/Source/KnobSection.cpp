@@ -61,11 +61,9 @@ void KnobSection::addKnobs(const std::vector<String>* ids, AudioProcessorValueTr
         temp->setLookAndFeel(&KnobLAF);
         temp->setAttachment(*apvts, id); // attach knob value to audio processor tree state
         lab = new Label("title", title); //adds text label according to id
-        lab->attachToComponent(temp, false);
-        // lab->setBounds(0, 0, width / 2, 30);
-        temp->addAndMakeVisible(lab);
-
-        lab->attachToComponent(temp, true);
+        // lab->attachToComponent(temp, false);
+        //lab->setBounds(0, 0, width / 2, 30);
+        // temp->addAndMakeVisible(lab);
         addAndMakeVisible(temp);
         knobs.push_back(temp);
         labels.push_back(lab);
