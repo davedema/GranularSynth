@@ -44,6 +44,8 @@
         <FILE id="H7gU3I" name="MyKnob.h" compile="0" resource="0" file="Source/MyKnob.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="xnsULc" name="SequenceStrategy.cpp" compile="1" resource="0"
+              file="Source/SequenceStrategy.cpp"/>
         <FILE id="ihcXry" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>
         <FILE id="btzDuj" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
         <FILE id="QkKo9x" name="GrainCloud.cpp" compile="1" resource="0" file="Source/GrainCloud.cpp"/>

@@ -21,6 +21,16 @@ GrainCloud::~GrainCloud()
     }
 }
 
+bool GrainCloud::appliesToNote(int midiNoteNumber)
+{
+    return true;
+}
+
+bool GrainCloud::appliesToChannel(int midiChannel)
+{
+    return true;
+}
+
 void GrainCloud::addGrain(Grain* g)
 {
     grains.add(g);

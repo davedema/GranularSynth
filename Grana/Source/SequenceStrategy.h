@@ -13,15 +13,22 @@
 
 #pragma once
 
+#include <stdlib.h>
+
+
 class SequenceStrategy {
 
 
 private:
+    float grainDensity;
+    int grainLength;
+    float quasiSyncRange;
 
 
 
 public:
 
+    SequenceStrategy();
     int nextDuration(); //TODO: check if int or float (depending if samples or time)
     int nextInterOnset();
 
