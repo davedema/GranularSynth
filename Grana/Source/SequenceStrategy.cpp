@@ -14,10 +14,12 @@ SequenceStrategy::SequenceStrategy()
 {
     //TODO: getrawvalues from treestate
     this->quasiSyncRange = 0;
+    engine = std::mt19937(this->rd());
+    distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
 }
 
 int SequenceStrategy::nextInterOnset()
 {
-    float randomNumber = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f) * 2.0f; //rand in [-1, 1]
+    float randomNumber = distribution(engine); //random number in [-1, 1]
     return (1 / grainDensity) + randomNumber * quasiSyncRange;
 }
