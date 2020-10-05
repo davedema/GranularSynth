@@ -11,12 +11,27 @@
 #include "Grain.h"
 
 
-Grain::Grain(EnvType type, long long onset, int length, int startPos, float amp) :
-    AudioBuffer(), onset(onset), length(length), startPosition(startPos),
-    lengthRecip(1 / (float)length), amp(amp) 
+Grain::Grain(int length, int startPos) :
+    length(length), startPosition(startPos)
+    
 {
     fileLoader = FileLoader::getInstance();
+    buffer = processBuffer(); 
     float mainLobeWidth = 0.95; //connect to treestate
+    playbackRate = 1;
+    
+}
+
+AudioBuffer<float>* Grain::processBuffer()
+{
+    AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(2, this->length);
+    returnBuffer->copyFrom(0, this->startPosition, fileLoader->getAudioBuffer()->getReadPointer(0), 0, this->length); //copy buffer
+    returnBuffer->copyFrom(1, this->startPosition, fileLoader->getAudioBuffer()->getReadPointer(1), 1, this->length);
+    for (int i = 0; i < length; i++) { //apply envelope
+        *(returnBuffer->getWritePointer(0, i)) *= envelope->currentValue(i); //deferentiating to access values
+        *(returnBuffer->getWritePointer(1, i)) *= envelope->currentValue(i);
+    }
+    return returnBuffer;
 }
 
 inline float Grain::cubicinterp(float x, float y0, float y1, float y2, float y3)
@@ -30,7 +45,7 @@ inline float Grain::cubicinterp(float x, float y0, float y1, float y2, float y3)
     return ((c3 * x + c2) * x + c1) * x + c0;
 }
 
-void Grain::process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples, 
+/**void Grain::process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples, 
     int fileNumSamples, long long int time)
 {
     for (int channel = 0; channel < numChannels; ++channel) {
@@ -59,7 +74,7 @@ void Grain::process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuff
 
         channelData[time % blockNumSamples] += currentSample;
     }
-}
+}**/
 
 void Grain::changeEnvelope(EnvType type){
 

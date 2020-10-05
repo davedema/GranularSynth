@@ -18,27 +18,32 @@
 
 enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
 
-class Grain : public juce::AudioBuffer<int> {
+class Grain {
 
 
 private:
 
-    long long onset;
+    /**long long onset;
+    float lengthRecip;
+    float amp;**/
+
     int length;
     int startPosition;
-    float lengthRecip;
-    float amp;
+    float playbackRate; //siamo sicuri?
 
     FileLoader* fileLoader;
+    AudioBuffer<float>* buffer;
     GrainEnvelope* envelope;
 
 public:
-    Grain(EnvType type, long long onset, int length, int startPos, float amp);
+    Grain(int length, int startPos);
+
+    AudioBuffer<float>* processBuffer();
 
 
     inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
-    void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
-                int fileNumSamples, long long int time);
+    /**void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
+                int fileNumSamples, long long int time);**/
     void changeEnvelope(EnvType type);
 
     void activate();
