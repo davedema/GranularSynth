@@ -18,7 +18,6 @@ class GrainEnvelope
 public:
 	
     virtual float currentValue(float time);
-    virtual float nextValue();
     static void reset();
     static void reset(float duration, int sampleRate, float mainLobeWidth);
     static GrainEnvelope* getInstance();

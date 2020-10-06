@@ -31,7 +31,6 @@ public:
     static GaussianEnvelope* getInstance();
     
     float currentValue(float time) override;
-    virtual float nextValue() override;
     
 
 private:

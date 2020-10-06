@@ -143,7 +143,10 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
         auto file = chooser.getResult();
         auto* reader = formatManager->createReaderFor(file);
 
-        if (reader != nullptr) { loader->loadWaveform(file); }
+        if (reader != nullptr) { 
+            loader->loadWaveform(file); 
+            audioProcessor.resetEnvelopes();
+        }
     }
 }
 

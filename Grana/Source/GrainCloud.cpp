@@ -40,3 +40,21 @@ void GrainCloud::deleteGrain(Grain* g)
 {
     grains.remove(&g);
 }
+
+void GrainCloud::granulatePortion(int filePosition, int grainLength, int portionLength) 
+{
+    int hopSize = grainLength / 2; //COLA condition
+    int numGrains = portionLength / hopSize; // # of grains
+    if (numGrains * hopSize > portionLength) // check if outside
+        numGrains--;
+    for (int i = 0; i < numGrains; i++) { //add grains
+        Grain* grain = new Grain(grainLength, filePosition + i * hopSize);
+        addGrain(grain);
+    }
+
+}
+
+void GrainCloud::shiftPortion(int shift)
+{
+
+}

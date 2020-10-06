@@ -56,6 +56,9 @@ public:
 
     AudioProcessorValueTreeState* getValueTreeState();
 
+    void granulate();
+    void resetEnvelopes();
+
 
 private:
     std::atomic<float>* grainParameter = nullptr; //atomic allows different threads to operate on the instance

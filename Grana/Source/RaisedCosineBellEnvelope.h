@@ -25,7 +25,6 @@ class RaisedCosineBellEnvelope : public GrainEnvelope
 {
 public:
     float currentValue(float time) override;
-    virtual float nextValue() override;
 
     static void reset();
     static void reset(float duration, int sampleRate, float mainLobeWidth);

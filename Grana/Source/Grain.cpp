@@ -19,6 +19,7 @@ Grain::Grain(int length, int startPos) :
     buffer = processBuffer(); 
     float mainLobeWidth = 0.95; //connect to treestate
     playbackRate = 1;
+    envelope = GaussianEnvelope::getInstance();
     
 }
 
