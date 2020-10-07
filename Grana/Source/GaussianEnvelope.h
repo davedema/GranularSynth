@@ -30,7 +30,6 @@ public:
     static GaussianEnvelope* setMainLobeWidth(int mainLobeWidth);
     static GaussianEnvelope* getInstance();
     
-    float currentValue(float time) override;
     
 
 private:
@@ -44,9 +43,5 @@ private:
 
     ~GaussianEnvelope();
 
-    float duration; //duration in seconds
-    int sampleRate;
-    float mainLobeWidth;
-    std::vector<double> GKernel;
     static GaussianEnvelope* instance;
 };

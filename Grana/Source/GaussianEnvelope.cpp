@@ -14,30 +14,36 @@
 GaussianEnvelope* GaussianEnvelope::instance = 0;
 
 
-GaussianEnvelope::GaussianEnvelope() : sampleRate(0), duration(0), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95){
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) : duration(duration), sampleRate (sampleRate), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-
-
-
-
-float GaussianEnvelope::currentValue(float time)
+GaussianEnvelope::GaussianEnvelope()
 {
-	return GKernel[(int) time* sampleRate];
+	this->duration = 0;
+	this->sampleRate = 0;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
 }
+
+GaussianEnvelope::GaussianEnvelope(int sampleRate)
+{
+	this->duration = 0;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = mainLobeWidth;
+	filterCreation();
+}
+
 
 GaussianEnvelope* GaussianEnvelope::getInstance()
 {
@@ -91,8 +97,8 @@ void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth
 // Function to create Gaussian filter 
 void GaussianEnvelope::filterCreation()
 {
-	if (GKernel.size() > 0) { //clear previous kernel
-		GKernel.clear();
+	if (kernel.size() > 0) { //clear previous kernel
+		kernel.clear();
 	}
 
 	int halfDuration = (int)duration / 2;
@@ -109,9 +115,14 @@ void GaussianEnvelope::filterCreation()
 	}
 
 	for (int x = -halfDuration; x <= halfDurationPositive; x++) {
-			GKernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
-			GKernel[x + halfDuration] -= GKernel[0];
-			GKernel[x + halfDuration] /= 1 - GKernel[0];
+			kernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
+			kernel[x + halfDuration] -= kernel[0];
+			kernel[x + halfDuration] /= 1 - kernel[0];
 	}
+}
+
+GaussianEnvelope::~GaussianEnvelope()
+{
+	kernel.clear();
 }
 

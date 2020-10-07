@@ -14,7 +14,7 @@
 #include <cmath> 
 #include "GrainEnvelope.h"
 #include <iomanip> 
-#include <vector>
+
 
 
 
@@ -24,7 +24,6 @@
 class RaisedCosineBellEnvelope : public GrainEnvelope
 {
 public:
-    float currentValue(float time) override;
 
     static void reset();
     static void reset(float duration, int sampleRate, float mainLobeWidth);
@@ -44,9 +43,5 @@ private:
 
     void filterCreation();
 
-    float duration; //duration in seconds
-    int sampleRate;
-    float mainLobeWidth;
-    std::vector<double> kernel;
     static RaisedCosineBellEnvelope* instance;
 };

@@ -21,7 +21,6 @@ class TrapezoidalEnvelope : public GrainEnvelope
 {
 public:
     
-    float currentValue(float time) override;
     
 
     static void reset();
@@ -43,9 +42,6 @@ private:
 
     void filterCreation();
 
-    float duration; //duration in seconds
-    int sampleRate;
-    float mainLobeWidth;
-    std::vector<double> kernel;
+    
     static TrapezoidalEnvelope* instance;
 };

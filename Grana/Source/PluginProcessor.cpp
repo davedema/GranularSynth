@@ -242,8 +242,8 @@ AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
 
 void LaGranaAudioProcessor::granulate()
 {
-    /**GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
-    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos"), 44100 * 0.03, 44100 * 2);**/
+    GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
+    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos"), 44100 * 0.03, 44100 * 2);
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()

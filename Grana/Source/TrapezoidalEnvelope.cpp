@@ -13,31 +13,39 @@
 TrapezoidalEnvelope* TrapezoidalEnvelope::instance = 0;
 
 
-TrapezoidalEnvelope::TrapezoidalEnvelope() : duration(0), sampleRate(0), mainLobeWidth(0.95)
+TrapezoidalEnvelope::TrapezoidalEnvelope() 
 {
+	this->duration = 0;
+	this->sampleRate = 0;
+	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95)
+TrapezoidalEnvelope::TrapezoidalEnvelope(int sampleRate)
 {
+	this->duration = 0;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
+TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = mainLobeWidth;
 	filterCreation();
 }
 
-
-
-
-
-float TrapezoidalEnvelope::currentValue(float time)
+TrapezoidalEnvelope::~TrapezoidalEnvelope()
 {
-	return kernel[(int)time * sampleRate];
+	kernel.clear();
 }
 
 TrapezoidalEnvelope* TrapezoidalEnvelope::getInstance()

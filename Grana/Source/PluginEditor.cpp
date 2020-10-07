@@ -146,6 +146,7 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
         if (reader != nullptr) { 
             loader->loadWaveform(file); 
             audioProcessor.resetEnvelopes();
+            audioProcessor.granulate();
         }
     }
 }

@@ -9,6 +9,7 @@
 */
 
 #pragma once
+#include <vector>
 
 
 
@@ -17,20 +18,22 @@ class GrainEnvelope
 
 public:
 	
-    virtual float currentValue(float time);
+    float currentValue(float time);
+    std::vector<double> getKernel();
+
     static void reset();
     static void reset(float duration, int sampleRate, float mainLobeWidth);
-    static GrainEnvelope* getInstance();
+    
+protected:
 
-    GrainEnvelope();
-    virtual ~GrainEnvelope();
+    float duration; //duration in seconds
+    int sampleRate;
+    float mainLobeWidth;
+    std::vector<double> kernel;
 
 private:
     
     
-
-    float duration;
-    float mainLobeWidth;
-    static GrainEnvelope* instance;
+    
 };
 
