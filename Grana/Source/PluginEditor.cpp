@@ -148,6 +148,8 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
             audioProcessor.resetEnvelopes();
             audioProcessor.granulate();
         }
+
+        delete reader;
     }
 }
 
@@ -177,6 +179,8 @@ void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
 {
     if (isInterestedInFileDrag(files)) {
         loader->loadFile(files[0]);
+        audioProcessor.resetEnvelopes();
+        audioProcessor.granulate();
     }
 }
 

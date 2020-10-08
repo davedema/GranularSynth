@@ -24,6 +24,11 @@ Grain::Grain(int length, int startPos) :
     
 }
 
+Grain::~Grain()
+{
+    delete buffer;
+}
+
 AudioBuffer<float>* Grain::processBuffer()
 {
     AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(2, this->length);

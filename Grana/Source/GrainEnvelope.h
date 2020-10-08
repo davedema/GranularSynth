@@ -23,10 +23,11 @@ public:
     static void reset();
     static void reset(int duration, int sampleRate, float mainLobeWidth);
 
-    std::vector<double> kernel;
+    
     
 protected:
 
+    std::vector<double> kernel;
     int duration; //duration in samples
     int sampleRate;
     float mainLobeWidth;
