@@ -143,7 +143,13 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
         auto file = chooser.getResult();
         auto* reader = formatManager->createReaderFor(file);
 
-        if (reader != nullptr) { loader->loadWaveform(file); }
+        if (reader != nullptr) { 
+            loader->loadWaveform(file); 
+            audioProcessor.resetEnvelopes();
+            audioProcessor.granulate();
+        }
+
+        delete reader;
     }
 }
 
@@ -173,6 +179,8 @@ void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
 {
     if (isInterestedInFileDrag(files)) {
         loader->loadFile(files[0]);
+        audioProcessor.resetEnvelopes();
+        audioProcessor.granulate();
     }
 }
 

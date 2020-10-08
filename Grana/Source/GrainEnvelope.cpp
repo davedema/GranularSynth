@@ -10,13 +10,8 @@
 
 #include "GrainEnvelope.h"
 
-GrainEnvelope* GrainEnvelope::instance = 0;
 
-
-void GrainEnvelope::reset()
+float GrainEnvelope::currentValue(int time)
 {
-    if (getInstance() != nullptr) {
-        delete getInstance(); // REM : it works even if the pointer is NULL (does nothing then)
-        instance = nullptr; // so GetInstance will still work.
-    }
+    return kernel[time];
 }

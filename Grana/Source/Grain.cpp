@@ -16,17 +16,24 @@ Grain::Grain(int length, int startPos) :
     
 {
     fileLoader = FileLoader::getInstance();
+    envelope = GaussianEnvelope::getInstance();
     buffer = processBuffer(); 
     float mainLobeWidth = 0.95; //connect to treestate
     playbackRate = 1;
     
+    
+}
+
+Grain::~Grain()
+{
+    delete buffer;
 }
 
 AudioBuffer<float>* Grain::processBuffer()
 {
     AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(2, this->length);
-    returnBuffer->copyFrom(0, this->startPosition, fileLoader->getAudioBuffer()->getReadPointer(0), 0, this->length); //copy buffer
-    returnBuffer->copyFrom(1, this->startPosition, fileLoader->getAudioBuffer()->getReadPointer(1), 1, this->length);
+    returnBuffer->copyFrom(0, 0, &(fileLoader->getAudioBuffer()->getReadPointer(0)[this->startPosition]), 0, this->length); //copy buffer
+    returnBuffer->copyFrom(1, 0, &(fileLoader->getAudioBuffer()->getReadPointer(1)[this->startPosition]), 1, this->length);
     for (int i = 0; i < length; i++) { //apply envelope
         *(returnBuffer->getWritePointer(0, i)) *= envelope->currentValue(i); //deferentiating to access values
         *(returnBuffer->getWritePointer(1, i)) *= envelope->currentValue(i);

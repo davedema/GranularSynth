@@ -9,6 +9,7 @@
 */
 
 #include "Granulator.h"
+#include "GrainCloud.h"
 
 Granulator::Granulator() 
 {
@@ -19,17 +20,15 @@ Granulator::Granulator()
 
     for (int i; i < VOICES; ++i)                        // Add voices to the synth
         this->addVoice(new Voice(&this->envelopeParams));
-    /*
+
     this->addSound(new GrainCloud());                   // Add the sound of the synth (that is the GrainCloud)
-    */
 }
 
 Granulator::~Granulator()
 {
     this->clearVoices();
-    /*
     this->clearSounds();
-    */
+    
 }
 
 void Granulator::setEnvelopeSampleRate(double sampleRate)
@@ -51,3 +50,5 @@ void Granulator::setEnvelope(float a, float d, float s, float r)
         voice->setEnvelope(&this->envelopeParams);
     }
 }
+
+

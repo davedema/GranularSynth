@@ -14,30 +14,36 @@
 GaussianEnvelope* GaussianEnvelope::instance = 0;
 
 
-GaussianEnvelope::GaussianEnvelope() : sampleRate(0), duration(0), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(int sampleRate) : duration(0), sampleRate(sampleRate), mainLobeWidth(0.95){
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) : duration(duration), sampleRate (sampleRate), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) : duration(duration), sampleRate(sampleRate), mainLobeWidth(0.95) {
-	filterCreation();
-}
-
-
-
-
-
-float GaussianEnvelope::currentValue(float time)
+GaussianEnvelope::GaussianEnvelope()
 {
-	return GKernel[(int) time* sampleRate];
+	this->duration = 0;
+	this->sampleRate = 0;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
 }
+
+GaussianEnvelope::GaussianEnvelope(int sampleRate)
+{
+	this->duration = 0;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(int duration, int sampleRate) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = 0.95;
+	filterCreation();
+}
+
+GaussianEnvelope::GaussianEnvelope(int duration, int sampleRate, float mainLobeWidth) {
+	this->duration = duration;
+	this->sampleRate = sampleRate;
+	this->mainLobeWidth = mainLobeWidth;
+	filterCreation();
+}
+
 
 GaussianEnvelope* GaussianEnvelope::getInstance()
 {
@@ -79,7 +85,7 @@ GaussianEnvelope* GaussianEnvelope::setMainLobeWidth(int mainLobeWidth)
 	return instance;
 }
 
-void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+void GaussianEnvelope::reset(int duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
@@ -91,27 +97,34 @@ void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth
 // Function to create Gaussian filter 
 void GaussianEnvelope::filterCreation()
 {
-	if (GKernel.size() > 0) { //clear previous kernel
-		GKernel.clear();
+	if (kernel.size() > 0) { //clear previous kernel
+		kernel.clear();
 	}
 
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
 	// intialising standard deviation to 1.0 
-	double sigma = mainLobeWidth * duration * sampleRate;
-	double r, s = 2.0 * sigma * sigma;
+	float sigma = mainLobeWidth * (float)duration;
+	float r, s = 2.0 * sigma * sigma;
 
 	// generating kernel 
 
-	if ((int)duration %2 == 0) { //this is done in order to solve the problem of having an array
+	if (duration %2 == 0) { //this is done in order to solve the problem of having an array
 								 //1 cell longer than needed when working with a even duration
 		halfDurationPositive--;
 	}
 
 	for (int x = -halfDuration; x <= halfDurationPositive; x++) {
-			GKernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
-			GKernel[x + halfDuration] -= GKernel[0];
-			GKernel[x + halfDuration] /= 1 - GKernel[0];
+			kernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
+			kernel[x + halfDuration] -= kernel[0];
+			kernel[x + halfDuration] /= 1 - kernel[0];
 	}
 }
+
+GaussianEnvelope::~GaussianEnvelope()
+{
+	kernel.clear();
+}
+
+
 

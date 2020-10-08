@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "FileLoader.h"
+#include "GrainCloud.h"
 
 // define constant values for knobs
 // GRAIN DURATIONS
@@ -49,6 +50,9 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
     FileLoader::resetInstance();
+    GaussianEnvelope::reset();
+    TrapezoidalEnvelope::reset();
+    RaisedCosineBellEnvelope::reset();
 }
 
 //==============================================================================
@@ -156,6 +160,7 @@ bool LaGranaAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    int currentBufferLength = buffer.getNumSamples();
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -166,7 +171,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear (i, 0, currentBufferLength);
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -233,6 +238,23 @@ void LaGranaAudioProcessor::setStateInformation (const void* data, int sizeInByt
 AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
 {
     return &treeState;
+}
+
+void LaGranaAudioProcessor::granulate()
+{
+    float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
+    int sampleDuration = (int)durationValue;
+    GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
+    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos")->load(), sampleDuration, 44100 * 2);
+}
+
+void LaGranaAudioProcessor::resetEnvelopes()
+{
+    float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
+    int sampleDuration = (int)durationValue;
+    GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
+    TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
+    RaisedCosineBellEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
 }
 
 //==============================================================================

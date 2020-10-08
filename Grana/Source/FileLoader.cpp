@@ -54,13 +54,14 @@ void FileLoader::resetInstance()
 // Read the file and loads it in the thumbnail (to display) and in the buffer
 void FileLoader::loadWaveform(juce::File file)
 {
-    juce::AudioFormatReader* reader = formatManager->createReaderFor(file);
+    auto* reader = formatManager->createReaderFor(file);
     std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));                                                                                                          // [13]
     thumbnail->setSource(new juce::FileInputSource(file));
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
     reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
     sampleRate = reader->sampleRate;
+    delete reader;
 }
 
 // Drag & Drop funztion (calls loadWaveform to load the file)

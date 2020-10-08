@@ -37,6 +37,7 @@ private:
 
 public:
     Grain(int length, int startPos);
+    ~Grain();
 
     AudioBuffer<float>* processBuffer();
 

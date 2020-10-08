@@ -12,7 +12,7 @@
 #include "Grain.h"
 #include "SequenceStrategy.h"
 
-class GrainCloud : juce::SynthesiserSound { // passive class just describes the sound - the rendering happens inside the Voice class
+class GrainCloud : public juce::SynthesiserSound { // passive class just describes the sound - the rendering happens inside the Voice class
 
 private: 
     Array<Grain*> grains; //juce array class
@@ -30,5 +30,7 @@ public:
     //custom functions
     void addGrain(Grain* g); // adds a grain to the stack
     void deleteGrain(Grain* g); // deletes a grain once its lifetime is over
+    void granulatePortion(int filePosition, int grainLength, int portionLength); // granulates specified portion
+    void shiftPortion(int shift);
 
 };
