@@ -45,7 +45,7 @@ void GrainCloud::granulatePortion(int filePosition, int grainLength, int portion
 {
     int hopSize = grainLength / 2; //COLA condition
     int numGrains = portionLength / hopSize; // # of grains
-    if (numGrains * hopSize > portionLength) // check if outside
+    while ((numGrains * hopSize + grainLength) > portionLength) // check if outside
         numGrains--;
     for (int i = 0; i < numGrains; i++) { //add grains
         Grain* grain = new Grain(grainLength, filePosition + i * hopSize);

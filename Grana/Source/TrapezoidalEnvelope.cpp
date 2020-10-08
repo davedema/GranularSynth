@@ -29,14 +29,14 @@ TrapezoidalEnvelope::TrapezoidalEnvelope(int sampleRate)
 	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate) {
+TrapezoidalEnvelope::TrapezoidalEnvelope(int duration, int sampleRate) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-TrapezoidalEnvelope::TrapezoidalEnvelope(float duration, int sampleRate, float mainLobeWidth) {
+TrapezoidalEnvelope::TrapezoidalEnvelope(int duration, int sampleRate, float mainLobeWidth) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = mainLobeWidth;
@@ -88,7 +88,7 @@ TrapezoidalEnvelope* TrapezoidalEnvelope::setMainLobeWidth(int mainLobeWidth)
 	return instance;
 }
 
-void TrapezoidalEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+void TrapezoidalEnvelope::reset(int duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
@@ -101,7 +101,7 @@ void TrapezoidalEnvelope::reset(float duration, int sampleRate, float mainLobeWi
 // Function to create Gaussian filter 
 void TrapezoidalEnvelope::filterCreation()
 {
-	int sampleLength = duration * sampleRate;
+	int sampleLength = duration;
 	int sustain = mainLobeWidth * sampleLength;
 	int attack = (sampleLength - sustain) / 2;
 
@@ -122,4 +122,3 @@ void TrapezoidalEnvelope::filterCreation()
 		kernel.push_back(kernel[x]);
 	}
 }
-

@@ -26,18 +26,19 @@ class RaisedCosineBellEnvelope : public GrainEnvelope
 public:
 
     static void reset();
-    static void reset(float duration, int sampleRate, float mainLobeWidth);
+    static void reset(int duration, int sampleRate, float mainLobeWidth);
 
     static RaisedCosineBellEnvelope* getInstance();
     static RaisedCosineBellEnvelope* setSampleRate(int sampleRate);
     static RaisedCosineBellEnvelope* setMainLobeWidth(int mainLobeWidth);
     static RaisedCosineBellEnvelope* setDuration(int duration);
 
+
 private:
     RaisedCosineBellEnvelope();
     RaisedCosineBellEnvelope(int sampleRate);
-    RaisedCosineBellEnvelope(float duration, int sampleRate);
-    RaisedCosineBellEnvelope(float duration, int sampleRate, float mainLobeWidth);
+    RaisedCosineBellEnvelope(int duration, int sampleRate);
+    RaisedCosineBellEnvelope(int duration, int sampleRate, float mainLobeWidth);
 
     ~RaisedCosineBellEnvelope();
 

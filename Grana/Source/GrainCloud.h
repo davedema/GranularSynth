@@ -30,7 +30,7 @@ public:
     //custom functions
     void addGrain(Grain* g); // adds a grain to the stack
     void deleteGrain(Grain* g); // deletes a grain once its lifetime is over
-    void granulatePortion(int filePosition, int grainLength, int portionLength); // granulates input file from filePosition to filePosition + portionLength
+    void granulatePortion(int filePosition, int grainLength, int portionLength); // granulates specified portion
     void shiftPortion(int shift);
 
 };

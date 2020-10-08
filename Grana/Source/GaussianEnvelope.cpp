@@ -30,14 +30,14 @@ GaussianEnvelope::GaussianEnvelope(int sampleRate)
 	filterCreation();
 }
 
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate) {
+GaussianEnvelope::GaussianEnvelope(int duration, int sampleRate) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-GaussianEnvelope::GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth) {
+GaussianEnvelope::GaussianEnvelope(int duration, int sampleRate, float mainLobeWidth) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = mainLobeWidth;
@@ -85,7 +85,7 @@ GaussianEnvelope* GaussianEnvelope::setMainLobeWidth(int mainLobeWidth)
 	return instance;
 }
 
-void GaussianEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+void GaussianEnvelope::reset(int duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
@@ -104,12 +104,12 @@ void GaussianEnvelope::filterCreation()
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
 	// intialising standard deviation to 1.0 
-	double sigma = mainLobeWidth * duration * sampleRate;
-	double r, s = 2.0 * sigma * sigma;
+	float sigma = mainLobeWidth * (float)duration;
+	float r, s = 2.0 * sigma * sigma;
 
 	// generating kernel 
 
-	if ((int)duration %2 == 0) { //this is done in order to solve the problem of having an array
+	if (duration %2 == 0) { //this is done in order to solve the problem of having an array
 								 //1 cell longer than needed when working with a even duration
 		halfDurationPositive--;
 	}
@@ -125,4 +125,6 @@ GaussianEnvelope::~GaussianEnvelope()
 {
 	kernel.clear();
 }
+
+
 

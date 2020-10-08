@@ -18,18 +18,19 @@ class GrainEnvelope
 
 public:
 	
-    float currentValue(float time);
-    std::vector<double> getKernel();
+    float currentValue(int time);
 
     static void reset();
-    static void reset(float duration, int sampleRate, float mainLobeWidth);
+    static void reset(int duration, int sampleRate, float mainLobeWidth);
+
+    std::vector<double> kernel;
     
 protected:
 
-    float duration; //duration in seconds
+    int duration; //duration in samples
     int sampleRate;
     float mainLobeWidth;
-    std::vector<double> kernel;
+    
 
 private:
     

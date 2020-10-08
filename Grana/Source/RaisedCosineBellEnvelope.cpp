@@ -29,14 +29,14 @@ RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(int sampleRate)
 	filterCreation();
 }
 
-RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate) {
+RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(int duration, int sampleRate) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = 0.95;
 	filterCreation();
 }
 
-RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(float duration, int sampleRate, float mainLobeWidth) {
+RaisedCosineBellEnvelope::RaisedCosineBellEnvelope(int duration, int sampleRate, float mainLobeWidth) {
 	this->duration = duration;
 	this->sampleRate = sampleRate;
 	this->mainLobeWidth = mainLobeWidth;
@@ -89,7 +89,7 @@ RaisedCosineBellEnvelope* RaisedCosineBellEnvelope::setMainLobeWidth(int mainLob
 	return instance;
 }
 
-void RaisedCosineBellEnvelope::reset(float duration, int sampleRate, float mainLobeWidth)
+void RaisedCosineBellEnvelope::reset(int duration, int sampleRate, float mainLobeWidth)
 {
 	if (instance != nullptr) {
 		delete instance; // REM : it works even if the pointer is NULL (does nothing then) so GetInstance will still work.
@@ -101,7 +101,7 @@ void RaisedCosineBellEnvelope::reset(float duration, int sampleRate, float mainL
 // Function to create Gaussian filter 
 void RaisedCosineBellEnvelope::filterCreation()
 {
-	int sampleLength = duration * sampleRate;
+	int sampleLength = duration;
 	int sustain = mainLobeWidth * sampleLength;
 	int attack = (sampleLength - sustain) / 2;
 
@@ -119,4 +119,3 @@ void RaisedCosineBellEnvelope::filterCreation()
 		kernel.push_back(kernel[x]);
 	}
 }
-

@@ -24,11 +24,12 @@ class GaussianEnvelope : public GrainEnvelope
 public:
 
     static void reset();
-    static void reset(float duration, int sampleRate, float mainLobeWidth);
+    static void reset(int duration, int sampleRate, float mainLobeWidth);
     static GaussianEnvelope* setDuration(int duration);
     static GaussianEnvelope* setSampleRate(int sampleRate);
     static GaussianEnvelope* setMainLobeWidth(int mainLobeWidth);
     static GaussianEnvelope* getInstance();
+    
     
     
 
@@ -36,8 +37,8 @@ private:
 
     GaussianEnvelope();
     GaussianEnvelope(int sampleRate);
-    GaussianEnvelope(float duration, int sampleRate);
-    GaussianEnvelope(float duration, int sampleRate, float mainLobeWidth);
+    GaussianEnvelope(int duration, int sampleRate);
+    GaussianEnvelope(int duration, int sampleRate, float mainLobeWidth);
     
     void filterCreation();
 

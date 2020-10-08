@@ -242,15 +242,19 @@ AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
 
 void LaGranaAudioProcessor::granulate()
 {
+    float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
+    int sampleDuration = (int)durationValue;
     GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
-    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos"), 44100 * 0.03, 44100 * 2);
+    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos")->load(), sampleDuration, 44100 * 2);
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()
 {
-    GaussianEnvelope::reset((int)treeState.getRawParameterValue("grain_durations"), FileLoader::getInstance()->getSampleRate(), 0.8f);
-    TrapezoidalEnvelope::reset((int)treeState.getRawParameterValue("grain_durations"), FileLoader::getInstance()->getSampleRate(), 0.8f);
-    RaisedCosineBellEnvelope::reset((int)treeState.getRawParameterValue("grain_durations"), FileLoader::getInstance()->getSampleRate(), 0.8f);
+    float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
+    int sampleDuration = (int)durationValue;
+    GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
+    TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
+    RaisedCosineBellEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
 }
 
 //==============================================================================

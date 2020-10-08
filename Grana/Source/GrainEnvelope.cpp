@@ -10,12 +10,8 @@
 
 #include "GrainEnvelope.h"
 
-float GrainEnvelope::currentValue(float time)
-{
-    return kernel[(int)time * sampleRate];
-}
 
-std::vector<double> GrainEnvelope::getKernel()
+float GrainEnvelope::currentValue(int time)
 {
-    return this->kernel;
+    return kernel[time];
 }
