@@ -13,6 +13,7 @@
 Voice::Voice(ADSR::Parameters* params)
 {
     this->envelope.setParameters(*params);
+    this->currentSample = 0;
 }
 
 Voice::~Voice()
@@ -28,6 +29,8 @@ bool Voice::canPlaySound(SynthesiserSound*)
 // Called to start a new note.This will be called during the rendering callback, so must be fast and thread-safe.
 void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
 {
+    this->currentSample = 0;
+    this->cloud = dynamic_cast<GrainCloud*>(sound);
     this->envelope.noteOn();       // Starts the attack phase of the envelope
     // Set the playback rate of the sound
 }
@@ -61,15 +64,16 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     // If the sound that the voice is playing finishes during the course of this rendered block, it must call clearCurrentNote(), to tell the synthesiser that it has finished.
     // The size of the blocks that are rendered can change each time it is called, and may involve rendering as little as 1 sample at a time.In between rendering callbacks, the voice's methods will be called to tell it about note and controller events. 
     
-    if (this->isVoiceActive()) {                                                                // If the voice is playing
-        for (int samplePos = startSample; samplePos < startSample + numSamples; ++samplePos) {  // Cycle trough all the samples of the buffer
-            if (this->envelope.isActive()) {                                                   // If the envelope has not finished
-                auto currentSample = (float)0;                                                  // Calculate the current sample
-                for (auto i = outputBuffer.getNumChannels(); --i >= 0;)                         // For each channel of the output buffer
-                    outputBuffer.addSample(i, samplePos, currentSample);                        // Write the sample. It mixes the currentSample with the one already present (written by other voices)
+    if (this->isVoiceActive()) {                                                                                        // If the voice is playing
+        for (int samplePos = startSample; samplePos < startSample + numSamples; ++samplePos) {                          // Cycle trough all the samples of the buffer
+            if (this->envelope.isActive()) {                                                                            // If the envelope has not finished
+                auto currentSample = this->cloud->getSample(this->currentSample)*this->envelope.getNextSample();        // Calculate the current sample
+                for (auto i = outputBuffer.getNumChannels(); --i >= 0;)                                                 // For each channel of the output buffer
+                    outputBuffer.addSample(i, samplePos, currentSample);                                                // Write the sample. It mixes the currentSample with the one already present (written by other voices)
+                this->currentSample++;
             }
-            else {                                                                              // If the envelope has finished
-                this->clearCurrentNote();                                                       // Clear the note
+            else {                                                                                                      // If the envelope has finished
+                this->clearCurrentNote();                                                                               // Clear the note
             }
         }
     }

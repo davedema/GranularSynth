@@ -11,12 +11,15 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "GrainCloud.h"
 
 class Voice : public juce::SynthesiserVoice
 {
 private:
 
     ADSR envelope;         // A pointer to the global envelope (needed for rendering)
+    GrainCloud* cloud;
+    int currentSample;
 
 public:
     Voice(ADSR::Parameters* params);

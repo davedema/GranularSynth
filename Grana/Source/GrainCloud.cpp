@@ -58,3 +58,8 @@ void GrainCloud::shiftPortion(int shift)
 {
 
 }
+
+float GrainCloud::getSample(int samplePos)
+{
+    return 0;
+}

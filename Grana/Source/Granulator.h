@@ -15,7 +15,7 @@
 #include "Voice.h"
 
 
-#define VOICES 10       // Number of polyphony voices
+#define VOICES 1       // Number of polyphony voices
 
 class Granulator : public juce::Synthesiser
 {
