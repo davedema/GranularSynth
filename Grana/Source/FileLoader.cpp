@@ -59,9 +59,10 @@ void FileLoader::loadWaveform(juce::File file)
     thumbnail->setSource(new juce::FileInputSource(file));
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
+    float** writePointers = buffer->getArrayOfWritePointers();
     reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
+    float test = buffer->getSample(1, 1000);
     sampleRate = reader->sampleRate;
-    delete reader;
 }
 
 // Drag & Drop funztion (calls loadWaveform to load the file)

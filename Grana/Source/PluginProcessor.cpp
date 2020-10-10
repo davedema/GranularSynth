@@ -181,6 +181,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // interleaved by keeping the same state.
 
     //MIDI messages managment
+    /*
     MidiMessage m;
     int time;
 
@@ -192,7 +193,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         else if (m.isNoteOff()) {
             granulator.noteOff(m.getChannel(), m.getNoteNumber(), m.getVelocity(), true);
         }
-    }
+    
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -200,6 +201,8 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         // ..do something to the data...
     }
+    **/
+    granulator.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
