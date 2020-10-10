@@ -248,7 +248,9 @@ void LaGranaAudioProcessor::granulate()
     float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
     int sampleDuration = (int)durationValue;
     GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
-    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos")->load(), sampleDuration, 44100 * 2);
+    float floatPos = treeState.getRawParameterValue("filepos")->load() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
+    int filePos = (int)floatPos;
+    cloud->granulatePortion(filePos, sampleDuration, 44100 * 2);
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()

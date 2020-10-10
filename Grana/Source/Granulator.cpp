@@ -18,7 +18,7 @@ Granulator::Granulator()
     this->envelopeParams.sustain = 0.7;
     this->envelopeParams.release = 0.1;
 
-    for (int i = 0; i < VOICES; ++i)                        // Add voices to the synth
+    for (int i = 0; i < VOICES; i++)                        // Add voices to the synth
         this->addVoice(new Voice(&this->envelopeParams));
 
     this->addSound(new GrainCloud());                   // Add the sound of the synth (that is the GrainCloud)

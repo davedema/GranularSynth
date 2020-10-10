@@ -45,9 +45,10 @@ void GrainCloud::granulatePortion(int filePosition, int grainLength, int portion
 {
     int hopSize = grainLength / 2; //COLA condition
     int numGrains = portionLength / hopSize; // # of grains
-    while ((numGrains * hopSize + grainLength) > portionLength) // check if outside
+    int fileLength = FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+    while (filePosition + numGrains * hopSize + grainLength > fileLength) // check if outside
         numGrains--;
-    for (int i = 0; i < numGrains; i++) { //add grains
+    for (int i = 0; i < numGrains - 1; i++) { //add grains
         Grain* grain = new Grain(grainLength, filePosition + i * hopSize);
         addGrain(grain);
     }
