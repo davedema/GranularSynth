@@ -59,7 +59,7 @@ void GrainCloud::shiftPortion(int shift)
 
 }
 
-float GrainCloud::getSample(int samplePos)
+float GrainCloud::getSample(int channel, int samplePos)
 {
-    return 0;
+    return grains.getFirst()->getSample(channel, samplePos); // dummy implementation with the first grain
 }

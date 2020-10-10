@@ -46,6 +46,7 @@ public:
     /**void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
                 int fileNumSamples, long long int time);**/
     void changeEnvelope(EnvType type);
+    float getSample(int channel, int index);
 
     void activate();
     void synthesize();

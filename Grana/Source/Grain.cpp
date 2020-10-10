@@ -99,3 +99,8 @@ void Grain::changeEnvelope(EnvType type){
         break;
     }
 }
+
+float Grain::getSample(int channel, int index)
+{
+    return this->buffer->getSample(channel, index);
+}
