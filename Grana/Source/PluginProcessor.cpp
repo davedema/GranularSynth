@@ -181,6 +181,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // interleaved by keeping the same state.
 
     //MIDI messages managment
+    /*
     MidiMessage m;
     int time;
 
@@ -192,7 +193,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         else if (m.isNoteOff()) {
             granulator.noteOff(m.getChannel(), m.getNoteNumber(), m.getVelocity(), true);
         }
-    }
+    
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -200,6 +201,8 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         // ..do something to the data...
     }
+    **/
+    granulator.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -245,7 +248,9 @@ void LaGranaAudioProcessor::granulate()
     float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
     int sampleDuration = (int)durationValue;
     GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
-    cloud->granulatePortion((int)treeState.getRawParameterValue("filepos")->load(), sampleDuration, 44100 * 2);
+    float floatPos = treeState.getRawParameterValue("filepos")->load() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
+    int filePos = (int)floatPos;
+    cloud->granulatePortion(filePos, sampleDuration, 44100 * 2);
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()

@@ -32,11 +32,11 @@ Grain::~Grain()
 AudioBuffer<float>* Grain::processBuffer()
 {
     AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(2, this->length);
-    returnBuffer->copyFrom(0, 0, &(fileLoader->getAudioBuffer()->getReadPointer(0)[this->startPosition]), 0, this->length); //copy buffer
-    returnBuffer->copyFrom(1, 0, &(fileLoader->getAudioBuffer()->getReadPointer(1)[this->startPosition]), 1, this->length);
-    for (int i = 0; i < length; i++) { //apply envelope
-        *(returnBuffer->getWritePointer(0, i)) *= envelope->currentValue(i); //deferentiating to access values
-        *(returnBuffer->getWritePointer(1, i)) *= envelope->currentValue(i);
+    for (int i = 0; i < fileLoader->getAudioBuffer()->getNumChannels(); i++) {
+        returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length - 1); //copy buffer
+        for (int j = 0; j < length; j++) { //apply envelope
+            *(returnBuffer->getWritePointer(i, j)) *= envelope->currentValue(j); //deferentiating to access values
+        }
     }
     return returnBuffer;
 }

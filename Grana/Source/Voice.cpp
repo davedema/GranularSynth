@@ -65,12 +65,12 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     // The size of the blocks that are rendered can change each time it is called, and may involve rendering as little as 1 sample at a time.In between rendering callbacks, the voice's methods will be called to tell it about note and controller events. 
     
     if (this->isVoiceActive()) {                                                                                        // If the voice is playing
-        for (int samplePos = startSample; samplePos < startSample + numSamples; ++samplePos) {                          // Cycle trough all the samples of the buffer
+        for (int samplePos = startSample; samplePos < startSample + numSamples; samplePos++) {                          // Cycle trough all the samples of the buffer
             if (this->envelope.isActive()) {                                                                            // If the envelope has not finished
                 auto currentEnvelope = this->envelope.getNextSample();
-                for (auto i = outputBuffer.getNumChannels(); --i >= 0;) {                                                 // For each channel of the output buffer
+                for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {                                               // For each channel of the output buffer
                     
-                    auto currentSample = this->cloud->getSample(i, this->currentSample) * currentEnvelope; // Calculate the current sample
+                    auto currentSample = this->cloud->getSample(i, this->currentSample) * currentEnvelope;              // Calculate the current sample
                     outputBuffer.addSample(i, samplePos, currentSample);                                                // Write the sample. It mixes the currentSample with the one already present (written by other voices)
                 }
                 this->currentSample++;
@@ -83,6 +83,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     else {              // If the voice is not playing
         return;         // Return
     }
+    this->currentSample = 0;
 }
 
 // CUSTOM FUNCTIONS
