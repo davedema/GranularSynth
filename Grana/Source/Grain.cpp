@@ -19,6 +19,7 @@ Grain::Grain(int length, int startPos) :
     envelope = GaussianEnvelope::getInstance();
     buffer = processBuffer(); 
     float mainLobeWidth = 0.95; //connect to treestate
+    nextOnsetTime = 0;
     playbackRate = 1;
     
     
@@ -98,6 +99,11 @@ void Grain::changeEnvelope(EnvType type){
     default:
         break;
     }
+}
+
+int Grain::getLength()
+{
+    return this->length;
 }
 
 float Grain::getSample(int channel, int index)

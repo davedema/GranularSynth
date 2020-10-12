@@ -9,10 +9,10 @@
 */
 
 #pragma once
-
 #include <JuceHeader.h>
 //#include "MasterEnvelope.h"
 #include "Voice.h"
+#include "GrainCloud.h"
 
 
 #define VOICES 1       // Number of polyphony voices

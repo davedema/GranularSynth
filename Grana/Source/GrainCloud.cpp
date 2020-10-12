@@ -7,8 +7,8 @@
 
   ==============================================================================
 */
-
 #include "GrainCloud.h"
+
 
 GrainCloud::GrainCloud()
 {
@@ -60,7 +60,14 @@ void GrainCloud::shiftPortion(int shift)
 
 }
 
-float GrainCloud::getSample(int channel, int samplePos)
+
+Grain* GrainCloud::getNextGrain(Grain* currentGrain)
 {
-    return grains.getFirst()->getSample(channel, samplePos); // dummy implementation with the first grain
+    if (currentGrain == nullptr) return grains.getFirst();
+
+    int idx = grains.indexOf(currentGrain);
+    if (idx != -1) return grains.getUnchecked(idx + 1);
+
+    return grains.getFirst();
+
 }

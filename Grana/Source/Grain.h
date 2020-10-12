@@ -8,6 +8,7 @@
   ==============================================================================
 */
 
+#pragma once
 
 #include <JuceHeader.h>
 #include "FileLoader.h"
@@ -29,6 +30,7 @@ private:
 
     int length;
     int startPosition;
+    int nextOnsetTime;
     float playbackRate; //siamo sicuri?
 
     FileLoader* fileLoader;
@@ -46,6 +48,7 @@ public:
     /**void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
                 int fileNumSamples, long long int time);**/
     void changeEnvelope(EnvType type);
+    int getLength();
     float getSample(int channel, int index);
 
     void activate();

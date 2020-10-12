@@ -7,9 +7,8 @@
 
   ==============================================================================
 */
-
 #include "Granulator.h"
-#include "GrainCloud.h"
+
 
 Granulator::Granulator() 
 {

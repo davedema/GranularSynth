@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 #include "Granulator.h"
+#include "FileLoader.h"
+#include "GrainCloud.h"
 
 //==============================================================================
 /**

@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "GrainCloud.h"
+#include "Grain.h"
 
 class Voice : public juce::SynthesiserVoice
 {
@@ -20,7 +21,8 @@ private:
     ADSR envelope;         // A pointer to the global envelope (needed for rendering)
     GrainCloud* cloud;
     int currentSample;
-
+    Grain* currentGrain;
+    
 public:
     Voice(ADSR::Parameters* params);
     ~Voice();
@@ -36,5 +38,6 @@ public:
     // Custom functions
     void setEnvelope(ADSR::Parameters* params);
     void setEnvelopeSampleRate(double sampleRate);
+    float clip(float value, float min, float max);
 
 };

@@ -8,8 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "FileLoader.h"
-#include "GrainCloud.h"
+
 
 // define constant values for knobs
 // GRAIN DURATIONS
