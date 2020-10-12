@@ -20,8 +20,8 @@ private:
 
     ADSR envelope;         // A pointer to the global envelope (needed for rendering)
     GrainCloud* cloud;
-    int currentSample;
-    Grain* currentGrain;
+    int currentSampleIdx;  // keeps the position in samples starting from the first grain in activeGrains
+    Array<Grain *> activeGrains;
     
 public:
     Voice(ADSR::Parameters* params);

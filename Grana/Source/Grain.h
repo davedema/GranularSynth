@@ -48,9 +48,16 @@ public:
     /**void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
                 int fileNumSamples, long long int time);**/
     void changeEnvelope(EnvType type);
-    int getLength();
-    float getSample(int channel, int index);
-
     void activate();
     void synthesize();
+
+
+
+    //--------GETTERS AND SETTERS
+
+
+    int getLength();
+    float getSample(int channel, int index);
+    int getNextOnsetTime();
+
 };

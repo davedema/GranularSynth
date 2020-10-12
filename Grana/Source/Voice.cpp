@@ -13,7 +13,7 @@
 Voice::Voice(ADSR::Parameters* params)
 {
     this->envelope.setParameters(*params);
-    this->currentSample = 0;
+    this->currentSampleIdx = 0;
     this->cloud = nullptr;
     this->currentGrain = nullptr;
 }
@@ -31,11 +31,10 @@ bool Voice::canPlaySound(SynthesiserSound*)
 // Called to start a new note.This will be called during the rendering callback, so must be fast and thread-safe.
 void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
 {
-    this->currentSample = 0;
+    this->currentSampleIdx = 0;
     this->cloud = dynamic_cast<GrainCloud*>(sound);
-    this->currentGrain = this->cloud->getNextGrain(this->currentGrain);
-    this->envelope.noteOn();       // Starts the attack phase of the envelope
-    // Set the playback rate of the sound
+    activeGrains.add(cloud->getNextGrain(nullptr));
+    this->envelope.noteOn(); // Starts the attack phase of the envelope
     
 }
 
@@ -61,25 +60,55 @@ void Voice::controllerMoved(int controllerNumber, int newControllerValue)
 }
 
 // Renders the next block of data for this voice. 
-void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
-{
-    // The output audio data must be added to the current contents of the buffer provided. Only the region of the buffer between startSample and (startSample + numSamples) should be altered by this method.
+// The output audio data must be added to the current contents of the buffer provided. Only the region of the buffer between startSample and (startSample + numSamples) should be altered by this method.
     // If the voice is currently silent, it should just return without doing anything.
     // If the sound that the voice is playing finishes during the course of this rendered block, it must call clearCurrentNote(), to tell the synthesiser that it has finished.
-    // The size of the blocks that are rendered can change each time it is called, and may involve rendering as little as 1 sample at a time.In between rendering callbacks, the voice's methods will be called to tell it about note and controller events. 
-    if (this->isVoiceActive()) {                                                                                        // If the voice is playing
-        for (int samplePos = startSample; samplePos < startSample + numSamples; samplePos++) {                          // Cycle trough all the samples of the buffer
-            if (this->currentSample >= this->currentGrain->getLength()) {
-                this->currentGrain = this->cloud->getNextGrain(this->currentGrain);
-                this->currentSample = 0;
+    // The size of the blocks that are rendered can change each time it is called, 
+    //and may involve rendering as little as 1 sample at a time.In between rendering callbacks, the voice's methods will be called to tell it about note and controller events. 
+void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
+{
+    auto sampleValue;
+    // If the voice is playing
+    if (this->isVoiceActive()) {
+        // Cycle trough all the samples of the buffer
+        for (int samplePos = startSample; samplePos < startSample + numSamples; samplePos++) {                          
+            //if we get to the end of the grain then go to the next
+            if (currentSampleIdx == currentGrain->getLength()) { 
+
+                int hopsize = activeGrains.getFirst().getNextOnSetTime();
+                //removes the first grain
+                activeGrains.remove(0);
+                //sets the currentSample Index to the starting position
+                //that is going back #hopsize samples!
+                currentSampleIdx -=hopsize; 
             }
-            if (this->envelope.isActive()) {                                                                            // If the envelope has not finished
+
+
+
+            //do we need to add a new grain on active grains?
+            if(currentSampleIdx >= activeGrains.getLast()->getNextOnSetTime()){
+                activeGrains.add(cloud->getNextGrain(activeGrains.getLast()))
+            }
+            
+            if (this->envelope.isActive()) {                                                                            
+                // If the envelope has not finished
                 auto currentEnvelope = this->envelope.getNextSample();
-                for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {                                               // For each channel of the output buffer
-                    auto sampleValue = this->currentGrain->getSample(i, this->currentSample) * currentEnvelope;           // Calculate the sample I want to add from the grain stack
-                    outputBuffer.addSample(i, samplePos, sampleValue);                                                // Write the sample. It mixes the currentSample with the one already present (written by other voices)
+                int hopSizeSum = 0;
+                // For each channel of the output buffer
+                for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {    
+                    hopSizeSum = 0;                                           
+                    //compute the sum of the samples from all the currently active grains
+                    while(auto grain : activeGrains){
+                        sampleValue += grain.getSample(i, currentSampleIdx - hopSizeSum)
+                        hopSizeSum += grain.getNextOnSetTime();
+                    }
+
+                    // aplly Global Envelope to the summed samples
+                    sampleValue *= currentEnvelope;         
+                    // Write the sample. It mixes the currentSampleIdx with the one already present (written by other voices)  
+                    outputBuffer.addSample(i, samplePos, sampleValue);                                                
                 }
-                this->currentSample++;
+                this->currentSampleIdx++;
             }
             else {                                                                                                      // If the envelope has finished
                 this->clearCurrentNote();                                                                               // Clear the note
@@ -87,7 +116,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
         }
     }
     else {              // If the voice is not playing
-        this->currentSample = 0;
+        this->currentSampleIdx = 0;
         return;         // Return
     }
 }

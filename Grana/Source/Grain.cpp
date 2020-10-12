@@ -110,3 +110,9 @@ float Grain::getSample(int channel, int index)
 {
     return this->buffer->getSample(channel, index);
 }
+
+
+
+int Grain::getNextOnsetTime(){
+    return nextOnsetTime;
+}
