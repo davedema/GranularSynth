@@ -114,5 +114,5 @@ float Grain::getSample(int channel, int index)
 
 
 int Grain::getNextOnsetTime(){
-    return nextOnsetTime;
+    return this->length/2; //dummy value using a 50%  constant overlap
 }

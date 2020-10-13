@@ -15,8 +15,7 @@ Voice::Voice(ADSR::Parameters* params)
     this->envelope.setParameters(*params);
     this->currentSampleIdx = 0;
     this->cloud = nullptr;
-    this->currentGrain = nullptr;
-}
+f}
 
 Voice::~Voice()
 {
@@ -67,15 +66,15 @@ void Voice::controllerMoved(int controllerNumber, int newControllerValue)
     //and may involve rendering as little as 1 sample at a time.In between rendering callbacks, the voice's methods will be called to tell it about note and controller events. 
 void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
-    auto sampleValue;
+    float sampleValue = 0;
     // If the voice is playing
     if (this->isVoiceActive()) {
         // Cycle trough all the samples of the buffer
         for (int samplePos = startSample; samplePos < startSample + numSamples; samplePos++) {                          
-            //if we get to the end of the grain then go to the next
-            if (currentSampleIdx == currentGrain->getLength()) { 
+            //REMOVE GRAINS if we get to the end of the grain then go to the next
+            if (currentSampleIdx == activeGrains.getFirst()->getLength()) { 
 
-                int hopsize = activeGrains.getFirst().getNextOnSetTime();
+                int hopsize = activeGrains.getFirst()->getNextOnsetTime();
                 //removes the first grain
                 activeGrains.remove(0);
                 //sets the currentSample Index to the starting position
@@ -83,11 +82,9 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                 currentSampleIdx -=hopsize; 
             }
 
-
-
-            //do we need to add a new grain on active grains?
-            if(currentSampleIdx >= activeGrains.getLast()->getNextOnSetTime()){
-                activeGrains.add(cloud->getNextGrain(activeGrains.getLast()))
+            //ADD GRAINS // do we need to add a new grain on active grains?
+            if(currentSampleIdx >= activeGrains.getLast()->getNextOnsetTime()){
+                activeGrains.add(cloud->getNextGrain(activeGrains.getLast()));
             }
             
             if (this->envelope.isActive()) {                                                                            
@@ -98,15 +95,17 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                 for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {    
                     hopSizeSum = 0;                                           
                     //compute the sum of the samples from all the currently active grains
-                    while(auto grain : activeGrains){
-                        sampleValue += grain.getSample(i, currentSampleIdx - hopSizeSum)
-                        hopSizeSum += grain.getNextOnSetTime();
+                    for(auto grain : activeGrains){
+                        if (currentSampleIdx < grain->getLength()) {
+                            sampleValue += grain->getSample(i, currentSampleIdx - hopSizeSum);
+                            hopSizeSum += grain->getNextOnsetTime();
+                        }
                     }
 
                     // aplly Global Envelope to the summed samples
                     sampleValue *= currentEnvelope;         
                     // Write the sample. It mixes the currentSampleIdx with the one already present (written by other voices)  
-                    outputBuffer.addSample(i, samplePos, sampleValue);                                                
+                    outputBuffer.addSample(i, samplePos, this->clip(sampleValue, -1, 1));                                                
                 }
                 this->currentSampleIdx++;
             }
