@@ -15,7 +15,7 @@ Voice::Voice(ADSR::Parameters* params)
     this->envelope.setParameters(*params);
     this->currentSampleIdx = 0;
     this->cloud = nullptr;
-f}
+}
 
 Voice::~Voice()
 {
