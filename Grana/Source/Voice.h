@@ -22,6 +22,12 @@ private:
     GrainCloud* cloud;
     int currentSampleIdx;  // keeps the position in samples starting from the first grain in activeGrains
     Array<Grain *> activeGrains;
+    int totalHops;
+
+
+    ////////////////////////
+    int grainCounter; // DEBUG VARIABLE TODELETE
+
     
 public:
     Voice(ADSR::Parameters* params);

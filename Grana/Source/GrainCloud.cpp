@@ -60,6 +60,11 @@ void GrainCloud::shiftPortion(int shift)
 
 }
 
+int GrainCloud::getCloudLength()
+{
+    return this->grains.size();
+}
+
 
 Grain* GrainCloud::getNextGrain(Grain* currentGrain)
 {

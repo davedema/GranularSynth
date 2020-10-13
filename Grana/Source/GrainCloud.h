@@ -32,6 +32,7 @@ public:
     void deleteGrain(Grain* g); // deletes a grain once its lifetime is over
     void granulatePortion(int filePosition, int grainLength, int portionLength); // granulates specified portion
     void shiftPortion(int shift);
+    int getCloudLength();
 
     Grain* getNextGrain(Grain* currentGrain);
 
