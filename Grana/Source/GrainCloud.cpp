@@ -12,6 +12,11 @@
 
 GrainCloud::GrainCloud()
 {
+    //TODO: getrawvalues from treestate
+    this->quasiSyncRange = 0;
+    engine = std::mt19937(this->rd());
+    distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
+
 }
 
 GrainCloud::~GrainCloud()
@@ -65,6 +70,11 @@ int GrainCloud::getCloudLength()
     return this->grains.size();
 }
 
+
+int GrainCloud::nextInterOnset(Grain* currentGrain)
+{
+    return currentGrain->getLength() / 2;
+}
 
 Grain* GrainCloud::getNextGrain(Grain* currentGrain)
 {

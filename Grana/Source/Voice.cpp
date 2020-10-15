@@ -43,8 +43,9 @@ void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* soun
 // Called to stop a note. This will be called during the rendering callback, so must be fastand thread-safe.
 void Voice::stopNote(float velocity, bool allowTailOff)
 {
-    if (allowTailOff)
+    if (allowTailOff) {
         this->envelope.noteOff();      //Starts the release phase of the envelope
+    }
     else
         clearCurrentNote();
 }
@@ -74,20 +75,19 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
     if (this->isVoiceActive()) {
         // Cycle trough all the samples of the buffer
         for (int samplePos = startSample; samplePos < startSample + numSamples; samplePos++) { 
-            DBG("1stGRAIN->LENGTH: " + std::to_string(activeGrains.getFirst()->getLength()));
-            DBG("lastGRAIN->ONSET: " + std::to_string(activeGrains.getLast()->getNextOnsetTime()));
-            DBG("totalhops: " + std::to_string(totalHops));
+            //DBG("1stGRAIN->LENGTH: " + std::to_string(activeGrains.getFirst()->getLength()));
+            //DBG("totalhops: " + std::to_string(totalHops));
             //ADD GRAINS // do we need to add a new grain on active grains?
-            if (currentSampleIdx == activeGrains.getLast()->getNextOnsetTime() + this->totalHops) {
+            if (currentSampleIdx == this->cloud->nextInterOnset(activeGrains.getLast()) + this->totalHops) {
                 activeGrains.add(cloud->getNextGrain(activeGrains.getLast()));
-                this->totalHops += activeGrains.getFirst()->getNextOnsetTime();
-                DBG("<--------------ADDED GRAIN------------>");
+                this->totalHops += this->cloud->nextInterOnset(activeGrains.getFirst());
+               // DBG("<--------------ADDED GRAIN------------>");
                 this->grainCounter++;
             }
             //REMOVE GRAINS if we get to the end of the grain then go to the next
             if (currentSampleIdx == activeGrains.getFirst()->getLength()) { 
 
-                int hopsize = activeGrains.getFirst()->getNextOnsetTime();
+                int hopsize = this->cloud->nextInterOnset(activeGrains.getFirst());
                 //removes the first grain
                 activeGrains.remove(0);
                 //sets the currentSample Index to the starting position
@@ -96,7 +96,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
 
                 //remove nextonset of the first
                 this->totalHops -= hopsize;
-                DBG("<------------REMOVED GRAIN-------------->" );
+                //DBG("<------------REMOVED GRAIN-------------->" );
             }
             
             if (this->envelope.isActive()) {                                                                            
@@ -104,30 +104,37 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                 auto currentEnvelope = this->envelope.getNextSample();
                 int hopSizeSum = 0;
                 // For each channel of the output buffer
+                DBG("active grains size:" + std::to_string(this->activeGrains.size()));
                 for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {    
+                    sampleValue = 0;
                     hopSizeSum = 0.0;                                           
                     //compute the sum of the samples from all the currently active grains
                     for(auto grain : activeGrains){
-                        DBG("COUNTER:" + std::to_string(this->grainCounter));
+                        //DBG("COUNTER:" + std::to_string(this->grainCounter));
                         if (currentSampleIdx < grain->getLength()) {
-                            DBG("currentSampleIdx :" + std::to_string(currentSampleIdx));
+                            //DBG("getSample IDX :" + std::to_string(currentSampleIdx - hopSizeSum));
                         //    DBG("hopSizeSum : " + std::to_string(hopSizeSum));
                             sampleValue += grain->getSample(i, currentSampleIdx - hopSizeSum);
-                            
-                            hopSizeSum += grain->getNextOnsetTime();
+                            DBG("sample value on channel " + std::to_string(i) + ": " + std::to_string(sampleValue));
+                            DBG("bufferMagnitude: " + std::to_string(grain->maxValue));
+                            hopSizeSum += this->cloud->nextInterOnset(grain);
                         }
                         else std::cout << "error: out of grain!\n";
                     }
 
                     // aplly Global Envelope to the summed samples
-                    sampleValue *= currentEnvelope;         
+                    //DBG("total sum of samples:" + std::to_string(sampleValue));
+                    sampleValue *= currentEnvelope;     
+                   //DBG("total sum of samples: (After envelope)" + std::to_string(sampleValue) + "\n");
                     // Write the sample. It mixes the currentSampleIdx with the one already present (written by other voices)  
-                    outputBuffer.addSample(i, samplePos, this->clip(sampleValue, -1, 1));                                                
+                    outputBuffer.addSample(i, samplePos, sampleValue);                                                
                 }
                 this->currentSampleIdx++;
             }
             else {                                                                                                      // If the envelope has finished
                 this->clearCurrentNote();                                                                               // Clear the note
+                this->activeGrains.clear();                                                                         // clear all the activeGrains when note has been released
+
             }
         }
     }

@@ -21,7 +21,7 @@ Grain::Grain(int length, int startPos) :
     float mainLobeWidth = 0.95; //connect to treestate
     nextOnsetTime = 0;
     playbackRate = 1;
-    
+    maxValue = buffer->getMagnitude(0, length);
     
 }
 
@@ -115,5 +115,5 @@ float Grain::getSample(int channel, int index)
 
 int Grain::getNextOnsetTime(){
 
-    return this->length/2; //dummy value using a 50%  constant overlap
+    return (int)this->length/2; //dummy value using a 50%  constant overlap
 }

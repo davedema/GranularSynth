@@ -33,6 +33,7 @@ private:
     int nextOnsetTime;
     float playbackRate; //siamo sicuri?
 
+
     FileLoader* fileLoader;
     AudioBuffer<float>* buffer;
     GrainEnvelope* envelope;
@@ -40,6 +41,8 @@ private:
 public:
     Grain(int length, int startPos);
     ~Grain();
+
+    float maxValue;
 
     AudioBuffer<float>* processBuffer();
 

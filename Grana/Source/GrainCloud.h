@@ -18,6 +18,14 @@ private:
     Array<Grain*> grains; //juce array class
     SequenceStrategy strategy;
 
+    float grainDensity;
+    int grainLength;
+    float quasiSyncRange;
+
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 engine; //Standard mersenne_twister_engine seeded with rd() and feeded to distribution
+    std::uniform_real_distribution<float> distribution; //uniform distribution
+
 public: 
     GrainCloud();
     ~GrainCloud();
@@ -33,7 +41,10 @@ public:
     void granulatePortion(int filePosition, int grainLength, int portionLength); // granulates specified portion
     void shiftPortion(int shift);
     int getCloudLength();
-
     Grain* getNextGrain(Grain* currentGrain);
+
+    //sequence strategy
+    int nextInterOnset(Grain* currentGrain);
+
 
 };

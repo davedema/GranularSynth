@@ -250,6 +250,8 @@ void LaGranaAudioProcessor::granulate()
     float floatPos = treeState.getRawParameterValue("filepos")->load() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
     int filePos = (int)floatPos;
     cloud->granulatePortion(filePos, sampleDuration, 44100 * 2);
+    DBG("Filepos:" + std::to_string(filePos));
+    DBG("duration:" + std::to_string(sampleDuration));
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()

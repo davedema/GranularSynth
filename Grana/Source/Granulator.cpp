@@ -12,15 +12,12 @@
 
 Granulator::Granulator() 
 {
-    this->envelopeParams.attack = 0.1;                  // Setting some default envelope parameters (should be taken from treestate)
-    this->envelopeParams.decay = 0.1;
-    this->envelopeParams.sustain = 0.7;
-    this->envelopeParams.release = 0.1;
-
     for (int i = 0; i < VOICES; i++)                        // Add voices to the synth
         this->addVoice(new Voice(&this->envelopeParams));
 
     this->addSound(new GrainCloud());                   // Add the sound of the synth (that is the GrainCloud)
+
+    this->setEnvelope(0.1, 0.1, 0.7, 0.1);
 }
 
 Granulator::~Granulator()
