@@ -1,0 +1,7 @@
+This computer program containing an atmospheric propagation model for the
+submillimeter band is a work of the United States and may be used freely,
+with attribution and credit to the Smithsonian Astrophysical Observatory.
+The program is intended for educational, scholarly or research purposes.  In
+connection with any commercial use of the program, the user should disclose
+clearly and conspicuously all of the information contained in the first
+sentence of this notice.
