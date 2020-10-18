@@ -43,10 +43,11 @@ void Voice::startNote(int midiNoteNumber, float velocity, SynthesiserSound* soun
 // Called to stop a note. This will be called during the rendering callback, so must be fastand thread-safe.
 void Voice::stopNote(float velocity, bool allowTailOff)
 {
-    if (allowTailOff) {
+
+    /*if (allowTailOff) {
         this->envelope.noteOff();      //Starts the release phase of the envelope
     }
-    else
+    else*/
         clearCurrentNote();
 }
 
@@ -104,7 +105,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                 auto currentEnvelope = this->envelope.getNextSample();
                 int hopSizeSum = 0;
                 // For each channel of the output buffer
-                DBG("active grains size:" + std::to_string(this->activeGrains.size()));
+                //DBG("active grains size:" + std::to_string(this->activeGrains.size()));
                 for (auto i = 0; i < outputBuffer.getNumChannels(); i++) {    
                     sampleValue = 0;
                     hopSizeSum = 0.0;                                           
@@ -115,8 +116,8 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                             //DBG("getSample IDX :" + std::to_string(currentSampleIdx - hopSizeSum));
                         //    DBG("hopSizeSum : " + std::to_string(hopSizeSum));
                             sampleValue += grain->getSample(i, currentSampleIdx - hopSizeSum);
-                            DBG("sample value on channel " + std::to_string(i) + ": " + std::to_string(sampleValue));
-                            DBG("bufferMagnitude: " + std::to_string(grain->maxValue));
+                            //DBG("sample value on channel " + std::to_string(i) + ": " + std::to_string(sampleValue));
+                            //DBG("bufferMagnitude: " + std::to_string(grain->maxValue));
                             hopSizeSum += this->cloud->nextInterOnset(grain);
                         }
                         else std::cout << "error: out of grain!\n";

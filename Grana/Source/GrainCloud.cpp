@@ -81,6 +81,8 @@ Grain* GrainCloud::getNextGrain(Grain* currentGrain)
     if (currentGrain == nullptr) return grains.getFirst();
 
     int idx = grains.indexOf(currentGrain);
+    DBG("Number of grains: " + std::to_string(grains.size()));
+    DBG("Grain index: " + std::to_string(idx));
     if (idx != -1) return grains.getUnchecked(idx + 1);
 
     return grains.getFirst();
