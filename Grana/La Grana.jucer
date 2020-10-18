@@ -6,6 +6,13 @@
               includeBinaryInJuceHeader="1">
   <MAINGROUP id="cZs3we" name="La Grana">
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
+      <GROUP id="{A4C7E0AD-34FC-B090-3B23-B4AF9936C68E}" name="SmithsoniansTransforms">
+        <FILE id="Ng6gHE" name="math_const.h" compile="0" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"/>
+        <FILE id="kcrn4o" name="transforms.c" compile="1" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/transforms.c"/>
+        <FILE id="rGuxL2" name="transforms.h" compile="0" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/transforms.h"/>
+        <FILE id="NOgDpp" name="am_sysdep.c" compile="1" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/am_sysdep.c"/>
+        <FILE id="SVeE72" name="am_sysdep.h" compile="0" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/am_sysdep.h"/>
+      </GROUP>
       <GROUP id="{FB54BA8B-3FB5-7DF9-0AC6-A1B7809CEC26}" name="images">
         <FILE id="knkXOu" name="BIGDADDY.png" compile="0" resource="1" file="images/BIGDADDY.png"/>
         <FILE id="deU5Z5" name="Carbon.png" compile="0" resource="1" file="images/Carbon.png"/>

@@ -10,13 +10,23 @@
 
 #include "Grain.h"
 
+#ifdef __cplusplus 
+extern "C" {
+#endif
+#include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/transforms.h"
+#ifdef __cplusplus 
+}
+#endif
+
 
 Grain::Grain(int length, int startPos) :
     length(length), startPosition(startPos)
     
 {
     fileLoader = FileLoader::getInstance();
+    this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
+    hilbertTransform = (double*)malloc(sizeof(double) * numChannels * 2 * this->length); //allocate a transform for every channel
     buffer = processBuffer(); 
     float mainLobeWidth = 0.95; //connect to treestate
     nextOnsetTime = 0;
@@ -27,17 +37,23 @@ Grain::Grain(int length, int startPos) :
 
 Grain::~Grain()
 {
+    free(hilbertTransform);
     delete buffer;
 }
 
 AudioBuffer<float>* Grain::processBuffer()
 {
-    AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(2, this->length);
-    for (int i = 0; i < fileLoader->getAudioBuffer()->getNumChannels(); i++) {
-        returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length - 1); //copy buffer
+    AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(this->numChannels, this->length);
+    returnBuffer->clear();
+ 
+    for (int i = 0; i < this->numChannels; i++) {
+        returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length); //copy buffer
         for (int j = 0; j < length; j++) { //apply envelope
-            *(returnBuffer->getWritePointer(i, j)) *= envelope->currentValue(j); //deferentiating to access values
+            returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
+            hilbertTransform[i * this->length + j] = returnBuffer->getSample(i, j);
+            hilbertTransform[i * this->length + j + 1] = 0; //real signal ----> a value every two set to zero
         }
+        hilbert(&hilbertTransform[i * this->length], this->length); //hilbertTransform is now the Hilbert transform of the grain
     }
     return returnBuffer;
 }
@@ -116,4 +132,9 @@ float Grain::getSample(int channel, int index)
 int Grain::getNextOnsetTime(){
 
     return (int)this->length/2; //dummy value using a 50%  constant overlap
+}
+
+int Grain::getNumChannels()
+{
+    return this->numChannels;
 }

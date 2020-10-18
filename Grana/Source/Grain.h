@@ -37,6 +37,9 @@ private:
     FileLoader* fileLoader;
     AudioBuffer<float>* buffer;
     GrainEnvelope* envelope;
+    int numChannels;   //number of channels
+    double* hilbertTransform; //hilbert transform for each channel
+    
 
 public:
     Grain(int length, int startPos);
@@ -62,5 +65,6 @@ public:
     int getLength();
     float getSample(int channel, int index);
     int getNextOnsetTime();
+    int getNumChannels();
 
 };
