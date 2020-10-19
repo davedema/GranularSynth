@@ -115,7 +115,7 @@ void Voice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, i
                         if (currentSampleIdx < grain->getLength()) {
                             //DBG("getSample IDX :" + std::to_string(currentSampleIdx - hopSizeSum));
                         //    DBG("hopSizeSum : " + std::to_string(hopSizeSum));
-                            sampleValue += grain->getSample(i, currentSampleIdx - hopSizeSum);
+                            sampleValue += grain->getSample(i % grain->getNumChannels(), currentSampleIdx - hopSizeSum);
                             //DBG("sample value on channel " + std::to_string(i) + ": " + std::to_string(sampleValue));
                             //DBG("bufferMagnitude: " + std::to_string(grain->maxValue));
                             hopSizeSum += this->cloud->nextInterOnset(grain);
