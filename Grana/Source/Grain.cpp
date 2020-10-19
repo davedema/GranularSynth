@@ -229,7 +229,7 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
                     averageTime += 4 * averageTimeIncrement;
                 }
             }
-            averageTime += step / (3 * norm); //normalize and simpson rule
+            averageTime *= step / (3 * norm); //normalize and simpson rule
             totalAverageTime += averageTime;
         }
         totalAverageTime /= numChannels; //average of channels (probably overkilling here)
