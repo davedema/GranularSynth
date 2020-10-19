@@ -21,7 +21,7 @@ enum class Windows { gaussian = 1,
 //==============================================================================
 /**
 */
-class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget
+class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget, public juce::Button::Listener
 {
 public:
     LaGranaAudioProcessorEditor (LaGranaAudioProcessor&);
@@ -52,7 +52,8 @@ private:
     KnobSection* grainSection;
     KnobSection* fileSection;
     ComboBox* envelopeList;
-
+    ToggleButton playStop;
+    std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
 
@@ -66,7 +67,7 @@ private:
     void filesDropped(const juce::StringArray& files, int x, int y) override;
     void envelopeSelected();
 
-
+    void buttonClicked(Button* button) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };

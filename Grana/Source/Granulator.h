@@ -10,23 +10,22 @@
 
 #pragma once
 #include <JuceHeader.h>
-//#include "MasterEnvelope.h"
-#include "Voice.h"
+#include "SequenceStrategy.h"
 #include "GrainCloud.h"
 
-
-#define VOICES 1       // Number of polyphony voices
-
-class Granulator : public juce::Synthesiser
+class Granulator
 {
 private:
-    ADSR::Parameters envelopeParams;       // Envelope parameters, needed for setting
+    GrainCloud cloud;               // Grain pool derived from the loaded sample
+    Array<Grain*> activeGrains;     // Grains to be played (extracted from the cloud)
+    SequenceStrategy strategy;
+    int currentSampleIdx;           // Position in samples starting from the first grain in activeGrains (for managing grains splitted in multiple output buffers)
+    int totalHops;                  // Sum of the hop sizes of the active grains
 
 public:
     Granulator();
     ~Granulator();
-    void setEnvelopeSampleRate(double sampleRate);          // Set the envelope sample rate
-    void setEnvelope(float a, float d, float s, float r);   // Set the envelope parameters and apply them to the actual envelope
-    
-
+    GrainCloud* getCloud();
+    void initialize();
+    void process(AudioBuffer<float>& outputBuffer, int numSamples);
 };

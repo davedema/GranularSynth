@@ -15,8 +15,7 @@
 
 #include <stdlib.h>
 #include <random>
-
-
+#include "Grain.h"
 
 class SequenceStrategy {
 
@@ -30,12 +29,9 @@ private:
     std::mt19937 engine; //Standard mersenne_twister_engine seeded with rd() and feeded to distribution
     std::uniform_real_distribution<float> distribution; //uniform distribution
 
-    
-
 public:
 
     SequenceStrategy();
-    int nextDuration(); //TODO: check if int or float (depending if samples or time)
-    int nextInterOnset();
+    int nextInterOnset(Grain* currentGrain);
 
 };

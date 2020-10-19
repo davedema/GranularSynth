@@ -53,14 +53,15 @@ Grain::~Grain()
 AudioBuffer<float>* Grain::processBuffer()
 {
     AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(this->numChannels, this->length);
-    returnBuffer->clear();
+    //returnBuffer->clear();
  
     for (int i = 0; i < this->numChannels; i++) {
 
         returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length); //copy buffer
 
         for (int j = 0; j < length; j++) { //apply envelope
-            returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
+            //returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
+            *(returnBuffer->getWritePointer(i, j)) *= envelope->currentValue(j); //deferentiating to access values
             if (hilbertTransform != NULL) {
                 hilbertTransform[i * 2 * ceiledLength + j * 2] = returnBuffer->getSample(i, j);
                 hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 0; //real signal ----> a value every two set to zero
@@ -109,7 +110,7 @@ int Grain::getLength()
 
 float Grain::getSample(int channel, int index)
 {
-    return this->buffer->getSample(channel, index);
+   return this->buffer->getSample(channel, index);
 }
 
 

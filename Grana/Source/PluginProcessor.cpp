@@ -23,27 +23,28 @@
 //==============================================================================
 LaGranaAudioProcessor::LaGranaAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       ),
+    : AudioProcessor(BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+        .withInput("Input", juce::AudioChannelSet::stereo(), true)
+#endif
+        .withOutput("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+    ),
     // constructors
-    treeState(*this, nullptr, Identifier ("CURRENT_STATE"),
+    treeState(*this, nullptr, Identifier("CURRENT_STATE"),
         {
         std::make_unique<AudioParameterFloat>("grain_durations", "Grain_Durations", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value
-        std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f ),
+        std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 50.0f),
-        std::make_unique<AudioParameterFloat>("randompos", "Randompos", 0, 1, 0.5f)
-
+        std::make_unique<AudioParameterFloat>("randompos", "Randompos", 0, 1, 0.5f),
+        std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false)
 })
 #endif
 { 
     grainParameter = treeState.getRawParameterValue("grain");
     filePosParameter = treeState.getRawParameterValue("filepos");
+    isPlaying = treeState.getRawParameterValue("isPlaying");                // 0: false, 1: true
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
@@ -121,9 +122,7 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-
-    granulator.setCurrentPlaybackSampleRate(sampleRate);       // Set the playback rate for the synthesizer (will automatically propagate to all voices)
-    granulator.setEnvelopeSampleRate(sampleRate);              // Set the sample rate for the global envelope of the grain cloud
+    this->sampleRate = sampleRate;
 }
 
 void LaGranaAudioProcessor::releaseResources()
@@ -201,7 +200,9 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         // ..do something to the data...
     }
     **/
-    granulator.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    //granulator.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    if (*isPlaying == 1)
+        granulator.process(buffer, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -246,7 +247,7 @@ void LaGranaAudioProcessor::granulate()
 {
     float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
     int sampleDuration = (int)durationValue;
-    GrainCloud *cloud = dynamic_cast<GrainCloud*>(granulator.getSound(0).get());
+    GrainCloud* cloud = granulator.getCloud();
     float floatPos = treeState.getRawParameterValue("filepos")->load() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
     int filePos = (int)floatPos;
     cloud->granulatePortion(filePos, sampleDuration, 44100 * 2);
@@ -261,6 +262,11 @@ void LaGranaAudioProcessor::resetEnvelopes()
     GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
     TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
     RaisedCosineBellEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
+}
+
+void LaGranaAudioProcessor::play()
+{
+    this->granulator.initialize();
 }
 
 //==============================================================================

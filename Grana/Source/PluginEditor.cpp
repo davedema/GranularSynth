@@ -76,6 +76,11 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     envelopeList->addItem("Trapezoidal", 3);
     envelopeList->onChange = [this] { envelopeSelected(); };
 
+    playStop.setBounds(getWidth()/2 - 25, getHeight()/2 - 50, 50, 50);
+    playStop.addListener(this);
+    playStop.setButtonText("PLAY");
+    addAndMakeVisible(playStop);
+    playAttachment.reset(new AudioProcessorValueTreeState::ButtonAttachment(*valueTreeState, "isPlaying", playStop));
 }
 
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
@@ -187,4 +192,14 @@ void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
 void LaGranaAudioProcessorEditor::envelopeSelected()
 {
     // create Envelope object
+}
+
+void LaGranaAudioProcessorEditor::buttonClicked(Button* button)
+{
+    if (button->getButtonText() == "PLAY") {
+        audioProcessor.play();
+        button->setButtonText("STOP");
+    }
+    else
+        button->setButtonText("PLAY");
 }

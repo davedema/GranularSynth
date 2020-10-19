@@ -60,14 +60,17 @@ public:
 
     void granulate();
     void resetEnvelopes();
+    void play();            // Called from editor (when PLAY button pressed)
 
 
 private:
     std::atomic<float>* grainParameter = nullptr; //atomic allows different threads to operate on the instance
     std::atomic<float>* filePosParameter = nullptr;
+    std::atomic<float>* isPlaying = nullptr;
 
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
     Granulator granulator;
+    double sampleRate;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)

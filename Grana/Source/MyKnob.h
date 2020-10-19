@@ -22,8 +22,6 @@ public:
     MyKnob(Slider::SliderStyle style, TextEntryBoxPosition textBoxPos) : Slider(style, textBoxPos) {};
     ~MyKnob();
 
-    
-
     knobType getType() const;
     void setType(knobType type);
     int getRow() const;

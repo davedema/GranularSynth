@@ -18,8 +18,11 @@ SequenceStrategy::SequenceStrategy()
     distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
 }
 
-int SequenceStrategy::nextInterOnset()
+int SequenceStrategy::nextInterOnset(Grain* currentGrain)
 {
+    /*
     float randomNumber = distribution(engine); //random number in [-1, 1]
     return (1 / grainDensity) + randomNumber * quasiSyncRange;
+    */
+    return currentGrain->getLength() / 2;
 }

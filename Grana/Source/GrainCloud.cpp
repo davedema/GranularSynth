@@ -12,28 +12,15 @@
 
 GrainCloud::GrainCloud()
 {
-    //TODO: getrawvalues from treestate
-    this->quasiSyncRange = 0;
-    engine = std::mt19937(this->rd());
-    distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
-
+    this->grains.clearQuick();
 }
 
 GrainCloud::~GrainCloud()
 {
-    for (auto g : grains) {
+    /*for (auto g : grains) {
         delete g;
-    }
-}
-
-bool GrainCloud::appliesToNote(int midiNoteNumber)
-{
-    return true;
-}
-
-bool GrainCloud::appliesToChannel(int midiChannel)
-{
-    return true;
+    }*/
+    this->grains.clear();
 }
 
 void GrainCloud::addGrain(Grain* g)
@@ -68,12 +55,6 @@ void GrainCloud::shiftPortion(int shift)
 int GrainCloud::getCloudLength()
 {
     return this->grains.size();
-}
-
-
-int GrainCloud::nextInterOnset(Grain* currentGrain)
-{
-    return currentGrain->getLength() / 2;
 }
 
 Grain* GrainCloud::getNextGrain(Grain* currentGrain)
