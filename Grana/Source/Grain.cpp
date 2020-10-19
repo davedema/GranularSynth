@@ -149,7 +149,7 @@ float SimpsonIntegrator::getAverageTime()
 void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
 {
 
-    float nyquist = 1 / (2 * length);
+    float nyquist = samplingFrequency / 2;
     float step = nyquist / length; //freq resolution
     float totalAverageFrequency = 0;
 
@@ -178,7 +178,7 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
                 float averageFreqIncrement = normIncrement * step * i;
 
                 //simpson rule
-                if (j == 0 || j == length) {
+                if (j == 0 || j == length - 1) {
                     norm += normIncrement;
                     averageFrequency += averageFreqIncrement;
                 }
@@ -191,7 +191,7 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
                     averageFrequency += 4 * averageFreqIncrement;
                 }
             }
-            averageFrequency *= step / (3 * norm); //normalize
+            averageFrequency *= step / (3 * norm); //normalize and simpson rule
             totalAverageFrequency += averageFrequency;
         }
         totalAverageFrequency /= numChannels; //average of channels (probably overkilling here)
@@ -201,7 +201,7 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
 
 void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
 {
-    float step = 1 / samplingFrequency;
+    float step = 1 / samplingFrequency; //time resolution
     float totalAverageTime = 0;
 
     if (hilbertTransform != NULL) {
@@ -216,7 +216,7 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
                 float averageTimeIncrement = normIncrement * step * i;
 
                 //simpson rule
-                if (j == 0 || j == length) {
+                if (j == 0 || j == length - 1) {
                     norm += normIncrement;
                     averageTime += averageTimeIncrement;
                 }
@@ -229,7 +229,7 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
                     averageTime += 4 * averageTimeIncrement;
                 }
             }
-            averageTime /= norm; //normalize
+            averageTime += step / (3 * norm); //normalize and simpson rule
             totalAverageTime += averageTime;
         }
         totalAverageTime /= numChannels; //average of channels (probably overkilling here)
