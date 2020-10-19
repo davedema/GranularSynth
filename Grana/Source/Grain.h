@@ -19,6 +19,34 @@
 
 enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
 
+/*
+Simpson integrator: integrates time and frequency using "Simpson rule".
+Just create one and use the two public get methods to get average time and frequency
+*/
+
+class SimpsonIntegrator {
+public:
+
+    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels);
+    ~SimpsonIntegrator();
+    float getAverageFrequency();
+    float getAverageTime();
+
+private:
+
+    void computeAverageFrequency(double* hilbertTransform);
+    void computeAverageTime(double* hilbertTransform);
+
+    int samplingFrequency;
+    int length;
+    int numChannels;
+
+    float averageFrequency;
+    float averageTime;
+
+    double* hilbertSpectrum;
+};
+
 class Grain {
 
 
@@ -33,12 +61,18 @@ private:
     int nextOnsetTime;
     float playbackRate; //siamo sicuri?
 
+    float averageFrequency;
+    float averageTime;
+
 
     FileLoader* fileLoader;
     AudioBuffer<float>* buffer;
     GrainEnvelope* envelope;
     int numChannels;   //number of channels
+    int ceiledLength; //lowest power of 2 > grainlength, for fft and hilbert transforms
     double* hilbertTransform; //hilbert transform for each channel
+
+    SimpsonIntegrator *integrator;
     
 
 public:
@@ -51,8 +85,6 @@ public:
 
 
     inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
-    /**void process(AudioSampleBuffer& currentBlock, AudioSampleBuffer& fileBuffer, int numChannels, int blockNumSamples,
-                int fileNumSamples, long long int time);**/
     void changeEnvelope(EnvType type);
     void activate();
     void synthesize();
@@ -68,3 +100,5 @@ public:
     int getNumChannels();
 
 };
+
+
