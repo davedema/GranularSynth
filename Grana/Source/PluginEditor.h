@@ -49,8 +49,9 @@ private:
 
     FileLoader *loader;
 
-    KnobSection* grainSection;
-    KnobSection* fileSection;
+    /*KnobSection* grainSection;
+    KnobSection* fileSection;*/
+    KnobSection controlSection;
     ComboBox* envelopeList;
     ToggleButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value

@@ -41,22 +41,14 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
         * fileids_ptr = &fileids;                                        //pointer to knob ids
     const std::vector<String> filetitles = { "File position", "Random" }, * filetitles_ptr = &filetitles;
 
-    fileSection = new KnobSection(
-        WAV_WIDTH + 100,
-        WAV_HEIGHT / 2 - 10,
-        100, 70,
-        fileids_ptr,
-        filetitles_ptr,
-        p.getValueTreeState()
-        );
-    fileSection->setMyBounds();
-    addAndMakeVisible(fileSection);
+    controlSection.init(*valueTreeState);
+    addAndMakeVisible(controlSection);
     
     // GRAIN SECTION
     const std::vector<String> grainids = {"grain_durations", "grain_density"},    //knob ids
         *point = &grainids;                                        //pointer to knob ids
     const std::vector<String> titles = { "Duration", "Density" }, *titlesp = &titles;
-    grainSection = new KnobSection(                                //new knobsection
+    /*grainSection = new KnobSection(                                //new knobsection
         40, 
         getHeight() / 2,
         getWidth() / 3 - 80, getHeight() / 4 - 50,
@@ -65,7 +57,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
         p.getValueTreeState()
     );
     grainSection->setMyBounds();                                    //set bounds
-    addAndMakeVisible(grainSection);
+    addAndMakeVisible(grainSection);*/
 
     //ENVELOPE SECTION
     envelopeList = new ComboBox();
@@ -86,9 +78,10 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
-    delete grainSection;
+    //delete grainSection;
     delete envelopeList;
-    delete fileSection;
+    //delete fileSection;
+    //delete controlSection;
 }
 
 //==============================================================================
@@ -107,6 +100,12 @@ void LaGranaAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    int margin = 10;
+    auto area = getLocalBounds().reduced(margin);
+
+    // Add knob section below
+    auto knobSection = area.removeFromLeft(controlSection.getWidth());
+    controlSection.setBounds(knobSection.removeFromBottom(controlSection.getHeight()));
 }
 
 
