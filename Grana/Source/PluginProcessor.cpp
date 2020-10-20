@@ -171,36 +171,6 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, currentBufferLength);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-
-    //MIDI messages managment
-    /*
-    MidiMessage m;
-    int time;
-
-    for (MidiBuffer::Iterator i(midiMessages); i.getNextEvent(m, time);) {
-        //DBG(m.getDescription() + " Note:" +  to_string(m.getNoteNumber()));
-        if (m.isNoteOn()) {
-            granulator.noteOn(m.getChannel(), m.getNoteNumber(), m.getVelocity());
-        }
-        else if (m.isNoteOff()) {
-            granulator.noteOff(m.getChannel(), m.getNoteNumber(), m.getVelocity(), true);
-        }
-    
-
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
-    **/
-    //granulator.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     if (*isPlaying == 1)
         granulator.process(buffer, buffer.getNumSamples());
 }
@@ -250,7 +220,7 @@ void LaGranaAudioProcessor::granulate()
     GrainCloud* cloud = granulator.getCloud();
     float floatPos = treeState.getRawParameterValue("filepos")->load() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
     int filePos = (int)floatPos;
-    cloud->granulatePortion(filePos, sampleDuration, 44100 * 2);
+    cloud->granulatePortion(filePos, sampleDuration, FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
     DBG("Filepos:" + std::to_string(filePos));
     DBG("duration:" + std::to_string(sampleDuration));
 }
