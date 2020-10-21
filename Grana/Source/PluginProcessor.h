@@ -12,6 +12,7 @@
 #include "Granulator.h"
 #include "FileLoader.h"
 #include "GrainCloud.h"
+#include "Model.h"
 
 //==============================================================================
 /**
@@ -71,6 +72,8 @@ private:
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
     Granulator granulator;
     double sampleRate;
+
+    Model granulatorModel;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)

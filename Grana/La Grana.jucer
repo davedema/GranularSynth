@@ -87,6 +87,8 @@
             file="Source/PluginProcessor.h"/>
       <FILE id="UZhlYP" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
+      <FILE id="f5muns" name="Model.cpp" compile="1" resource="0" file="Source/Model.cpp"/>
+      <FILE id="GaDsPo" name="Model.h" compile="0" resource="0" file="Source/Model.h"/>
       <FILE id="IBKM6M" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
