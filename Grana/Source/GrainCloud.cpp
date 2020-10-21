@@ -26,6 +26,7 @@ GrainCloud::~GrainCloud()
 void GrainCloud::addGrain(Grain* g)
 {
     grains.add(g);
+    g->equalTemperament();
 }
 
 void GrainCloud::deleteGrain(Grain* g)

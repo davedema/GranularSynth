@@ -38,6 +38,8 @@ void Granulator::initialize()
 // Process the sound
 void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 {
+    if (activeGrains.isEmpty())
+        return;
     float sampleValue = 0;              // Output sample value
 
     // Cycle trough all the samples of the buffer

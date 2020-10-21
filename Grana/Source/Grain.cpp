@@ -10,11 +10,13 @@
 
 #include "Grain.h"
 #include <cmath>>
+#include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"
 
 #ifdef __cplusplus 
 extern "C" {
 #endif
 #include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/transforms.h"
+
 #ifdef __cplusplus 
 }
 #endif
@@ -24,28 +26,36 @@ Grain::Grain(int length, int startPos) :
     length(length), startPosition(startPos)
     
 {
+    shouldFreeHilbert = true;
     fileLoader = FileLoader::getInstance();
+    sampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
     ceiledLength = pow(2, ceil(log2(length)));
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
 
     buffer = processBuffer(); 
-    integrator = new SimpsonIntegrator(hilbertTransform, fileLoader->getSampleRate(), ceiledLength, this->numChannels);
+    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
     averageFrequency = integrator->getAverageFrequency();
     averageTime = integrator->getAverageTime();
 
     delete integrator; //useless after
     float mainLobeWidth = 0.95; //connect to treestate
     nextOnsetTime = 0;
-    playbackRate = 1;
-    maxValue = buffer->getMagnitude(0, length);
     
+    maxValue = buffer->getMagnitude(0, length);
 }
+
 
 Grain::~Grain()
 {
-    free(hilbertTransform);
+    if (shouldFreeHilbert) {
+        free(hilbertTransform);
+        for (auto& buffer : freqShiftedGrains) {
+            delete buffer;
+        }
+    }
+
     delete buffer;
     
 }
@@ -60,8 +70,7 @@ AudioBuffer<float>* Grain::processBuffer()
         returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length); //copy buffer
 
         for (int j = 0; j < length; j++) { //apply envelope
-            //returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
-           //  *(returnBuffer->getWritePointer(i, j)) *= envelope->currentValue(j); //deferentiating to access values
+            returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
             if (hilbertTransform != NULL) {
                 hilbertTransform[i * 2 * ceiledLength + j * 2] = returnBuffer->getSample(i, j);
                 hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 0; //real signal ----> a value every two set to zero
@@ -72,6 +81,48 @@ AudioBuffer<float>* Grain::processBuffer()
             hilbert(&hilbertTransform[i * ceiledLength], ceiledLength); //hilbertTransform is now the Hilbert transform of the grain
 
     }
+    return returnBuffer;
+}
+
+void Grain::equalTemperament()
+{
+    float differenceFromALow = 55 - this->averageFrequency;
+    float freqRange = 110;
+    int octavestep = 0;
+
+    jassert(hilbertTransform != nullptr);
+
+    if (hilbertTransform != nullptr) {
+        for (int octave = 0; octave < 6; octave++) {
+
+            for (int note = 0; note < 12; note++) {
+                freqShiftedGrains.add(freqShift(differenceFromALow + octavestep + freqRange / 12));
+            }
+            octavestep += freqRange;
+            freqRange *= 2;
+        }
+        this->temperament = Temperament::equalTemperament;
+    }
+}
+
+void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel)
+{
+    for (int i = 0; i < length; i++) {//freq shift  ---> ref links
+
+        float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
+        float theta = TWOPI * phaseInc; //angle
+        float newValue = hilbertTransform[this->ceiledLength * channel + i] * cos(theta) -
+            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rptation
+        buffer->setSample(channel, i, newValue); //rewrite channel
+    }
+
+}
+
+AudioBuffer<float>* Grain::freqShift(float freqshift)
+{
+    AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(*this->buffer);
+    for (int i = 0; i < this->numChannels; i++)
+        channelFreqShift(returnBuffer, freqshift, i);
     return returnBuffer;
 }
 
@@ -108,6 +159,11 @@ int Grain::getLength()
     return this->length;
 }
 
+int Grain::getCeiledLength()
+{
+    return this->ceiledLength;
+}
+
 float Grain::getSample(int channel, int index)
 {
    return this->buffer->getSample(channel, index);
@@ -123,6 +179,41 @@ int Grain::getNextOnsetTime(){
 int Grain::getNumChannels()
 {
     return this->numChannels;
+}
+
+float Grain::getMaxValue()
+{
+    return this->maxValue;
+}
+
+int Grain::getStartPosition()
+{
+    return this->startPosition;
+}
+
+float Grain::getAverageFrequency()
+{
+    return this->averageFrequency;
+}
+
+float Grain::getAverageTime()
+{
+    return this->averageTime;
+}
+
+GrainEnvelope* Grain::getEnvelope()
+{
+    return this->envelope;
+}
+
+AudioBuffer<float>* Grain::getBuffer()
+{
+    return this->buffer;
+}
+
+double* Grain::getHilbertTransform()
+{
+    return this->hilbertTransform;
 }
 
 SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels) :
@@ -192,7 +283,9 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
                     averageFrequency += 4 * averageFreqIncrement;
                 }
             }
-            averageFrequency *= step / (3 * norm); //normalize and simpson rule
+            norm *= step / 3;
+            averageFrequency *= step / 3;
+            averageFrequency /= norm;   //normalize
             totalAverageFrequency += averageFrequency;
         }
         totalAverageFrequency /= numChannels; //average of channels (probably overkilling here)
@@ -230,7 +323,9 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
                     averageTime += 4 * averageTimeIncrement;
                 }
             }
-            averageTime *= step / (3 * norm); //normalize and simpson rule
+            norm *= step / 3;
+            averageTime *= step / 3; 
+            averageTime /= norm;  //normalize 
             totalAverageTime += averageTime;
         }
         totalAverageTime /= numChannels; //average of channels (probably overkilling here)

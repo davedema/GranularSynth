@@ -18,6 +18,7 @@
 #include "TrapezoidalEnvelope.h"
 
 enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
+enum class Temperament{equalTemperament};
 
 /*
 Simpson integrator: integrates time and frequency using "Simpson rule".
@@ -52,17 +53,16 @@ class Grain {
 
 private:
 
-    /**long long onset;
-    float lengthRecip;
-    float amp;**/
-
     int length;
     int startPosition;
     int nextOnsetTime;
-    float playbackRate; //siamo sicuri?
+    float sampleRate; 
 
     float averageFrequency;
     float averageTime;
+    float maxValue;
+
+    bool shouldFreeHilbert; // == TRUE if performed hilbert transform
 
 
     FileLoader* fileLoader;
@@ -73,15 +73,19 @@ private:
     double* hilbertTransform; //hilbert transform for each channel
 
     SimpsonIntegrator *integrator;
-    
+
+    void channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel); //shifts a channel of freqshift [Hz]
+    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
+
+    Temperament temperament;
 
 public:
     Grain(int length, int startPos);
     ~Grain();
 
-    float maxValue;
-
     AudioBuffer<float>* processBuffer();
+
+    void equalTemperament();
 
 
     inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
@@ -89,15 +93,26 @@ public:
     void activate();
     void synthesize();
 
+    Array<AudioBuffer<float>*> freqShiftedGrains;
+
 
 
     //--------GETTERS AND SETTERS
 
 
     int getLength();
+    int getCeiledLength(); //lowest power of 2 > grainlength, for fft and hilbert transforms
     float getSample(int channel, int index);
     int getNextOnsetTime();
     int getNumChannels();
+    float getMaxValue();
+    int getStartPosition();
+    float getAverageFrequency();
+    float getAverageTime();
+    GrainEnvelope* getEnvelope();
+    AudioBuffer<float>* getBuffer();  
+    double* getHilbertTransform(); //hilbert transform for each channel --> 2 * channel * ceiledlength samples 
+    
 
 };
 
