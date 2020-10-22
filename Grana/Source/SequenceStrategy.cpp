@@ -31,6 +31,7 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
 {
     Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength);
     int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()));
+    delete correlationArray;
     return interOnset;
 }
 
