@@ -34,7 +34,7 @@ private:
     Label labels[NUM_CONTROLS];
     std::string controlNames[NUM_CONTROLS] = { "Section Size", "Density", "Grain Size", "Speed" };
 
-    std::unique_ptr <SliderAttachment[]> attachments[NUM_CONTROLS];
+    SliderAttachment *attachments[NUM_CONTROLS];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)
 };

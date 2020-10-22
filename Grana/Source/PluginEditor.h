@@ -12,16 +12,12 @@
 #include "PluginProcessor.h"
 #include "FileLoader.h"
 #include "KnobSection.h"
-
-enum class Windows { gaussian = 1,
-    raisedcosinebell,
-    trapezoidal
-};
+#include "FileSection.h"
 
 //==============================================================================
 /**
 */
-class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget, public juce::Button::Listener
+class LaGranaAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget, public juce::Button::Listener
 {
 public:
     LaGranaAudioProcessorEditor (LaGranaAudioProcessor&);
@@ -45,13 +41,16 @@ private:
 
     juce::AudioThumbnailCache* thumbnailCache;                  // [1]
     juce::AudioThumbnail* thumbnail;                            // [2]
-
-
     FileLoader *loader;
 
     /*KnobSection* grainSection;
     KnobSection* fileSection;*/
+    Slider filepos;
+    Label labfilepos;
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> fileposAttachment;
+
     KnobSection controlSection;
+    FileSection fileSection;
     ComboBox* envelopeList;
     ToggleButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
