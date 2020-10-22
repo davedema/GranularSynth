@@ -56,8 +56,8 @@ private:
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
-
     void paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
+    void paintSelected(juce::Graphics& g);
 
     void loadBtnClicked();
 

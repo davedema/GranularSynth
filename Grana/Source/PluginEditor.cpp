@@ -88,8 +88,11 @@ void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 
     if (thumbnail->getNumChannels() == 0)
         paintIfNoFileLoaded(g, thumbnailBounds);
-   else
+    else
+    {
         paintIfFileLoaded(g, thumbnailBounds);
+        paintSelected(g);
+    }
 }
 
 void LaGranaAudioProcessorEditor::resized()
@@ -117,7 +120,6 @@ void LaGranaAudioProcessorEditor::paintIfNoFileLoaded(juce::Graphics& g, const j
 void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds)
 {
 
-    
     g.setColour(juce::Colours::transparentBlack);
     g.fillRect(thumbnailBounds);
 
@@ -130,6 +132,23 @@ void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juc
         1.0f);                                  // vertical zoom
     
 }
+
+void LaGranaAudioProcessorEditor::paintSelected(juce::Graphics& g)
+{
+    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH / 100); // tree state stores value in percentage!
+    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH / 100); 
+    int rest = filepos + selectionWidth;
+    Rectangle<int> selectionBounds;
+    if ( rest < WAV_WIDTH) 
+        selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - selectionWidth), WAV_HEIGHT);
+    else
+        selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - filepos), WAV_HEIGHT);
+
+    g.setColour(Colours::darkred);
+    g.setOpacity(0.4);
+    g.fillRect(selectionBounds);
+}
+
 
 void LaGranaAudioProcessorEditor::loadBtnClicked() {
 
