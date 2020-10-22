@@ -49,9 +49,8 @@ Grain::Grain(int length, int startPos) :
 Grain::~Grain()
 {
     free(hilbertTransform);
-    for (auto& buffer : freqShiftedGrains) {
-        delete buffer;
-    }
+    for (auto buff : freqShiftedGrains)
+        delete buff;
 
     delete buffer;
     
@@ -110,7 +109,7 @@ void Grain::equalTemperament()
 
 void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel)
 {
-    for (int i = 0; i < length; i++) {//freq shift  ---> ref links
+    for (int i = 0; i < length; i++) {//freq shift  --->    ref links
 
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
         float theta = TWOPI * phaseInc; //angle
