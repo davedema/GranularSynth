@@ -53,7 +53,8 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
     // Cycle trough all the samples of the buffer
     for (int samplePos = 0; samplePos < numSamples; samplePos++) {
         int grainLength = lastActivatedGrain->getBuffer()->getNumSamples();
-        int lastInterOnset = interOnsets[0];
+        int firstInterOnset = interOnsets[0];
+        int lastInterOnset = interOnsets.getLast();
         // ADD GRAINS: If the current sample is the Hop size of the last active grain, get the next grain to play
         if (currentSampleIdx == lastInterOnset + this->totalHops) {
             lastActivatedGrain = activeGrains.getLast();
@@ -72,10 +73,9 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         if (currentSampleIdx == activeGrains.getFirst()->getLength()) {
             activeGrains.remove(0);
             // Updating indexes
-            currentSampleIdx -= lastInterOnset;
-            this->totalHops -= lastInterOnset;
+            currentSampleIdx -= firstInterOnset;
+            this->totalHops -= firstInterOnset;
             interOnsets.remove(0);
-            lastInterOnset = interOnsets[0];
         }
 
         int hopSizeSum = 0;
