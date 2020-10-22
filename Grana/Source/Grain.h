@@ -62,7 +62,6 @@ private:
     float averageTime;
     float maxValue;
 
-    bool shouldFreeHilbert; // == TRUE if performed hilbert transform
 
 
     FileLoader* fileLoader;

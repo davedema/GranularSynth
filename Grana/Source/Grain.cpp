@@ -26,7 +26,6 @@ Grain::Grain(int length, int startPos) :
     length(length), startPosition(startPos)
     
 {
-    shouldFreeHilbert = true;
     fileLoader = FileLoader::getInstance();
     sampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
@@ -49,11 +48,9 @@ Grain::Grain(int length, int startPos) :
 
 Grain::~Grain()
 {
-    if (shouldFreeHilbert) {
-        free(hilbertTransform);
-        for (auto& buffer : freqShiftedGrains) {
-            delete buffer;
-        }
+    free(hilbertTransform);
+    for (auto& buffer : freqShiftedGrains) {
+        delete buffer;
     }
 
     delete buffer;
