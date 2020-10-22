@@ -29,6 +29,7 @@ class SimpsonIntegrator {
 public:
 
     SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels);
+    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, float freqshift); //integrate shifted signal
     ~SimpsonIntegrator();
     float getAverageFrequency();
     float getAverageTime();
@@ -37,6 +38,8 @@ private:
 
     void computeAverageFrequency(double* hilbertTransform);
     void computeAverageTime(double* hilbertTransform);
+    void computeAverageFrequency(double* hilbertTransform, float freqShift);
+    void computeAverageTime(double* hilbertTransform, float freqShift);
 
     int samplingFrequency;
     int length;
@@ -76,6 +79,9 @@ private:
     void channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel); //shifts a channel of freqshift [Hz]
     AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
 
+    Array<AudioBuffer<float>*> freqShiftedGrains;
+    Array<float> averageTimes;
+    Array<float> averageFrequencies;
     Temperament temperament;
 
 public:
@@ -92,7 +98,7 @@ public:
     void activate();
     void synthesize();
 
-    Array<AudioBuffer<float>*> freqShiftedGrains;
+    
 
 
 

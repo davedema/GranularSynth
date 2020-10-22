@@ -25,6 +25,9 @@ private:
     int grainLength;
     float quasiSyncRange;
 
+    Array<float> computeCrossCorrelation(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime);
+    Array<float> computeCrossCorrelation(Grain* currentGrain, Grain* nextGrain, float userLength);
+
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 engine; //Standard mersenne_twister_engine seeded with rd() and feeded to distribution
     std::uniform_real_distribution<float> distribution; //uniform distribution
@@ -33,5 +36,7 @@ public:
 
     SequenceStrategy();
     int nextInterOnset(Grain* currentGrain);
+    int nextInterOnset(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime);
+    int nextInterOnset(Grain* currentGrain, Grain* nextGrain, float userLength);
 
 };
