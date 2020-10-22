@@ -13,7 +13,7 @@
 #include <JuceHeader.h>
 
 typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
-constexpr auto NUM_CONTROLS = 4;
+constexpr auto NUM_CONTROLS = 3;
 
 //==============================================================================
 /*
@@ -32,9 +32,12 @@ public:
 private:
     Slider controls[NUM_CONTROLS];
     Label labels[NUM_CONTROLS];
-    std::string controlNames[NUM_CONTROLS] = { "Section Size", "Density", "Grain Size", "Speed" };
+    std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
 
     SliderAttachment *attachments[NUM_CONTROLS];
+
+    ComboBox* envelopeList;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)
 };

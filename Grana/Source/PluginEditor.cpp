@@ -38,7 +38,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     //FILE POSITION SLIDER
     filepos.setSliderStyle(Slider::LinearHorizontal);
     filepos.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-
+    filepos.onValueChange = [this] {hasChanged(); };
     labfilepos.setText("Filepos", dontSendNotification);
     labfilepos.setFont(Font(12.0f));
     labfilepos.setJustificationType(Justification(36));
@@ -48,6 +48,19 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     fileposAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(*valueTreeState, "filepos", filepos));
     addAndMakeVisible(filepos);
     addAndMakeVisible(labfilepos);
+
+    // SECTION SIZE SLIDER
+    sectionsize.setSliderStyle(Slider::LinearHorizontal);
+    sectionsize.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
+    sectionsize.onValueChange = [this] {hasChanged(); };
+    labsectionsize.setText("Section", dontSendNotification);
+    labsectionsize.setFont(Font(12.0f));
+    labsectionsize.setJustificationType(Justification(36));
+    labsectionsize.attachToComponent(&sectionsize, true);
+    sectionsize.setBounds(40, 240, 480, 25);
+    secsizeAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(*valueTreeState, "Section Size", sectionsize));
+    addAndMakeVisible(sectionsize);
+    addAndMakeVisible(labsectionsize);
 
     //FILE MANAGEMENT SECTION   
     fileSection.init(*valueTreeState);
@@ -76,8 +89,6 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
-    //delete grainSection;
-    //delete envelopeList;
 }
 
 //==============================================================================
@@ -123,9 +134,9 @@ void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juc
     g.setColour(juce::Colours::transparentBlack);
     g.fillRect(thumbnailBounds);
 
-    g.setColour(juce::Colours::cadetblue);                               // [8]
+    g.setColour(juce::Colours::cadetblue);
 
-    thumbnail->drawChannels(g,                                      // [9]
+    thumbnail->drawChannels(g,
         thumbnailBounds,
         0.0,                                    // start time
         thumbnail->getTotalLength(),             // end time
@@ -139,8 +150,8 @@ void LaGranaAudioProcessorEditor::paintSelected(juce::Graphics& g)
     int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH / 100); 
     int rest = filepos + selectionWidth;
     Rectangle<int> selectionBounds;
-    if ( rest < WAV_WIDTH) 
-        selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - selectionWidth), WAV_HEIGHT);
+    if ( rest <= WAV_WIDTH ) 
+        selectionBounds = Rectangle<int>(40 + filepos, 40, selectionWidth, WAV_HEIGHT);
     else
         selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - filepos), WAV_HEIGHT);
 
@@ -215,4 +226,9 @@ void LaGranaAudioProcessorEditor::buttonClicked(Button* button)
     }
     else
         button->setButtonText("PLAY");
+}
+
+void LaGranaAudioProcessorEditor::hasChanged()
+{
+    repaint();
 }

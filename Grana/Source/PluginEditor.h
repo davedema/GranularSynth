@@ -27,7 +27,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(ChangeBroadcaster* source) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -35,23 +35,26 @@ private:
     LaGranaAudioProcessor& audioProcessor;
     AudioProcessorValueTreeState* valueTreeState;
 
-    juce::TextButton *loadBtn;
-    juce::AudioFormatManager *formatManager;
-    juce::AudioTransportSource *transportSource;        
+    TextButton *loadBtn;
+    AudioFormatManager *formatManager;
+    AudioTransportSource *transportSource;        
 
-    juce::AudioThumbnailCache* thumbnailCache;                  // [1]
-    juce::AudioThumbnail* thumbnail;                            // [2]
+    AudioThumbnailCache* thumbnailCache;
+    AudioThumbnail* thumbnail;
     FileLoader *loader;
 
     /*KnobSection* grainSection;
     KnobSection* fileSection;*/
     Slider filepos;
+    Slider sectionsize;
     Label labfilepos;
+    Label labsectionsize;
     std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> fileposAttachment;
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> secsizeAttachment;
+
 
     KnobSection controlSection;
     FileSection fileSection;
-    ComboBox* envelopeList;
     ToggleButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
@@ -68,6 +71,7 @@ private:
     void envelopeSelected();
 
     void buttonClicked(Button* button) override;
+    void hasChanged();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };

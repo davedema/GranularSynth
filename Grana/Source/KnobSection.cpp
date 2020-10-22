@@ -25,11 +25,22 @@ KnobSection::~KnobSection()
         delete attachments[i];
 
     }
+
+    delete envelopeList;
  
 }
 
 void KnobSection::init(AudioProcessorValueTreeState& apvts)
 {
+    envelopeList = new ComboBox();
+    envelopeList->addItem("Gaussian", 1);
+    envelopeList->addItem("RaisedCosineBell", 2);
+    envelopeList->addItem("Trapezoidal", 3);
+    envelopeList->setSize(50, 50);
+    //envelopeList->onChange = [this] { envelopeSelected();
+    addAndMakeVisible(envelopeList);
+
+
     for (int i = 0; i < NUM_CONTROLS; i++) {
         controls[i].setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
         controls[i].setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
@@ -58,16 +69,15 @@ void KnobSection::resized()
 
     layout.flexDirection = FlexBox::Direction::row;
     layout.justifyContent = FlexBox::JustifyContent::center;
+    //layout.items.add(FlexItem(*envelopeList));
 
+    //layout.items.add(FlexItem(*envelopeList).withFlex(1, 1));
     for (auto& element : controls) {
         layout.items.add(FlexItem(element).withMargin(FlexItem::Margin(20, 0, 0, 0)).withFlex(1, 1));
     }
-
     layout.performLayout(getBounds().toFloat());
 }
 
 void KnobSection::sliderValueChanged(Slider* slider)
 {
-    
 }
-
