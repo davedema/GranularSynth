@@ -219,6 +219,11 @@ double* Grain::getHilbertTransform()
     return this->hilbertTransform;
 }
 
+Array<AudioBuffer<float>*> Grain::getFreqShiftedGrains()
+{
+    return this->freqShiftedGrains;
+}
+
 SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels) :
     samplingFrequency(samplingFrequency), length(length), numChannels(numChannels)
 {

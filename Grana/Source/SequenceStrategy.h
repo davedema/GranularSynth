@@ -34,7 +34,7 @@ private:
 public:
 
     SequenceStrategy();
-    int nextInterOnset(Grain* currentGrain);
+    int nextInterOnset(int userLength);
     int nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
 
 };

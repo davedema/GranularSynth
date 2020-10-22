@@ -117,6 +117,7 @@ public:
     GrainEnvelope* getEnvelope();
     AudioBuffer<float>* getBuffer();  
     double* getHilbertTransform(); //hilbert transform for each channel --> 2 * channel * ceiledlength samples 
+    Array<AudioBuffer<float>*> getFreqShiftedGrains();
     
 
 };

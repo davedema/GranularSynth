@@ -18,21 +18,23 @@ SequenceStrategy::SequenceStrategy()
     distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
 }
 
-int SequenceStrategy::nextInterOnset(Grain* currentGrain)
+int SequenceStrategy::nextInterOnset(int userLength)
 {
-    /*
-    float randomNumber = distribution(engine); //random number in [-1, 1]
-    return (1 / grainDensity) + randomNumber * quasiSyncRange;
-    */
-    return int(currentGrain->getLength()/2);
+    float spreadControl = this->quasiSyncRange * distribution(engine);
+    return userLength + (int)spreadControl;
 }
 
 int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
 {
+    if (currentBuffer == nextBuffer) //handle single buffer case
+        return nextInterOnset(userLength);
+
     Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength);
-    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()));
+    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()))
+        + userLength;
     delete correlationArray;
-    return interOnset;
+    float spreadControl = this->quasiSyncRange * distribution(engine);
+    return interOnset + (int)spreadControl;
 }
 
 Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)

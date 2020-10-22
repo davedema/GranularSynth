@@ -232,8 +232,8 @@ void LaGranaAudioProcessor::granulate()
     float floatPos = granulatorModel.getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
     int filePos = (int)floatPos;
     cloud->granulatePortion(filePos, sampleDuration, FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
-    granulatorModel.setHasGranulatedCloud(true);
     this->granulator.initialize();
+    granulatorModel.setHasGranulatedCloud(true);
     DBG("Filepos:" + std::to_string(filePos));
     DBG("duration:" + std::to_string(sampleDuration));
 }
