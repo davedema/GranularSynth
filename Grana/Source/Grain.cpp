@@ -93,10 +93,16 @@ void Grain::equalTemperament()
         for (int octave = 0; octave < 6; octave++) {
 
             for (int note = 0; note < 12; note++) {
-                freqShiftedGrains.add(freqShift(differenceFromALow + octavestep + freqRange / 12));
+                float fShift = differenceFromALow + octavestep + note * freqRange / 12;
+                freqShiftedGrains.add(freqShift(fShift));
+                integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, fShift);
+                averageFrequencies.add(integrator->getAverageFrequency());
+                averageTimes.add(integrator->getAverageTime());
+                delete integrator;
             }
+
             octavestep += freqRange;
-            freqRange *= 2;
+            freqRange *= 2;          
         }
         this->temperament = Temperament::equalTemperament;
     }
@@ -220,6 +226,13 @@ SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequ
     computeAverageTime(hilbertTransform);
 }
 
+SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, float freqshift) :
+    samplingFrequency(samplingFrequency), length(length), numChannels(numChannels)
+{
+    computeAverageFrequency(hilbertTransform, freqshift);
+    computeAverageTime(hilbertTransform, freqshift);
+}
+
 SimpsonIntegrator::~SimpsonIntegrator()
 {
     free(hilbertSpectrum);
@@ -322,6 +335,111 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
             }
             norm *= step / 3;
             averageTime *= step / 3; 
+            averageTime /= norm;  //normalize 
+            totalAverageTime += averageTime;
+        }
+        totalAverageTime /= numChannels; //average of channels (probably overkilling here)
+        this->averageTime = totalAverageTime;
+    }
+}
+
+void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform, float freqShift)
+{
+    float nyquist = samplingFrequency / 2;
+    float step = nyquist / length; //freq resolution
+    float totalAverageFrequency = 0;
+
+    hilbertSpectrum = (double*)calloc((size_t)(numChannels * (size_t)2 * length), sizeof(double)); //allocate a spectrum for every channel
+
+    for (int i = 0; i < this->numChannels; i++) { //loop over channels
+
+        float norm = 0;
+        float averageFrequency = 0;
+        if (hilbertSpectrum != NULL) {
+            for (int j = 0; j < length; j++) { //copy transform
+                if (hilbertSpectrum != NULL) {
+                    float phaseInc = freqShift * j / this->samplingFrequency;
+                    float theta = TWOPI * phaseInc; //angle
+                    float newValueX = hilbertTransform[this->length * i + j] * cos(theta) -
+                        hilbertTransform[this->length * i + j + 1] * sin(theta); //rotation
+                    float newValueY = hilbertTransform[this->length * i + j] * sin(theta) +
+                        hilbertTransform[this->length * i + j + 1] * cos(theta); //rotation
+                    hilbertSpectrum[i * 2 * length + j * 2] = newValueX;
+                    hilbertSpectrum[i * 2 * length + j * 2 + 1] = newValueY;
+                }
+
+            }
+
+            if (hilbertSpectrum != NULL) {
+                fft_dif(&hilbertSpectrum[i * (int)2 * length], length); // compute fft
+                bitrev_permute(&hilbertSpectrum[i * 2 * length], length); // bit-revert output (Smithsonian implementation)
+            }
+
+            for (int j = 0; j < length; j++) { //integrate frequency
+                float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
+                float averageFreqIncrement = normIncrement * step * i;
+
+                //simpson rule
+                if (j == 0 || j == length - 1) {
+                    norm += normIncrement;
+                    averageFrequency += averageFreqIncrement;
+                }
+                else if (j % 2 == 0) {
+                    norm += 2 * normIncrement;
+                    averageFrequency += 2 * averageFreqIncrement;
+                }
+                else {
+                    norm += 4 * normIncrement;
+                    averageFrequency += 4 * averageFreqIncrement;
+                }
+            }
+            norm *= step / 3;
+            averageFrequency *= step / 3;
+            averageFrequency /= norm;   //normalize
+            totalAverageFrequency += averageFrequency;
+        }
+        totalAverageFrequency /= numChannels; //average of channels (probably overkilling here)
+        this->averageFrequency = totalAverageFrequency;
+    }
+}
+
+void SimpsonIntegrator::computeAverageTime(double* hilbertTransform, float freqShift)
+{
+    float step = 1 / samplingFrequency; //time resolution
+    float totalAverageTime = 0;
+
+    if (hilbertTransform != NULL) {
+        for (int i = 0; i < this->numChannels; i++) { //loop over channels
+
+            float norm = 0;
+            float averageTime = 0;
+
+            for (int j = 0; j < length; j++) { //integrate time
+                float phaseInc = freqShift * j / this->samplingFrequency;
+                float theta = TWOPI * phaseInc; //angle
+                float newValueX = hilbertTransform[this->length * i + j] * cos(theta) -
+                    hilbertTransform[this->length * i + j + 1] * sin(theta); //rotation
+                float newValueY = hilbertTransform[this->length * i + j] * sin(theta) +
+                    hilbertTransform[this->length * i + j + 1] * cos(theta); //rotation
+                float normIncrement = (float)pow(newValueX, 2) + pow(newValueY, 2);
+                float averageTimeIncrement = normIncrement * step * i;
+
+                //simpson rule
+                if (j == 0 || j == length - 1) {
+                    norm += normIncrement;
+                    averageTime += averageTimeIncrement;
+                }
+                else if (j % 2 == 0) {
+                    norm += 2 * normIncrement;
+                    averageTime += 2 * averageTimeIncrement;
+                }
+                else {
+                    norm += 4 * normIncrement;
+                    averageTime += 4 * averageTimeIncrement;
+                }
+            }
+            norm *= step / 3;
+            averageTime *= step / 3;
             averageTime /= norm;  //normalize 
             totalAverageTime += averageTime;
         }

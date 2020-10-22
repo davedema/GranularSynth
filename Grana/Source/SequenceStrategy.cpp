@@ -10,7 +10,7 @@
 
 #include "SequenceStrategy.h"
 
-SequenceStrategy::SequenceStrategy() 
+SequenceStrategy::SequenceStrategy()
 {
     //TODO: getrawvalues from treestate
     this->quasiSyncRange = 0;
@@ -25,4 +25,24 @@ int SequenceStrategy::nextInterOnset(Grain* currentGrain)
     return (1 / grainDensity) + randomNumber * quasiSyncRange;
     */
     return int(currentGrain->getLength()/2);
+}
+
+int SequenceStrategy::nextInterOnset(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime)
+{
+    return 0;
+}
+
+int SequenceStrategy::nextInterOnset(Grain* currentGrain, Grain* nextGrain, float userLength)
+{
+    return 0;
+}
+
+Array<float> SequenceStrategy::computeCrossCorrelation(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime)
+{
+    return Array<float>();
+}
+
+Array<float> SequenceStrategy::computeCrossCorrelation(Grain* currentGrain, Grain* nextGrain, float userLength)
+{
+    return Array<float>();
 }
