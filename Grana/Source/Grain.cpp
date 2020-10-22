@@ -163,7 +163,7 @@ int Grain::getCeiledLength()
 
 float Grain::getSample(int channel, int index)
 {
-   return this->buffer->getSample(channel, index);
+   return this->freqShiftedGrains[38]->getSample(channel, index);
 }
 
 
