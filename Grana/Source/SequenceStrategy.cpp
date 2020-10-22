@@ -27,22 +27,33 @@ int SequenceStrategy::nextInterOnset(Grain* currentGrain)
     return int(currentGrain->getLength()/2);
 }
 
-int SequenceStrategy::nextInterOnset(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime)
+int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
 {
-    return 0;
+    Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength);
+    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()));
+    return interOnset;
 }
 
-int SequenceStrategy::nextInterOnset(Grain* currentGrain, Grain* nextGrain, float userLength)
+Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
 {
-    return 0;
-}
+    Array<float>* correlationArray = new Array<float>();
+    int numChannels = currentBuffer->getNumChannels();
+    correlationArray->clear();
 
-Array<float> SequenceStrategy::computeCrossCorrelation(Grain* currentGrain, int currentAverageTime, Grain* nextGrain, int nextAverageTime)
-{
-    return Array<float>();
-}
+    //begin compute autocorrelation
+    for (int i = 0; i < userLength; i++) {
+        float totalValue = 0;
+        for (int channel = 0; channel > numChannels; channel++) {
+            float newValue = 0;
+            for (int j = 0; j < grainLength - i - 1; j++) {
+                newValue += currentBuffer->getSample(channel, userLength + j) * nextBuffer->getSample(channel, j) / (grainLength - userLength);
+            }
+            totalValue += newValue;
+        }
+        totalValue /= numChannels; //average over channels
+        correlationArray->add(totalValue);
+    }
+    //end compute autocorrelation
 
-Array<float> SequenceStrategy::computeCrossCorrelation(Grain* currentGrain, Grain* nextGrain, float userLength)
-{
-    return Array<float>();
+    return correlationArray;
 }
