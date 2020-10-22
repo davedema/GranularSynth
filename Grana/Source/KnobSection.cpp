@@ -15,14 +15,17 @@
 
 KnobSection::KnobSection()
 {
-    setSize(360, 150);
+    setSize(480, 170);
 }
 
 KnobSection::~KnobSection() 
 {
-    for (int i = 0; i < NUM_CONTROLS; i++) {
-        attachments[i].reset(nullptr);
+    for (int i = 0; i < NUM_CONTROLS; i++)
+    {
+        delete attachments[i];
+
     }
+ 
 }
 
 void KnobSection::init(AudioProcessorValueTreeState& apvts)
@@ -32,11 +35,11 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
         controls[i].setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
 
         labels[i].setText(controlNames[i], dontSendNotification);
-        labels[i].setFont(Font(16.0f));
+        labels[i].setFont(Font(12.0f));
         labels[i].setJustificationType(Justification(36));
         labels[i].attachToComponent(&controls[i], false);
 
-        attachments[i].reset(new SliderAttachment(apvts, controlNames[i], controls[i]));
+        attachments[i] = new SliderAttachment(apvts, controlNames[i], controls[i]);
 
         addAndMakeVisible(controls[i]);
         addAndMakeVisible(labels[i]);
