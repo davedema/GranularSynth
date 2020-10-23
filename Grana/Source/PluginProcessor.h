@@ -75,6 +75,8 @@ private:
 
     Model granulatorModel;
 
+    int samplesPerBlock;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)
 };

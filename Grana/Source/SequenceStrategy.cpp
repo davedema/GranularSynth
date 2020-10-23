@@ -29,12 +29,19 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
     if (currentBuffer == nextBuffer) //handle single buffer case
         return nextInterOnset(userLength);
 
-    Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength);
+    Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength); //compute correlation
     int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()))
-        + userLength;
+        + userLength; //add lag
     delete correlationArray;
     float spreadControl = this->quasiSyncRange * distribution(engine);
-    return interOnset + (int)spreadControl;
+    interOnset += spreadControl; //add random
+    //crossFade(currentBuffer, nextBuffer, interOnset, grainLength); //crossfade grains
+    return interOnset;
+}
+
+void SequenceStrategy::setQuasiSyncRange(float quasiSyncRange)
+{
+    this->quasiSyncRange = quasiSyncRange;
 }
 
 Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
@@ -57,6 +64,17 @@ Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* curr
         correlationArray->add(totalValue);
     }
     //end compute autocorrelation
-
     return correlationArray;
+}
+
+void SequenceStrategy::crossFade(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int interOnset, int grainLength)
+{
+    int numChannels = currentBuffer->getNumChannels();
+    int linearCoeff = 1 / (grainLength - interOnset);
+    for (int i = 0; i < grainLength - interOnset; i++) {
+        for (int channel = 0; channel < numChannels; channel++) {
+            currentBuffer->setSample(channel, interOnset + i, 1 - linearCoeff * i);
+            nextBuffer->setSample(channel, i, linearCoeff * i);
+        }
+    }
 }

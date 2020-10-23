@@ -39,6 +39,7 @@ Grain::Grain(int length, int startPos) :
     buffer = processBuffer(); 
     integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
     averageFrequency = integrator->getAverageFrequency();
+    averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
 
     delete integrator;                                                                                      //useless after
@@ -97,10 +98,7 @@ void Grain::equalTemperament()
             for (int note = 0; note < 12; note++) {
                 float fShift = differenceFromALow + octavestep + note * freqRange / 12;
                 freqShiftedGrains.add(freqShift(fShift));
-                integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, fShift);
-                averageFrequencies.add(integrator->getAverageFrequency());
-                averageTimes.add(integrator->getAverageTime());
-                delete integrator;
+                averageFrequencies.add(averageFrequencies.getLast() + fShift);
             }
 
             octavestep += freqRange;
@@ -171,7 +169,7 @@ int Grain::getCeiledLength()
 
 float Grain::getSample(int channel, int index)
 {
-   return this->freqShiftedGrains[38]->getSample(channel, index);
+   return this->freqShiftedGrains[50]->getSample(channel, index);
 }
 
 
