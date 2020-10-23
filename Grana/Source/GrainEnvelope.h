@@ -9,7 +9,7 @@
 */
 
 #pragma once
-#include <vector>
+#include"JuceHeader.h"
 
 
 
