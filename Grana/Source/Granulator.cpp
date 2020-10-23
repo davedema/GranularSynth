@@ -24,6 +24,8 @@ Granulator::Granulator()
 
 Granulator::~Granulator()
 {
+    for (auto buff : freqShiftedGrains)
+        delete buff;
     this->activeGrains.clearQuick();
 }
 
