@@ -22,10 +22,25 @@ private:
     int currentSampleIdx;           // Position in samples starting from the first grain in activeGrains (for managing grains splitted in multiple output buffers)
     int totalHops;                  // Sum of the hop sizes of the active grains
 
+
+    /*=============================================================================
+    The following two pointers are initialized to the first Grain and then proceed 
+    one next to the other to get interonsets 
+    ===============================================================================*/
+    Grain* lastActivatedGrain;      //points to the last grain activated 
+    Grain* nextActivatedGrain;      //points to the next grain to activate
+
+    Array<int> interOnsets;
+    dsp::LinkwitzRileyFilter<float> masterLowPassFilter;
+    dsp::LinkwitzRileyFilter<float> masterHighPassFilter;
+
+    int samplesPerBlock;
 public:
     Granulator();
     ~Granulator();
     GrainCloud* getCloud();
     void initialize();
     void process(AudioBuffer<float>& outputBuffer, int numSamples);
+
+    void setSamplesPerBlock(int samplesPerBlock);
 };
