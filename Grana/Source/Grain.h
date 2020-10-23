@@ -18,6 +18,7 @@
 #include "TrapezoidalEnvelope.h"
 
 enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
+enum class Temperament{equalTemperament};
 
 /*
 Simpson integrator: integrates time and frequency using "Simpson rule".
@@ -28,6 +29,7 @@ class SimpsonIntegrator {
 public:
 
     SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels);
+    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, float freqshift); //integrate shifted signal
     ~SimpsonIntegrator();
     float getAverageFrequency();
     float getAverageTime();
@@ -36,6 +38,8 @@ private:
 
     void computeAverageFrequency(double* hilbertTransform);
     void computeAverageTime(double* hilbertTransform);
+    void computeAverageFrequency(double* hilbertTransform, float freqShift);
+    void computeAverageTime(double* hilbertTransform, float freqShift);
 
     int samplingFrequency;
     int length;
@@ -52,17 +56,15 @@ class Grain {
 
 private:
 
-    /**long long onset;
-    float lengthRecip;
-    float amp;**/
-
     int length;
     int startPosition;
     int nextOnsetTime;
-    float playbackRate; //siamo sicuri?
+    float sampleRate; 
 
     float averageFrequency;
     float averageTime;
+    float maxValue;
+
 
 
     FileLoader* fileLoader;
@@ -73,15 +75,22 @@ private:
     double* hilbertTransform; //hilbert transform for each channel
 
     SimpsonIntegrator *integrator;
-    
+
+    void channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel); //shifts a channel of freqshift [Hz]
+    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
+
+    Array<AudioBuffer<float>*> freqShiftedGrains;
+    Array<float> averageTimes;
+    Array<float> averageFrequencies;
+    Temperament temperament;
 
 public:
     Grain(int length, int startPos);
     ~Grain();
 
-    float maxValue;
-
     AudioBuffer<float>* processBuffer();
+
+    void equalTemperament();
 
 
     inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
@@ -89,15 +98,27 @@ public:
     void activate();
     void synthesize();
 
+    
+
 
 
     //--------GETTERS AND SETTERS
 
 
     int getLength();
+    int getCeiledLength(); //lowest power of 2 > grainlength, for fft and hilbert transforms
     float getSample(int channel, int index);
     int getNextOnsetTime();
     int getNumChannels();
+    float getMaxValue();
+    int getStartPosition();
+    float getAverageFrequency();
+    float getAverageTime();
+    GrainEnvelope* getEnvelope();
+    AudioBuffer<float>* getBuffer();  
+    double* getHilbertTransform(); //hilbert transform for each channel --> 2 * channel * ceiledlength samples 
+    Array<AudioBuffer<float>*> getFreqShiftedGrains();
+    
 
 };
 
