@@ -21,7 +21,6 @@ private:
     SequenceStrategy strategy;
     int currentSampleIdx;           // Position in samples starting from the first grain in activeGrains (for managing grains splitted in multiple output buffers)
     int totalHops;                  // Sum of the hop sizes of the active grains
-    bool readyToProcess;
 
 public:
     Granulator();

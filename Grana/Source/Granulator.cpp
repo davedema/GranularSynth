@@ -15,7 +15,6 @@ Granulator::Granulator()
     this->activeGrains.clearQuick();
     this->currentSampleIdx = 0;
     this->totalHops = 0;
-    this->readyToProcess = false;
 }
 
 Granulator::~Granulator()
@@ -34,32 +33,24 @@ void Granulator::initialize()
     this->currentSampleIdx = 0;
     this->activeGrains.clearQuick();
     activeGrains.add(this->cloud.getNextGrain(nullptr));
-    this->readyToProcess = true;
 }
 
 // Process the sound
 void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 {
-    if (!readyToProcess)
-        return;
-
     float sampleValue = 0;              // Output sample value
 
     // Cycle trough all the samples of the buffer
     for (int samplePos = 0; samplePos < numSamples; samplePos++) {
 
-        if (activeGrains.size() == 0) {
-            activeGrains.add(this->cloud.getNextGrain(nullptr));
-        }
-
         // ADD GRAINS: If the current sample is the Hop size of the last active grain, get the next grain to play
-        if (activeGrains.getLast()!= nullptr && currentSampleIdx == this->strategy.nextInterOnset(activeGrains.getLast()) + this->totalHops) {
+        if (currentSampleIdx == this->strategy.nextInterOnset(activeGrains.getLast()) + this->totalHops) {
             activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
             this->totalHops += this->strategy.nextInterOnset(activeGrains.getFirst());
         }
 
         //REMOVE GRAINS: if we get to the end of the grain then delete it and go to the next
-        if (activeGrains.getFirst()!=nullptr && currentSampleIdx == activeGrains.getFirst()->getLength()) {
+        if (currentSampleIdx == activeGrains.getFirst()->getLength()) {
             int hopsize = this->strategy.nextInterOnset(activeGrains.getFirst());
             activeGrains.remove(0);
             // Updating indexes
@@ -75,10 +66,8 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 
             // Compute the sum of the samples from all the currently active grains
             for (auto grain : activeGrains) {
-                if (grain != nullptr) {
-                    sampleValue += grain->getSample(i % grain->getNumChannels(), currentSampleIdx - hopSizeSum);
-                    hopSizeSum += this->strategy.nextInterOnset(grain);
-                }
+                sampleValue += grain->getSample(i % grain->getNumChannels(), currentSampleIdx - hopSizeSum);
+                hopSizeSum += this->strategy.nextInterOnset(grain);
             }
             outputBuffer.setSample(i, samplePos, sampleValue);
         }

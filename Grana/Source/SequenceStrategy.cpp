@@ -24,8 +24,5 @@ int SequenceStrategy::nextInterOnset(Grain* currentGrain)
     float randomNumber = distribution(engine); //random number in [-1, 1]
     return (1 / grainDensity) + randomNumber * quasiSyncRange;
     */
-    if(currentGrain!=nullptr)
-        return currentGrain->getLength() / 2;
-
-    return 0;
+    return currentGrain->getLength() / 2;
 }
