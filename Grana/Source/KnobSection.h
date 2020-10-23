@@ -11,35 +11,54 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "KnobLookAndFeel.h"
+#include "MyKnob.h"
 
 typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
-constexpr auto NUM_CONTROLS = 3;
 
 //==============================================================================
 /*
 */
 
+enum class direction { horizontal, vertical };
+enum class tSection { grain };
+
 class KnobSection : public Component, public Slider::Listener
 {
 public:
     KnobSection();
+    KnobSection(int x, int y, int w, int h, const std::vector<String>* ids, const std::vector<String>* titles, AudioProcessorValueTreeState* apvts); // constructor for grain section
+
     ~KnobSection();
-    void init(AudioProcessorValueTreeState& apvts);
+
+
     void paint(Graphics&) override;
     void resized() override;
+
     void sliderValueChanged(Slider* slider) override;
+    void sliderDragStarted(Slider*) override;
+    void sliderDragEnded(Slider*) override;
+
+    void setMyBounds();
+    void addKnobs(const std::vector<String>* ids, AudioProcessorValueTreeState* apvts, const std::vector<String>* titles);
+
+    void setMyOscillatorRange();
 
 private:
-    Slider controls[NUM_CONTROLS];
-    Label labels[NUM_CONTROLS];
-    std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
+    std::vector<MyKnob*> knobs;
+    std::vector<Label*> labels;
 
-    SliderAttachment *attachments[NUM_CONTROLS];
-    SliderAttachment * envAttachment;
+    int xPos;
+    int yPos;
+    int width;
+    int height;
+    direction dir;
 
-    ComboBox envelopeList; //list of envelopes
-    Slider envAmt; // amt of envelope to be applied to each grain
-    Label envAmtlab;
+    void arrange();
+    void checkDirection();
+    void checkTypeAndSetRange(tSection type);
+
+    KnobLookAndFeel KnobLAF;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)

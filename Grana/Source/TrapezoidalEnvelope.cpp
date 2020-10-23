@@ -118,11 +118,6 @@ void TrapezoidalEnvelope::filterCreation()
 		kernel.push_back(1);
 	}
 
-	if (duration % 2 == 0) { //this is done in order to solve the problem of having an array
-								 //1 cell longer than needed when working with a even duration
-		kernel.pop_back();
-	}
-
 	for (int x = attack - 1; x >= 0; x--) {
 		kernel.push_back(kernel[x]);
 	}
