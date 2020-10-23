@@ -31,8 +31,8 @@ private:
     Grain* nextActivatedGrain;      //points to the next grain to activate
 
     Array<int> interOnsets;
-    dsp::LinkwitzRileyFilter<float> under1000Hz;
-    dsp::LinkwitzRileyFilter<float> over1000Hz;
+    dsp::LinkwitzRileyFilter<float> masterLowPassFilter;
+    dsp::LinkwitzRileyFilter<float> masterHighPassFilter;
 
     int samplesPerBlock;
 public:

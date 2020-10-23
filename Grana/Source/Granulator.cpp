@@ -15,6 +15,11 @@ Granulator::Granulator()
     this->activeGrains.clearQuick();
     this->currentSampleIdx = 0;
     this->totalHops = 0;
+
+    masterLowPassFilter.setType(dsp::LinkwitzRileyFilterType::lowpass);
+    masterHighPassFilter.setType(dsp::LinkwitzRileyFilterType::highpass);
+    masterLowPassFilter.setCutoffFrequency(8000);
+    masterHighPassFilter.setCutoffFrequency(120);
 }
 
 Granulator::~Granulator()
@@ -41,6 +46,10 @@ void Granulator::initialize()
         lastActivatedGrain->getLength() / 2,
         lastActivatedGrain->getLength()
     ));
+
+    dsp::ProcessSpec spec{ FileLoader::getInstance()->getSampleRate(), static_cast<juce::uint32> (samplesPerBlock), 2 };
+    masterLowPassFilter.prepare(spec);
+    masterHighPassFilter.prepare(spec);
 }
 
 // Process the sound
@@ -100,6 +109,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         }
         this->currentSampleIdx++;
     }
+
+    juce::dsp::AudioBlock<float> block(outputBuffer);
+    juce::dsp::ProcessContextReplacing<float> context(block);
+    masterLowPassFilter.process(context);
+    masterHighPassFilter.process(context);
 }
 
 void Granulator::setSamplesPerBlock(int samplesPerBlock)
