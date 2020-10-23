@@ -35,7 +35,7 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
     delete correlationArray;
     float spreadControl = this->quasiSyncRange * distribution(engine);
     interOnset += spreadControl; //add random
-    crossFade(currentBuffer, nextBuffer, interOnset, grainLength); //crossfade grains
+    crossFade(currentBuffer, nextBuffer, juce::jmax(interOnset, 15 * grainLength / 16), grainLength); //crossfade grains
     return interOnset;
 }
 

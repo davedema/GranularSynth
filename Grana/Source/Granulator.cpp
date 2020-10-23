@@ -41,8 +41,8 @@ void Granulator::initialize()
     lastActivatedGrain = activeGrains.getFirst();
     nextActivatedGrain = activeGrains.getFirst();
     interOnsets.add(this->strategy.nextInterOnset( //add first interonset
-        lastActivatedGrain->getFreqShiftedGrains()[38],
-        nextActivatedGrain->getFreqShiftedGrains()[38],
+        lastActivatedGrain->getBuffer(),
+        nextActivatedGrain->getBuffer(),
         lastActivatedGrain->getLength() / 2,
         lastActivatedGrain->getLength()
     ));
@@ -66,17 +66,13 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         int lastInterOnset = interOnsets.getLast();
         // ADD GRAINS: If the current sample is the Hop size of the last active grain, get the next grain to play
         if (currentSampleIdx == lastInterOnset + this->totalHops) {
-            if (lastActivatedGrain == nextActivatedGrain) { //if first grain
-                interOnsets.remove(0); //remove first onset
-                interOnsets.add(1);    //TODO: verify
-            }
             lastActivatedGrain = activeGrains.getLast();
             activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
             nextActivatedGrain = activeGrains.getLast();
             this->totalHops += lastInterOnset;
             interOnsets.add(this->strategy.nextInterOnset( //add interonset
-                lastActivatedGrain->getFreqShiftedGrains()[38],
-                nextActivatedGrain->getFreqShiftedGrains()[38],
+                lastActivatedGrain->getBuffer(),
+                nextActivatedGrain->getBuffer(),
                 lastActivatedGrain->getLength() / 2,
                 lastActivatedGrain->getLength()
             ));
@@ -101,11 +97,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
             // Compute the sum of the samples from all the currently active grains
             int k = 0;
             for (auto grain : activeGrains) {
-                sampleValue += grain->getSample(i % grain->getNumChannels(), currentSampleIdx - hopSizeSum);
+                sampleValue += grain->getBuffer()->getSample(i % grain->getNumChannels(), currentSampleIdx - hopSizeSum);
                 hopSizeSum += interOnsets[k];
                 ++k;
             }
-            outputBuffer.setSample(i, samplePos, juce::jmin(sampleValue / activeGrains.size(), 1.0f));
+            outputBuffer.setSample(i, samplePos, juce::jmin(sampleValue, 1.0f));
         }
         this->currentSampleIdx++;
     }
