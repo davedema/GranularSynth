@@ -17,16 +17,15 @@ GrainCloud::GrainCloud()
 
 GrainCloud::~GrainCloud()
 {
-    for (auto g : grains) {
+    /*for (auto g : grains) {
         delete g;
-    }
-    //this->grains.clear();
+    }*/
+    this->grains.clear();
 }
 
 void GrainCloud::addGrain(Grain* g)
 {
     grains.add(g);
-    g->equalTemperament();
 }
 
 void GrainCloud::deleteGrain(Grain* g)

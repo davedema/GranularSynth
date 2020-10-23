@@ -9,7 +9,6 @@
 */
 
 #include "GaussianEnvelope.h"
-#include "Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"
 
 
 GaussianEnvelope* GaussianEnvelope::instance = 0;
@@ -104,10 +103,9 @@ void GaussianEnvelope::filterCreation()
 
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
-	float sigma_per_two = mainLobeWidth * (float)duration;
-	float sigma = sigma_per_two / 2;
-	float r, s = sigma * sigma;
-	float triangularCoeff = pow(10, -(1 - sigma_per_two / duration) * 4);  //guessing 
+	// intialising standard deviation to 1.0 
+	float sigma = mainLobeWidth * (float)duration;
+	float r, s = 2.0 * sigma * sigma;
 
 	// generating kernel 
 
@@ -116,9 +114,10 @@ void GaussianEnvelope::filterCreation()
 		halfDurationPositive--;
 	}
 
-	for (int x = -halfDuration; x <= halfDurationPositive; x++) { //windowing the window --> reference links
-			//kernel.push_back((exp(-(x * x) / (2 * s))) * pow(1 - abs(x) / halfDuration, triangularCoeff));
-		kernel.push_back((exp(-(x * x) / (2 * s))) * pow(1 - abs(x) / halfDuration, triangularCoeff));
+	for (int x = -halfDuration; x <= halfDurationPositive; x++) {
+			kernel.push_back((exp(-(x * x) / s)) / (M_PI * s));
+			kernel[x + halfDuration] -= kernel[0];
+			kernel[x + halfDuration] /= 1 - kernel[0];
 	}
 }
 

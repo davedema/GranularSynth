@@ -12,12 +12,16 @@
 #include "PluginProcessor.h"
 #include "FileLoader.h"
 #include "KnobSection.h"
-#include "FileSection.h"
+
+enum class Windows { gaussian = 1,
+    raisedcosinebell,
+    trapezoidal
+};
 
 //==============================================================================
 /**
 */
-class LaGranaAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget, public juce::Button::Listener
+class LaGranaAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::FileDragAndDropTarget, public juce::Button::Listener
 {
 public:
     LaGranaAudioProcessorEditor (LaGranaAudioProcessor&);
@@ -27,7 +31,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void changeListenerCallback(ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -35,32 +39,25 @@ private:
     LaGranaAudioProcessor& audioProcessor;
     AudioProcessorValueTreeState* valueTreeState;
 
-    TextButton *loadBtn;
-    AudioFormatManager *formatManager;
-    AudioTransportSource *transportSource;        
+    juce::TextButton *loadBtn;
+    juce::AudioFormatManager *formatManager;
+    juce::AudioTransportSource *transportSource;        
 
-    AudioThumbnailCache* thumbnailCache;
-    AudioThumbnail* thumbnail;
+    juce::AudioThumbnailCache* thumbnailCache;                  // [1]
+    juce::AudioThumbnail* thumbnail;                            // [2]
+
+
     FileLoader *loader;
 
-    /*KnobSection* grainSection;
-    KnobSection* fileSection;*/
-    Slider filepos;
-    Slider sectionsize;
-    Label labfilepos;
-    Label labsectionsize;
-    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> fileposAttachment;
-    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> secsizeAttachment;
-
-
-    KnobSection controlSection;
-    FileSection fileSection;
+    KnobSection* grainSection;
+    KnobSection* fileSection;
+    ComboBox* envelopeList;
     ToggleButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
+
     void paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
-    void paintSelected(juce::Graphics& g);
 
     void loadBtnClicked();
 
@@ -71,7 +68,6 @@ private:
     void envelopeSelected();
 
     void buttonClicked(Button* button) override;
-    void hasChanged();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };

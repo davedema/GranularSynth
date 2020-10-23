@@ -22,56 +22,61 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
+   // transportSource = loader->getTransportSource();
     thumbnail = loader->getThumbnail();
     thumbnailCache = loader->getThumbnailCache();
+
+
     formatManager->registerBasicFormats();                         //register formats
-    thumbnail->addChangeListener(this); // Listen to new file uploads
-
-
-    //LOAD FILE BUTTON
     loadBtn = new juce::TextButton();
     addAndMakeVisible(loadBtn);
     loadBtn->setButtonText("Open...");
     loadBtn->onClick = [this] {loadBtnClicked();};
-    loadBtn->setBounds(600, 40, 100, 40);
+    loadBtn->setBounds(10, 10, 50, 25);
 
+    thumbnail->addChangeListener(this);
 
-    //FILE POSITION SLIDER
-    filepos.setSliderStyle(Slider::LinearHorizontal);
-    filepos.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    filepos.onValueChange = [this] {hasChanged(); };
-    labfilepos.setText("Filepos", dontSendNotification);
-    labfilepos.setFont(Font(12.0f));
-    labfilepos.setJustificationType(Justification(36));
-    labfilepos.attachToComponent(&filepos, true);
-    filepos.setBounds(40, 200, 480, 25);
+    //FILE MANAGEMENT SECTION
+    const std::vector<String> fileids = { "filepos", "randompos" },    //knob ids
+        * fileids_ptr = &fileids;                                        //pointer to knob ids
+    const std::vector<String> filetitles = { "File position", "Random" }, * filetitles_ptr = &filetitles;
 
-    fileposAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(*valueTreeState, "filepos", filepos));
-    addAndMakeVisible(filepos);
-    addAndMakeVisible(labfilepos);
-
-    // SECTION SIZE SLIDER
-    sectionsize.setSliderStyle(Slider::LinearHorizontal);
-    sectionsize.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    sectionsize.onValueChange = [this] {hasChanged(); };
-    labsectionsize.setText("Section", dontSendNotification);
-    labsectionsize.setFont(Font(12.0f));
-    labsectionsize.setJustificationType(Justification(36));
-    labsectionsize.attachToComponent(&sectionsize, true);
-    sectionsize.setBounds(40, 240, 480, 25);
-    secsizeAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(*valueTreeState, "Section Size", sectionsize));
-    addAndMakeVisible(sectionsize);
-    addAndMakeVisible(labsectionsize);
-
-    //FILE MANAGEMENT SECTION   
-    fileSection.init(*valueTreeState);
+    fileSection = new KnobSection(
+        WAV_WIDTH + 100,
+        WAV_HEIGHT / 2 - 10,
+        100, 70,
+        fileids_ptr,
+        filetitles_ptr,
+        p.getValueTreeState()
+        );
+    fileSection->setMyBounds();
     addAndMakeVisible(fileSection);
-    //GRAIN CONTROLS SECTION
-    controlSection.init(*valueTreeState);
-    addAndMakeVisible(controlSection);
-   
+    
+    // GRAIN SECTION
+    const std::vector<String> grainids = {"grain_durations", "grain_density"},    //knob ids
+        *point = &grainids;                                        //pointer to knob ids
+    const std::vector<String> titles = { "Duration", "Density" }, *titlesp = &titles;
+    grainSection = new KnobSection(                                //new knobsection
+        40, 
+        getHeight() / 2,
+        getWidth() / 3 - 80, getHeight() / 4 - 50,
+        point,
+        titlesp,
+        p.getValueTreeState()
+    );
+    grainSection->setMyBounds();                                    //set bounds
+    addAndMakeVisible(grainSection);
 
-    playStop.setBounds(600, 80, 50, 50);
+    //ENVELOPE SECTION
+    envelopeList = new ComboBox();
+    envelopeList->setBounds(getWidth() / 3 , getHeight() / 2, 100,30);
+    addAndMakeVisible(envelopeList);
+    envelopeList->addItem("Gaussian", 1);
+    envelopeList->addItem("RaisedCosineBell", 2);
+    envelopeList->addItem("Trapezoidal", 3);
+    envelopeList->onChange = [this] { envelopeSelected(); };
+
+    playStop.setBounds(getWidth()/2 - 25, getHeight()/2 - 50, 50, 50);
     playStop.addListener(this);
     playStop.setButtonText("PLAY");
     addAndMakeVisible(playStop);
@@ -81,6 +86,9 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
     delete loadBtn;
+    delete grainSection;
+    delete envelopeList;
+    delete fileSection;
 }
 
 //==============================================================================
@@ -92,21 +100,13 @@ void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
     if (thumbnail->getNumChannels() == 0)
         paintIfNoFileLoaded(g, thumbnailBounds);
     else
-    {
         paintIfFileLoaded(g, thumbnailBounds);
-        paintSelected(g);
-    }
 }
 
 void LaGranaAudioProcessorEditor::resized()
 {
-   
-    int margin = 10;
-    auto area = getLocalBounds().reduced(margin);
-
-    // Add knob section below
-    auto knobSection = area.removeFromLeft(controlSection.getWidth());
-    controlSection.setBounds(knobSection.removeFromBottom(controlSection.getHeight()));
+    // This is generally where you'll want to lay out the positions of any
+    // subcomponents in your editor..
 }
 
 
@@ -123,35 +123,19 @@ void LaGranaAudioProcessorEditor::paintIfNoFileLoaded(juce::Graphics& g, const j
 void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds)
 {
 
-    g.setColour(juce::Colours::transparentBlack);
+    
+    g.setColour(juce::Colours::white);
     g.fillRect(thumbnailBounds);
 
-    g.setColour(juce::Colours::cadetblue);
+    g.setColour(juce::Colours::red);                               // [8]
 
-    thumbnail->drawChannels(g,
+    thumbnail->drawChannels(g,                                      // [9]
         thumbnailBounds,
         0.0,                                    // start time
         thumbnail->getTotalLength(),             // end time
         1.0f);                                  // vertical zoom
     
 }
-
-void LaGranaAudioProcessorEditor::paintSelected(juce::Graphics& g)
-{
-    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH / 100); // tree state stores value in percentage!
-    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH / 100); 
-    int rest = filepos + selectionWidth;
-    Rectangle<int> selectionBounds;
-    if ( rest <= WAV_WIDTH ) 
-        selectionBounds = Rectangle<int>(40 + filepos, 40, selectionWidth, WAV_HEIGHT);
-    else
-        selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - filepos), WAV_HEIGHT);
-
-    g.setColour(Colours::darkred);
-    g.setOpacity(0.4);
-    g.fillRect(selectionBounds);
-}
-
 
 void LaGranaAudioProcessorEditor::loadBtnClicked() {
 
@@ -218,9 +202,4 @@ void LaGranaAudioProcessorEditor::buttonClicked(Button* button)
     }
     else
         button->setButtonText("PLAY");
-}
-
-void LaGranaAudioProcessorEditor::hasChanged()
-{
-    repaint();
 }

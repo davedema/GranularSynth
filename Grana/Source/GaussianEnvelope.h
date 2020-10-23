@@ -9,7 +9,6 @@
 */
 
 #define _USE_MATH_DEFINES
-#pragma once
 #include <cmath> 
 #include "GrainEnvelope.h"
 #include <iomanip> 
@@ -17,7 +16,7 @@
 
 
 
-
+#pragma once
 
 
 class GaussianEnvelope : public GrainEnvelope

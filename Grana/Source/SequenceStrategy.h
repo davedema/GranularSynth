@@ -25,9 +25,6 @@ private:
     int grainLength;
     float quasiSyncRange;
 
-    Array<float>* computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
-    void crossFade(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int interOnset, int grainLength);
-
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 engine; //Standard mersenne_twister_engine seeded with rd() and feeded to distribution
     std::uniform_real_distribution<float> distribution; //uniform distribution
@@ -35,8 +32,6 @@ private:
 public:
 
     SequenceStrategy();
-    int nextInterOnset(int userLength);
-    int nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
+    int nextInterOnset(Grain* currentGrain);
 
-    void setQuasiSyncRange(float quasiSyncRange);
 };
