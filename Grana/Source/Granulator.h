@@ -31,6 +31,7 @@ private:
     Grain* nextActivatedGrain;      //points to the next grain to activate
 
     Array<int> interOnsets;
+    Array<AudioBuffer<float>*> freqShiftedGrains;
     dsp::LinkwitzRileyFilter<float> masterLowPassFilter;
     dsp::LinkwitzRileyFilter<float> masterHighPassFilter;
 

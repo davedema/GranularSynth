@@ -79,7 +79,6 @@ private:
     SimpsonIntegrator *integrator;
 
     void channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel); //shifts a channel of freqshift [Hz]
-    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
 
     Array<AudioBuffer<float>*> freqShiftedGrains;
     Array<float> averageTimes;
@@ -93,6 +92,7 @@ public:
 
     AudioBuffer<float>* processBuffer();
 
+    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
     void equalTemperament();
 
 

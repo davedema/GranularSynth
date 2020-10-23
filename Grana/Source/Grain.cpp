@@ -139,7 +139,7 @@ void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int ch
 
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
         float theta = TWOPI * phaseInc; //angle
-        float newValue = hilbertTransform[this->ceiledLength * channel + i] * cos(theta) -
+        float newValue = this->getBuffer()->getSample(channel, i) * cos(theta) -
             hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rptation
         buffer->setSample(channel, i, newValue); //rewrite channel
     }
