@@ -102,4 +102,9 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
     }
 }
 
+void Granulator::setSamplesPerBlock(int samplesPerBlock)
+{
+    this->samplesPerBlock = samplesPerBlock;
+}
+
 
