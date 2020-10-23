@@ -23,7 +23,7 @@ extern "C" {
 
 
 Grain::Grain(int length, int startPos) :
-    length(length), startPosition(startPos)
+    length(length), startPosition(startPos), highResolution(false)
     
 {
     fileLoader = FileLoader::getInstance();
@@ -46,6 +46,31 @@ Grain::Grain(int length, int startPos) :
     float mainLobeWidth = 0.95;                                                                             //connect to treestate
     nextOnsetTime = 0;
     
+    maxValue = buffer->getMagnitude(0, length);
+}
+
+Grain::Grain(int length, int startPos, bool highreSolution) :
+    length(length), startPosition(startPos), highResolution(highreSolution)
+{
+    fileLoader = FileLoader::getInstance();
+    sampleRate = fileLoader->getSampleRate();
+    this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
+    envelope = GaussianEnvelope::getInstance();
+    ceiledLength = pow(2, ceil(log2(length)));
+    if (sampleRate / (2 * ceiledLength) >= 20 && highreSolution)                                           //if over JND and high resolution
+        ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));                                                    
+    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
+
+    buffer = processBuffer();
+    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
+    averageFrequency = integrator->getAverageFrequency();
+    averageFrequencies.add(averageFrequency);
+    averageTime = integrator->getAverageTime();
+
+    delete integrator;                                                                                      //useless after
+    float mainLobeWidth = 0.95;                                                                             //connect to treestate
+    nextOnsetTime = 0;
+
     maxValue = buffer->getMagnitude(0, length);
 }
 

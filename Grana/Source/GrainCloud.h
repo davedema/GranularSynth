@@ -16,6 +16,8 @@ class GrainCloud{ // passive class just describes the sound - the rendering happ
 private: 
     Array<Grain*> grains; //juce array class
 
+    bool highresolution;
+
 public: 
     GrainCloud();
     ~GrainCloud();
@@ -25,4 +27,6 @@ public:
     void shiftPortion(int shift);
     int getCloudLength();
     Grain* getNextGrain(Grain* currentGrain);
+
+    void setHighResolution(bool highResolution);
 };

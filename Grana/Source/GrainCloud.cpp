@@ -12,6 +12,7 @@
 
 GrainCloud::GrainCloud()
 {
+    this->highresolution = false;
     this->grains.clearQuick();
 }
 
@@ -42,7 +43,7 @@ void GrainCloud::granulatePortion(int filePosition, int grainLength, int portion
     while (filePosition + numGrains * hopSize + grainLength > fileLength) // check if outside
         numGrains--;
     for (int i = 0; i < numGrains - 1; i++) { //add grains
-        Grain* grain = new Grain(grainLength, filePosition + i * hopSize);
+        Grain* grain = new Grain(grainLength, filePosition + i * hopSize, highresolution);
         addGrain(grain);
     }
 
@@ -69,4 +70,9 @@ Grain* GrainCloud::getNextGrain(Grain* currentGrain)
 
     return grains.getFirst();
 
+}
+
+void GrainCloud::setHighResolution(bool highResolution)
+{
+    this->highresolution = highResolution;
 }

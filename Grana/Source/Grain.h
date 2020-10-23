@@ -65,6 +65,8 @@ private:
     float averageTime;
     float maxValue;
 
+    bool highResolution;
+
 
 
     FileLoader* fileLoader;
@@ -86,6 +88,7 @@ private:
 
 public:
     Grain(int length, int startPos);
+    Grain(int length, int startPos, bool highreSolution);
     ~Grain();
 
     AudioBuffer<float>* processBuffer();
