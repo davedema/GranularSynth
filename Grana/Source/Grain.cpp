@@ -30,7 +30,10 @@ Grain::Grain(int length, int startPos) :
     sampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
-    ceiledLength = pow(2, ceil(log2(length)));
+    if (sampleRate / (2 * length) > 20) //over JND
+        ceiledLength = pow(2, ceil(log2(length)));
+    else //under JND
+        ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
 
     buffer = processBuffer(); 

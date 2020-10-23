@@ -57,6 +57,10 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         int lastInterOnset = interOnsets.getLast();
         // ADD GRAINS: If the current sample is the Hop size of the last active grain, get the next grain to play
         if (currentSampleIdx == lastInterOnset + this->totalHops) {
+            if (lastActivatedGrain == nextActivatedGrain) { //if first grain
+                interOnsets.remove(0); //remove first onset
+                interOnsets.add(1);    //TODO: verify
+            }
             lastActivatedGrain = activeGrains.getLast();
             activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
             nextActivatedGrain = activeGrains.getLast();
