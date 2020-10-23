@@ -117,7 +117,8 @@ void GaussianEnvelope::filterCreation()
 	}
 
 	for (int x = -halfDuration; x <= halfDurationPositive; x++) { //windowing the window --> reference links
-			kernel.push_back((exp(-(x * x) / (2 * s))) * pow(1 - abs(x) / halfDuration, triangularCoeff));
+			//kernel.push_back((exp(-(x * x) / (2 * s))) * pow(1 - abs(x) / halfDuration, triangularCoeff));
+		kernel.push_back((exp(-(x * x) / (2 * s))) * pow(1 - abs(x) / halfDuration, triangularCoeff));
 	}
 }
 

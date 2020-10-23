@@ -105,7 +105,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                 hopSizeSum += interOnsets[k];
                 ++k;
             }
-            outputBuffer.setSample(i, samplePos, sampleValue);
+            outputBuffer.setSample(i, samplePos, juce::jmin(sampleValue / activeGrains.size(), 1.0f));
         }
         this->currentSampleIdx++;
     }
