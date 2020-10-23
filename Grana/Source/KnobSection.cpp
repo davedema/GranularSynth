@@ -26,19 +26,29 @@ KnobSection::~KnobSection()
 
     }
 
-    delete envelopeList;
+    delete envAttachment;
  
 }
 
 void KnobSection::init(AudioProcessorValueTreeState& apvts)
 {
-    envelopeList = new ComboBox();
-    envelopeList->addItem("Gaussian", 1);
-    envelopeList->addItem("RaisedCosineBell", 2);
-    envelopeList->addItem("Trapezoidal", 3);
-    envelopeList->setSize(50, 50);
+    envelopeList.addItem("Gaussian", 1); //idx starting from 1!
+    envelopeList.addItem("RaisedCosineBell", 2);
+    envelopeList.addItem("Trapezoidal", 3);
     //envelopeList->onChange = [this] { envelopeSelected();
     addAndMakeVisible(envelopeList);
+
+    envAmt.setSliderStyle(Slider::LinearHorizontal);
+    envAmt.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    envAttachment = new SliderAttachment(apvts, "envAmt", envAmt);
+
+    envAmtlab.setText("Envelope", dontSendNotification);
+    envAmtlab.setFont(Font(12.0f));
+    envAmtlab.setJustificationType(Justification(36));
+    envAmtlab.attachToComponent(&envAmt, false);
+
+    addAndMakeVisible(envAmt);
+    addAndMakeVisible(envAmtlab);
 
 
     for (int i = 0; i < NUM_CONTROLS; i++) {
@@ -66,16 +76,26 @@ void KnobSection::resized()
 {
     //Define the layout
     FlexBox layout;
+    FlexBox knobBox;
+    FlexBox envelopeBox;
+
+    envelopeBox.flexDirection = FlexBox::Direction::column;
+    envelopeBox.justifyContent = FlexBox::JustifyContent::spaceBetween;
+    envelopeBox.items.add(FlexItem(envelopeList).withFlex(1).withMargin(FlexItem::Margin(0,0,20,0)));
+    envelopeBox.items.add(FlexItem(envAmt).withFlex(2));
+
+
+    knobBox.flexDirection = FlexBox::Direction::row;
+    knobBox.justifyContent = FlexBox::JustifyContent::center;
+
+    for (auto& element : controls) {
+        knobBox.items.add(FlexItem(element).withMargin(FlexItem::Margin(20, 0, 0, 0)).withFlex(1, 1));
+    }
 
     layout.flexDirection = FlexBox::Direction::row;
-    layout.justifyContent = FlexBox::JustifyContent::center;
-    //layout.items.add(FlexItem(*envelopeList));
-
-    //layout.items.add(FlexItem(*envelopeList).withFlex(1, 1));
-    for (auto& element : controls) {
-        layout.items.add(FlexItem(element).withMargin(FlexItem::Margin(20, 0, 0, 0)).withFlex(1, 1));
-    }
-    layout.performLayout(getBounds().toFloat());
+    layout.items.add(FlexItem(envelopeBox).withFlex(1).withMargin(FlexItem::Margin(0, 20, 0, 0)));
+    layout.items.add(FlexItem(knobBox).withFlex(2));
+    layout.performLayout(getLocalBounds());
 }
 
 void KnobSection::sliderValueChanged(Slider* slider)

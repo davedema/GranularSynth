@@ -25,15 +25,16 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     thumbnail = loader->getThumbnail();
     thumbnailCache = loader->getThumbnailCache();
     formatManager->registerBasicFormats();                         //register formats
+    thumbnail->addChangeListener(this); // Listen to new file uploads
 
 
+    //LOAD FILE BUTTON
     loadBtn = new juce::TextButton();
     addAndMakeVisible(loadBtn);
     loadBtn->setButtonText("Open...");
     loadBtn->onClick = [this] {loadBtnClicked();};
     loadBtn->setBounds(600, 40, 100, 40);
 
-    thumbnail->addChangeListener(this);
 
     //FILE POSITION SLIDER
     filepos.setSliderStyle(Slider::LinearHorizontal);
@@ -68,16 +69,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     //GRAIN CONTROLS SECTION
     controlSection.init(*valueTreeState);
     addAndMakeVisible(controlSection);
-    
-    //ENVELOPE SECTION
-   /*  envelopeList = new ComboBox();
-    envelopeList->setBounds(getWidth() / 3 , getHeight() / 2, 100,30);
-    addAndMakeVisible(envelopeList);
-    envelopeList->addItem("Gaussian", 1);
-    envelopeList->addItem("RaisedCosineBell", 2);
-    envelopeList->addItem("Trapezoidal", 3);
-    envelopeList->onChange = [this] { envelopeSelected(); };
-    */
+   
 
     playStop.setBounds(600, 80, 50, 50);
     playStop.addListener(this);

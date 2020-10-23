@@ -37,9 +37,9 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         //std::make_unique<AudioParameterFloat>("grain_durations", "Grain_Durations", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value
         //std::make_unique< AudioParameterFloat>("grain_density", "Grain_Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 0.0f),
-        std::make_unique<AudioParameterFloat>("randompos", "Randompos", 0, 1, 0.5f),
-        std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
         std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0, 100, 50),
+        std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
+        std::make_unique<AudioParameterFloat>("envAmt","envAmt", 0.1, 1, 0.5),
         std::make_unique< AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), // id, name, min,max, initial value,
         std::make_unique< AudioParameterFloat>("Speed", "Speed", -2, 2, 1)
@@ -47,9 +47,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 #endif
 { 
     treeState.addParameterListener("filepos", &granulatorModel);
-    treeState.addParameterListener("randompos", &granulatorModel);
-    treeState.addParameterListener("isPlaying", &granulatorModel);
     treeState.addParameterListener("Section Size", &granulatorModel);
+    treeState.addParameterListener("isPlaying", &granulatorModel);
     treeState.addParameterListener("Density", &granulatorModel);
     treeState.addParameterListener("Grain Size", &granulatorModel);
     treeState.addParameterListener("Speed", &granulatorModel);

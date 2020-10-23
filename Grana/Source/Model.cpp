@@ -15,7 +15,7 @@ Model::Model()
     this->isPlaying = false;
     this->hasGranulatedCloud = false;
     this->filePos = 0;
-    this->randomPos = 0.5;
+    this->envAmt = 0.5;
     this->sectionSize = 50.;
     this->density = 25.;
     this->grainSize = 25.;
@@ -28,9 +28,9 @@ void Model::parameterChanged(const String& parameterID, float newValue)
         this->newFilePos = newValue;
         changedParameters.addIfNotAlreadyThere(UserControls::filepos);
     }
-    else if (parameterID == "randompos") {
-        this->newRandomPos = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::randomPos);
+    else if (parameterID == "envAmt") {
+        this->newenvAmt = newValue;
+        changedParameters.addIfNotAlreadyThere(UserControls::envAmt);
     }
     else if (parameterID == "isPlaying") {
         this->isPlaying = (bool)newValue;
@@ -58,9 +58,9 @@ float Model::getFilePos()
     return this->filePos;
 }
 
-float Model::getRandomPos()
+float Model::getenvAmt()
 {
-    return this->randomPos;
+    return this->envAmt;
 }
 
 float Model::getSectionSize()

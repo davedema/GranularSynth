@@ -35,8 +35,11 @@ private:
     std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
 
     SliderAttachment *attachments[NUM_CONTROLS];
+    SliderAttachment * envAttachment;
 
-    ComboBox* envelopeList;
+    ComboBox envelopeList; //list of envelopes
+    Slider envAmt; // amt of envelope to be applied to each grain
+    Label envAmtlab;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)
