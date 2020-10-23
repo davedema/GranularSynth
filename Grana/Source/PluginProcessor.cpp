@@ -130,6 +130,8 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     this->sampleRate = sampleRate;
+    this->samplesPerBlock = samplesPerBlock;
+    granulator.setSamplesPerBlock(samplesPerBlock);
 }
 
 void LaGranaAudioProcessor::releaseResources()
@@ -232,7 +234,6 @@ void LaGranaAudioProcessor::granulate()
     int filePos = (int)floatPos;
     cloud->granulatePortion(filePos, sampleDuration, FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
     granulatorModel.setHasGranulatedCloud(true);
-    this->granulator.initialize();
     DBG("Filepos:" + std::to_string(filePos));
     DBG("duration:" + std::to_string(sampleDuration));
 }
