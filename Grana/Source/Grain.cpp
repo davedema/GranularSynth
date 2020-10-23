@@ -30,9 +30,9 @@ Grain::Grain(int length, int startPos) :
     sampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
-    if (sampleRate / (2 * length) > 20) //over JND
-        ceiledLength = pow(2, ceil(log2(length)));
-    else //under JND
+    if (sampleRate / (2 * length) <= 20)                                                                  //if under JND keep length 
+        ceiledLength = pow(2, ceil(log2(length)));                                                        //zero pad
+    else                                                                                                  //JND as resoulion maximum
         ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
 
@@ -41,8 +41,8 @@ Grain::Grain(int length, int startPos) :
     averageFrequency = integrator->getAverageFrequency();
     averageTime = integrator->getAverageTime();
 
-    delete integrator; //useless after
-    float mainLobeWidth = 0.95; //connect to treestate
+    delete integrator;                                                                                      //useless after
+    float mainLobeWidth = 0.95;                                                                             //connect to treestate
     nextOnsetTime = 0;
     
     maxValue = buffer->getMagnitude(0, length);
