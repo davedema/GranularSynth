@@ -13,6 +13,15 @@
 
 #include <JuceHeader.h>
 
+#ifdef __cplusplus 
+extern "C" {
+#endif
+#include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/transforms.h"
+
+#ifdef __cplusplus 
+}
+#endif
+
 class FileLoader {
 
 
@@ -26,6 +35,8 @@ private:
     juce::AudioThumbnailCache* thumbnailCache;                      // Keep the last 5 thumbnail saved 
     juce::AudioThumbnail* thumbnail;                                // To draw the waveform
     juce::AudioBuffer<float> *buffer;                               // Contains the complete audio source (gives access to the sample)
+    double* hilbertTransform;                                       //hilbert transform for each channel
+    int ceiledLength;
 
 public:
 
@@ -44,4 +55,6 @@ public:
     juce::AudioBuffer<float> *getAudioBuffer() const;
     int getSampleRate();
     void setSampleRate(int sampleRate);
+    double* getHilbertTransform();
+    int getCeiledLength();
 };

@@ -99,13 +99,12 @@ AudioBuffer<float>* Grain::processBuffer()
         for (int j = 0; j < length; j++) { //apply envelope
             returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
             if (hilbertTransform != NULL) {
-                hilbertTransform[i * 2 * ceiledLength + j * 2] = returnBuffer->getSample(i, j);
-                hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 0; //real signal ----> a value every two set to zero
+                hilbertTransform[i * 2 * ceiledLength + j * 2] = 
+                    fileLoader->getHilbertTransform()[2 * i * fileLoader->getCeiledLength() + j * 2];
+                hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 
+                    fileLoader->getHilbertTransform()[2 * i * fileLoader->getCeiledLength() + j * 2 + 1]; //complex signal
             }
         }
-
-        if(hilbertTransform != NULL)
-            hilbert(&hilbertTransform[i * ceiledLength], ceiledLength); //Transform grain
 
     }
     return returnBuffer;

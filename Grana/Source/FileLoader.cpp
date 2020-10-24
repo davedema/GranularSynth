@@ -33,6 +33,7 @@ FileLoader::~FileLoader()
     delete thumbnailCache;
     delete thumbnail;
     delete buffer;
+    free(hilbertTransform);
 }
 
 // Get the instance of FileLoader
@@ -60,7 +61,21 @@ void FileLoader::loadWaveform(juce::File file)
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
     reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
+    ceiledLength = pow(2, ceil(log2(buffer->getNumSamples())));
+    hilbertTransform = (double*)calloc((size_t)(buffer->getNumChannels() * (size_t)2 * ceiledLength), sizeof(double));
     sampleRate = reader->sampleRate;
+
+    for (int i = 0; i < this->buffer->getNumChannels(); i++) {
+        for (int j = 0; j < buffer->getNumSamples(); j++) { //apply envelope
+            if (hilbertTransform != NULL) {
+                hilbertTransform[i * 2 * ceiledLength + j * 2] = buffer->getSample(i, j);
+                hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 0; //real signal ----> a value every two set to zero
+            }
+        }
+
+        if (hilbertTransform != NULL)
+            hilbert(&hilbertTransform[i * ceiledLength], ceiledLength); //Transform file
+    }
 }
 
 // Drag & Drop funztion (calls loadWaveform to load the file)
@@ -108,6 +123,16 @@ int FileLoader::getSampleRate()
 void FileLoader::setSampleRate(int sampleRate)
 {
     this->sampleRate = sampleRate;
+}
+
+double* FileLoader::getHilbertTransform()
+{
+    return this->hilbertTransform;
+}
+
+int FileLoader::getCeiledLength()
+{
+    return this->ceiledLength;
 }
 
 
