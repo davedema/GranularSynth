@@ -43,8 +43,8 @@ void Granulator::initialize()
     activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
     lastActivatedGrain = activeGrains.getFirst();
     nextActivatedGrain = activeGrains.getLast();
-    AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(-200);
-    AudioBuffer<float>* nextShiftedBuffer = nextActivatedGrain->freqShift(-200);
+    AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(2000);
+    AudioBuffer<float>* nextShiftedBuffer = nextActivatedGrain->freqShift(2000);
     freqShiftedGrains.add(shiftedBuffer);
     freqShiftedGrains.add(nextShiftedBuffer);      //push already next
     interOnsets.add(this->strategy.nextInterOnset( //add first interonset
@@ -77,7 +77,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
             activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
             nextActivatedGrain = activeGrains.getLast();
             this->totalHops += lastInterOnset;
-            AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(-200), *previousBuffer;
+            AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(2000), *previousBuffer;
             previousBuffer = freqShiftedGrains.getLast();
             freqShiftedGrains.add(shiftedBuffer);
             interOnsets.add(this->strategy.nextInterOnset( //add first interonset
@@ -107,7 +107,10 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 
             // Compute the sum of the samples from all the currently active grains
             for (int k = 0; k < freqShiftedGrains.size() - 1; k++) {
-                sampleValue += freqShiftedGrains[k]->getSample(i % freqShiftedGrains[k]->getNumChannels(), currentSampleIdx - hopSizeSum);
+                sampleValue += freqShiftedGrains[k]->getSample(
+                    i % freqShiftedGrains[k]->getNumChannels(), 
+                    currentSampleIdx - hopSizeSum
+                );
                 hopSizeSum += interOnsets[k];
             }
             outputBuffer.setSample(i, samplePos, juce::jmin(sampleValue / activeGrains.size(), 1.0f));
