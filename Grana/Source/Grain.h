@@ -28,8 +28,8 @@ Just create one and use the two public get methods to get average time and frequ
 class SimpsonIntegrator {
 public:
 
-    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels);
-    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, float freqshift); //integrate shifted signal
+    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, int notCeiledLength);
+    SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, int notCeiledLength, float freqshift); //integrate shifted signal
     ~SimpsonIntegrator();
     float getAverageFrequency();
     float getAverageTime();
@@ -43,6 +43,7 @@ private:
 
     int samplingFrequency;
     int length;
+    int notCeiledLength;
     int numChannels;
 
     float averageFrequency;
