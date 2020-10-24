@@ -133,8 +133,9 @@ void Grain::equalTemperament()
 void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel)
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
-
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
+        if (phaseInc >= 1) //handle phase
+            phaseInc -= 1.0f;
         float theta = TWOPI * phaseInc; //angle
         float newValue = this->getBuffer()->getSample(channel, bufferIndex(channel, i)) * cos(theta) -
             hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rotation
