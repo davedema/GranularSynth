@@ -134,11 +134,21 @@ void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int ch
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
-        if (phaseInc >= 1) //handle phase
-            phaseInc -= 1.0f;
+        if (phaseInc > 1) //handle phase
+            while(phaseInc > 1)
+                phaseInc -= 1.00000000000000000000000000000000000f;
+        else if (phaseInc < -1)
+            while(phaseInc < -1)
+                phaseInc += 1.00000000000000000000000000000000000f;
+
+        jassert(abs(phaseInc) <= 1);
+
         float theta = TWOPI * phaseInc; //angle
-        float newValue = this->getBuffer()->getSample(channel, bufferIndex(channel, i)) * cos(theta) -
-            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rotation
+        /*float newValue = this->getBuffer()->getSample(channel, bufferIndex(channel, i)) * cos(theta) * envelope->currentValue(i) -
+            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta) * envelope->currentValue(i); //rotation
+        newValue *= envelope->currentValue(i);*/
+        float newValue = hilbertTransform[this->ceiledLength * channel + i] * cos(theta) * envelope->currentValue(i) -
+            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta) * envelope->currentValue(i); //rotation
         newValue *= envelope->currentValue(i);
         buffer->setSample(channel, i, newValue); //rewrite channel
     }

@@ -33,7 +33,8 @@ FileLoader::~FileLoader()
     delete thumbnailCache;
     delete thumbnail;
     delete buffer;
-    free(hilbertTransform);
+    if(hilbertTransform != nullptr)
+        free(hilbertTransform);
 }
 
 // Get the instance of FileLoader
