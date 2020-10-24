@@ -10,6 +10,7 @@
 
 #include "Grain.h"
 #include <cmath>>
+
 #include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"
 
 #ifdef __cplusplus 
@@ -58,7 +59,7 @@ Grain::Grain(int length, int startPos, bool highreSolution) :
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
 
     buffer = processBuffer();
-    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
+    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, this->length);
     averageFrequency = integrator->getAverageFrequency();
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
@@ -96,7 +97,7 @@ AudioBuffer<float>* Grain::processBuffer()
         }
 
     }
-    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
+    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, this->length);
     averageFrequency = integrator->getAverageFrequency();
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
@@ -132,8 +133,9 @@ void Grain::equalTemperament()
 void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int channel)
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
-
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
+        if (phaseInc >= 1) //handle phase
+            phaseInc -= 1.0f;
         float theta = TWOPI * phaseInc; //angle
         float newValue = this->getBuffer()->getSample(channel, bufferIndex(channel, i)) * cos(theta) -
             hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rotation
@@ -251,15 +253,15 @@ Array<AudioBuffer<float>*> Grain::getFreqShiftedGrains()
     return this->freqShiftedGrains;
 }
 
-SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels) :
-    samplingFrequency(samplingFrequency), length(length), numChannels(numChannels)
+SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, int notCeiledLength) :
+    samplingFrequency(samplingFrequency), length(length), numChannels(numChannels), notCeiledLength(notCeiledLength)
 {
     computeAverageFrequency(hilbertTransform);
     computeAverageTime(hilbertTransform);
 }
 
-SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, float freqshift) :
-    samplingFrequency(samplingFrequency), length(length), numChannels(numChannels)
+SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, int notCeiledLength, float freqshift) :
+    samplingFrequency(samplingFrequency), length(length), numChannels(numChannels), notCeiledLength(notCeiledLength)
 {
     computeAverageFrequency(hilbertTransform, freqshift);
     computeAverageTime(hilbertTransform, freqshift);
@@ -312,7 +314,10 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
                 float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + 
                     pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
                 float averageFreqIncrement = normIncrement * step * i;
-
+                if (j < notCeiledLength) {//if under original length apply envelope
+                    averageFreqIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                    normIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                }
                 //simpson rule
                 if (j == 0 || j == length - 1) {
                     norm += normIncrement;
@@ -352,6 +357,10 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
                 float normIncrement = (float)(pow(hilbertTransform[i * 2 * length + j * 2], 2) +
                     pow(hilbertTransform[i * 2 * length + j * 2 + 1], 2));
                 float averageTimeIncrement = normIncrement * step * i;
+                if (j < notCeiledLength) { //if under original length apply envelope
+                    averageTimeIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                    normIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                }
 
                 //simpson rule
                 if (j == 0 || j == length - 1) {
