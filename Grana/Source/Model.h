@@ -18,7 +18,7 @@ public:
 
     Model();
 
-    virtual void parameterChanged(const String& parameterID, float newValue) override;
+    void parameterChanged(const String& parameterID, float newValue) override;
 
 
     float getFilePos();

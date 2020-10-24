@@ -29,9 +29,15 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
     if (currentBuffer == nextBuffer) //handle single buffer case
         return nextInterOnset(userLength);
 
-    Array<float>* correlationArray = computeCrossCorrelation(currentBuffer, nextBuffer, userLength, grainLength); //compute correlation
-    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(correlationArray->begin(), correlationArray->end()))
-        + userLength; //add lag
+    Array<float>* correlationArray = computeCrossCorrelation(
+        currentBuffer, 
+        nextBuffer, 
+        userLength, 
+        grainLength
+    ); //compute correlation
+    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(
+        correlationArray->begin(), 
+        correlationArray->end())) + userLength; //add lag
     delete correlationArray;
     float spreadControl = this->quasiSyncRange * distribution(engine);
     interOnset += spreadControl; //add random
@@ -56,7 +62,8 @@ Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* curr
         for (int channel = 0; channel > numChannels; channel++) {
             float newValue = 0;
             for (int j = 0; j < grainLength - i - 1; j++) {
-                newValue += currentBuffer->getSample(channel, userLength + j) * nextBuffer->getSample(channel, j) / (grainLength - userLength);
+                newValue += currentBuffer->getSample(channel, userLength + j) * nextBuffer->getSample(channel, j) / 
+                    (grainLength - userLength);
             }
             totalValue += newValue;
         }

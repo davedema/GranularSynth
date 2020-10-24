@@ -30,11 +30,12 @@ Grain::Grain(int length, int startPos) :
     sampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
-    if (sampleRate / (2 * length) <= 20)                                                                  //if under JND keep length 
-        ceiledLength = pow(2, ceil(log2(length)));                                                        //zero pad
-    else                                                                                                  //JND as resoulion maximum
+    if (sampleRate / (2 * length) <= 20)                                    //if under JND keep length 
+        ceiledLength = pow(2, ceil(log2(length)));                          //zero pad
+    else                                                                    //JND as resoulion maximum
         ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));
-    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
+    //allocate a transform for every channel
+    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
 
     buffer = processBuffer(); 
     integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
@@ -42,8 +43,8 @@ Grain::Grain(int length, int startPos) :
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
 
-    delete integrator;                                                                                      //useless after
-    float mainLobeWidth = 0.95;                                                                             //connect to treestate
+    delete integrator;                                                        //useless after
+    float mainLobeWidth = 0.95;                                               //connect to treestate
     nextOnsetTime = 0;
     
     maxValue = buffer->getMagnitude(0, length);
@@ -57,9 +58,10 @@ Grain::Grain(int length, int startPos, bool highreSolution) :
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
     ceiledLength = pow(2, ceil(log2(length)));
-    if (sampleRate / (2 * ceiledLength) >= 20 && highreSolution)                                           //if over JND and high resolution
+    if (sampleRate / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
         ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));                                                    
-    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double)); //allocate a transform for every channel
+    //allocate a transform for every channel
+    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
 
     buffer = processBuffer();
     integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
@@ -67,8 +69,8 @@ Grain::Grain(int length, int startPos, bool highreSolution) :
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
 
-    delete integrator;                                                                                      //useless after
-    float mainLobeWidth = 0.95;                                                                             //connect to treestate
+    delete integrator;                                                             //useless after
+    float mainLobeWidth = 0.95;                                                    //connect to treestate
     nextOnsetTime = 0;
 
     maxValue = buffer->getMagnitude(0, length);
@@ -103,7 +105,7 @@ AudioBuffer<float>* Grain::processBuffer()
         }
 
         if(hilbertTransform != NULL)
-            hilbert(&hilbertTransform[i * ceiledLength], ceiledLength); //hilbertTransform is now the Hilbert transform of the grain
+            hilbert(&hilbertTransform[i * ceiledLength], ceiledLength); //Transform grain
 
     }
     return returnBuffer;
@@ -140,7 +142,7 @@ void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int ch
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
         float theta = TWOPI * phaseInc; //angle
         float newValue = this->getBuffer()->getSample(channel, i) * cos(theta) -
-            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rptation
+            hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rotation
         buffer->setSample(channel, i, newValue); //rewrite channel
     }
 
@@ -285,7 +287,8 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
     float step = nyquist / length; //freq resolution
     float totalAverageFrequency = 0;
 
-    hilbertSpectrum = (double*)calloc((size_t)(numChannels * (size_t)2 * length), sizeof(double)); //allocate a spectrum for every channel
+    //allocate a spectrum for every channel
+    hilbertSpectrum = (double*)calloc((size_t)(numChannels * (size_t)2 * length), sizeof(double));
 
     for (int i = 0; i < this->numChannels; i++) { //loop over channels
 
@@ -306,7 +309,8 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
             }
 
             for (int j = 0; j < length; j++) { //integrate frequency
-                float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
+                float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + 
+                    pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
                 float averageFreqIncrement = normIncrement * step * i;
 
                 //simpson rule
@@ -379,7 +383,8 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform, float 
     float step = nyquist / length; //freq resolution
     float totalAverageFrequency = 0;
 
-    hilbertSpectrum = (double*)calloc((size_t)(numChannels * (size_t)2 * length), sizeof(double)); //allocate a spectrum for every channel
+    //allocate a spectrum for every channel
+    hilbertSpectrum = (double*)calloc((size_t)(numChannels * (size_t)2 * length), sizeof(double));
 
     for (int i = 0; i < this->numChannels; i++) { //loop over channels
 
@@ -406,7 +411,8 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform, float 
             }
 
             for (int j = 0; j < length; j++) { //integrate frequency
-                float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
+                float normIncrement = (float)(pow(hilbertSpectrum[i * 2 * length + j * 2], 2) + 
+                    pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
                 float averageFreqIncrement = normIncrement * step * i;
 
                 //simpson rule
