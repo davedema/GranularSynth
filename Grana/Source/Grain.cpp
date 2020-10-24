@@ -38,12 +38,6 @@ Grain::Grain(int length, int startPos) :
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
 
     buffer = processBuffer(); 
-    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
-    averageFrequency = integrator->getAverageFrequency();
-    averageFrequencies.add(averageFrequency);
-    averageTime = integrator->getAverageTime();
-
-    delete integrator;                                                        //useless after
     float mainLobeWidth = 0.95;                                               //connect to treestate
     nextOnsetTime = 0;
     
@@ -82,31 +76,32 @@ Grain::~Grain()
     free(hilbertTransform);
     for (auto buff : freqShiftedGrains)
         delete buff;
-
-    delete buffer;
     
 }
 
 AudioBuffer<float>* Grain::processBuffer()
 {
-    AudioBuffer<float>* returnBuffer = new AudioBuffer<float>(this->numChannels, this->length);
+    AudioBuffer<float>* returnBuffer = fileLoader->getAudioBuffer();
     //returnBuffer->clear();
  
     for (int i = 0; i < this->numChannels; i++) {
-
-        returnBuffer->copyFrom(i, 0, *(fileLoader->getAudioBuffer()), i, this->startPosition, this->length); //copy buffer
-
         for (int j = 0; j < length; j++) { //apply envelope
-            returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
+            //returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
             if (hilbertTransform != NULL) {
                 hilbertTransform[i * 2 * ceiledLength + j * 2] = 
-                    fileLoader->getHilbertTransform()[2 * i * fileLoader->getCeiledLength() + j * 2];
+                    fileLoader->getHilbertTransform()[bufferHilbertIndex(i, j)];
                 hilbertTransform[i * 2 * ceiledLength + j * 2 + 1] = 
-                    fileLoader->getHilbertTransform()[2 * i * fileLoader->getCeiledLength() + j * 2 + 1]; //complex signal
+                    fileLoader->getHilbertTransform()[bufferHilbertIndex(i, j) + 1]; //complex signal
             }
         }
 
     }
+    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels);
+    averageFrequency = integrator->getAverageFrequency();
+    averageFrequencies.add(averageFrequency);
+    averageTime = integrator->getAverageTime();
+
+    delete integrator;                                                        //useless after
     return returnBuffer;
 }
 
@@ -140,8 +135,9 @@ void Grain::channelFreqShift(AudioBuffer<float>* buffer, float freqShift, int ch
 
         float phaseInc = freqShift * i / this->fileLoader->getSampleRate();
         float theta = TWOPI * phaseInc; //angle
-        float newValue = this->getBuffer()->getSample(channel, i) * cos(theta) -
+        float newValue = this->getBuffer()->getSample(channel, bufferIndex(channel, i)) * cos(theta) -
             hilbertTransform[this->ceiledLength * channel + i + 1] * sin(theta); //rotation
+        newValue *= envelope->currentValue(i);
         buffer->setSample(channel, i, newValue); //rewrite channel
     }
 
@@ -193,9 +189,14 @@ int Grain::getCeiledLength()
     return this->ceiledLength;
 }
 
-float Grain::getSample(int channel, int index)
+int Grain::bufferHilbertIndex(int channel, int index)
 {
-   return this->freqShiftedGrains[50]->getSample(channel, index);
+   return 2 * channel * fileLoader->getCeiledLength() + startPosition + index * 2;
+}
+
+int Grain::bufferIndex(int channel, int index)
+{
+    return channel * buffer->getNumSamples() + startPosition + index;
 }
 
 

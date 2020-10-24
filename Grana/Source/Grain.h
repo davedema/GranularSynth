@@ -70,7 +70,7 @@ private:
 
 
     FileLoader* fileLoader;
-    AudioBuffer<float>* buffer;
+    AudioBuffer<float>* buffer;  //points to the whole audiobuffer, to be accessed with the index methods
     GrainEnvelope* envelope;
     int numChannels;   //number of channels
     int ceiledLength; //lowest power of 2 > grainlength, for fft and hilbert transforms
@@ -84,6 +84,9 @@ private:
     Array<float> averageTimes;
     Array<float> averageFrequencies;
     Temperament temperament;
+
+    int bufferHilbertIndex(int channel, int index);
+    int bufferIndex(int channel, int index);
 
 public:
     Grain(int length, int startPos);
@@ -110,7 +113,6 @@ public:
 
     int getLength();
     int getCeiledLength(); //lowest power of 2 > grainlength, for fft and hilbert transforms
-    float getSample(int channel, int index);
     int getNextOnsetTime();
     int getNumChannels();
     float getMaxValue();

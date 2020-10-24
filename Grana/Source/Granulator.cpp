@@ -43,8 +43,8 @@ void Granulator::initialize()
     activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
     lastActivatedGrain = activeGrains.getFirst();
     nextActivatedGrain = activeGrains.getLast();
-    AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(0);
-    AudioBuffer<float>* nextShiftedBuffer = nextActivatedGrain->freqShift(0);
+    AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(-200);
+    AudioBuffer<float>* nextShiftedBuffer = nextActivatedGrain->freqShift(-200);
     freqShiftedGrains.add(shiftedBuffer);
     freqShiftedGrains.add(nextShiftedBuffer);      //push already next
     interOnsets.add(this->strategy.nextInterOnset( //add first interonset
@@ -77,7 +77,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
             activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
             nextActivatedGrain = activeGrains.getLast();
             this->totalHops += lastInterOnset;
-            AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(0), *previousBuffer;
+            AudioBuffer<float>* shiftedBuffer = lastActivatedGrain->freqShift(-200), *previousBuffer;
             previousBuffer = freqShiftedGrains.getLast();
             freqShiftedGrains.add(shiftedBuffer);
             interOnsets.add(this->strategy.nextInterOnset( //add interonset
