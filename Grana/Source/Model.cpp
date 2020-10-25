@@ -12,7 +12,7 @@
 
 Model::Model()
 {
-    this->isPlaying = false;
+    this->isPlaying = true;
     this->hasGranulatedCloud = false;
     this->filePos = 0;
     this->envAmt = 0.5;

@@ -55,7 +55,7 @@ private:
 
     KnobSection controlSection;
     FileSection fileSection;
-    ToggleButton playStop;
+    TextButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);

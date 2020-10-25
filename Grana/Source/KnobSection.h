@@ -28,6 +28,7 @@ public:
     void paint(Graphics&) override;
     void resized() override;
     void sliderValueChanged(Slider* slider) override;
+    void envelopeSelected();
 
 private:
     Slider controls[NUM_CONTROLS];
@@ -38,8 +39,8 @@ private:
     SliderAttachment * envAttachment;
 
     ComboBox envelopeList; //list of envelopes
-    Slider envAmt; // amt of envelope to be applied to each grain
-    Label envAmtlab;
+    Slider envShape; // shape of the envelope to apply
+    Label envShapelab;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)
