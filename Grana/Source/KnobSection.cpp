@@ -35,20 +35,20 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
     envelopeList.addItem("Gaussian", 1); //idx starting from 1!
     envelopeList.addItem("RaisedCosineBell", 2);
     envelopeList.addItem("Trapezoidal", 3);
-    envelopeList.onChange = [this] { envelopeSelected(); };
+    //envelopeList->onChange = [this] { envelopeSelected();
     addAndMakeVisible(envelopeList);
 
-    envShape.setSliderStyle(Slider::LinearHorizontal);
-    envShape.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
-    envAttachment = new SliderAttachment(apvts, "envShape", envShape);
+    envAmt.setSliderStyle(Slider::LinearHorizontal);
+    envAmt.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    envAttachment = new SliderAttachment(apvts, "envAmt", envAmt);
 
-    envShapelab.setText("Envelope", dontSendNotification);
-    envShapelab.setFont(Font(12.0f));
-    envShapelab.setJustificationType(Justification(36));
-    envShapelab.attachToComponent(&envShape, false);
+    envAmtlab.setText("Envelope", dontSendNotification);
+    envAmtlab.setFont(Font(12.0f));
+    envAmtlab.setJustificationType(Justification(36));
+    envAmtlab.attachToComponent(&envAmt, false);
 
-    addAndMakeVisible(envShape);
-    addAndMakeVisible(envShapelab);
+    addAndMakeVisible(envAmt);
+    addAndMakeVisible(envAmtlab);
 
 
     for (int i = 0; i < NUM_CONTROLS; i++) {
@@ -82,7 +82,7 @@ void KnobSection::resized()
     envelopeBox.flexDirection = FlexBox::Direction::column;
     envelopeBox.justifyContent = FlexBox::JustifyContent::spaceBetween;
     envelopeBox.items.add(FlexItem(envelopeList).withFlex(1).withMargin(FlexItem::Margin(0,0,20,0)));
-    envelopeBox.items.add(FlexItem(envShape).withFlex(2));
+    envelopeBox.items.add(FlexItem(envAmt).withFlex(2));
 
 
     knobBox.flexDirection = FlexBox::Direction::row;
@@ -100,17 +100,4 @@ void KnobSection::resized()
 
 void KnobSection::sliderValueChanged(Slider* slider)
 {
-    if (&envShape == slider)
-    {
-        slider->getValue();
-    }
-}
-
-void KnobSection::envelopeSelected()
-{
-}
-
-void drawEnvelope()
-{
-
 }
