@@ -110,12 +110,7 @@ void KnobSection::envelopeSelected()
 {
 }
 
-void drawEnvelope(Array<float> values, int interpolation_factor, double env_width, int x, int y)
+void drawEnvelope()
 {
-    Path envelopePath;
-    Point<float> start((float)0, (float)(y));
-    envelopePath.startNewSubPath(start);  // if this is the first point, start a new path..
-
-
 
 }

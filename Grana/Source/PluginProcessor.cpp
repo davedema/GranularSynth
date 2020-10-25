@@ -178,7 +178,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, currentBufferLength);
 
-    if (granulatorModel.getHasGranulatedCloud() && granulatorModel.getIsPlaying())
+    if (granulatorModel.getHasGranulatedCloud() && !granulatorModel.getIsPlaying())
         granulator.process(buffer, buffer.getNumSamples());
     else if (granulatorModel.detectAnyChange())
         return; //trigger stuff here, easy solution to handle parameter changes
