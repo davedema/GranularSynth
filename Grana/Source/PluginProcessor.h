@@ -65,16 +65,11 @@ public:
 
 
 private:
-    std::atomic<float>* grainParameter = nullptr; //atomic allows different threads to operate on the instance
-    std::atomic<float>* filePosParameter = nullptr;
-    std::atomic<float>* isPlaying = nullptr;
-
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
-    Granulator granulator;
+    Granulator granulator; // processor kernel where all operations on audio occur
+    Model granulatorModel; // a model in which we store the audiotreestate values in order to access them easily
+
     double sampleRate;
-
-    Model granulatorModel;
-
     int samplesPerBlock;
 
     //==============================================================================

@@ -17,7 +17,8 @@ constexpr auto WAV_HEIGHT = 160;
 
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
-    AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState()){
+    AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState())
+{
 
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
@@ -31,10 +32,18 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     //LOAD FILE BUTTON
     loadBtn = new juce::TextButton();
     addAndMakeVisible(loadBtn);
-    loadBtn->setButtonText("Open...");
+    loadBtn->setButtonText("Load...");
     loadBtn->onClick = [this] {loadBtnClicked();};
-    loadBtn->setBounds(600, 40, 100, 40);
-
+    loadBtn->setBounds(580, 40, 150, 50);
+    //PLAY FILE BUTTON
+    playStop.setBounds(580, 100, 150, 50);
+    playStop.addListener(this);
+    playStop.setButtonText("PLAY");
+    playStop.setColour(TextButton::buttonColourId, Colours::green);
+    playStop.setColour(TextButton::buttonOnColourId, Colours::red);
+    addAndMakeVisible(playStop);
+    playAttachment.reset(new AudioProcessorValueTreeState::ButtonAttachment(*valueTreeState, "isPlaying", playStop));
+    playStop.setToggleState(false, dontSendNotification);
 
     //FILE POSITION SLIDER
     filepos.setSliderStyle(Slider::LinearHorizontal);
@@ -71,11 +80,6 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     addAndMakeVisible(controlSection);
    
 
-    playStop.setBounds(600, 80, 50, 50);
-    playStop.addListener(this);
-    playStop.setButtonText("PLAY");
-    addAndMakeVisible(playStop);
-    playAttachment.reset(new AudioProcessorValueTreeState::ButtonAttachment(*valueTreeState, "isPlaying", playStop));
 }
 
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
@@ -212,12 +216,19 @@ void LaGranaAudioProcessorEditor::envelopeSelected()
 
 void LaGranaAudioProcessorEditor::buttonClicked(Button* button)
 {
-    if (button->getButtonText() == "PLAY") {
-        audioProcessor.play();
-        button->setButtonText("STOP");
+    if (button == &playStop)
+    {
+        if (button->getToggleState()) { // if it is on 
+            button->setButtonText("PLAY");
+            button->setToggleState(false, dontSendNotification);
+        }
+        else
+        {
+            button->setButtonText("STOP");
+            button->setToggleState(true, dontSendNotification);
+            audioProcessor.play();
+        }
     }
-    else
-        button->setButtonText("PLAY");
 }
 
 void LaGranaAudioProcessorEditor::hasChanged()
