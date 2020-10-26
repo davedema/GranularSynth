@@ -72,9 +72,6 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     addAndMakeVisible(sectionsize);
     addAndMakeVisible(labsectionsize);
 
-    //FILE MANAGEMENT SECTION   
-    fileSection.init(*valueTreeState);
-    addAndMakeVisible(fileSection);
     //GRAIN CONTROLS SECTION
     controlSection.init(*valueTreeState);
     addAndMakeVisible(controlSection);
