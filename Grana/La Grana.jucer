@@ -2,8 +2,7 @@
 
 <JUCERPROJECT id="uDaQq6" name="La Grana" projectType="audioplug" useAppConfig="1"
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              includeBinaryInJuceHeader="1">
+              pluginCharacteristicsValue="pluginIsSynth" includeBinaryInJuceHeader="1">
   <MAINGROUP id="cZs3we" name="La Grana">
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
       <GROUP id="{A4C7E0AD-34FC-B090-3B23-B4AF9936C68E}" name="SmithsoniansTransforms">
@@ -41,14 +40,20 @@
               file="fonts/UrbanBrushZone.ttf"/>
       </GROUP>
       <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI">
-        <FILE id="kppLtZ" name="FileSection.cpp" compile="1" resource="0" file="Source/FileSection.cpp"/>
-        <FILE id="ZkI0Fy" name="FileSection.h" compile="0" resource="0" file="Source/FileSection.h"/>
+        <FILE id="nnW2sE" name="EnvelopeDrawable.cpp" compile="1" resource="0"
+              file="Source/EnvelopeDrawable.cpp"/>
+        <FILE id="NvtefY" name="EnvelopeDrawable.h" compile="0" resource="0"
+              file="Source/EnvelopeDrawable.h"/>
         <FILE id="M2pWGZ" name="KnobLookAndFeel.cpp" compile="1" resource="0"
               file="Source/KnobLookAndFeel.cpp"/>
         <FILE id="KxeUyY" name="KnobLookAndFeel.h" compile="0" resource="0"
               file="Source/KnobLookAndFeel.h"/>
         <FILE id="VDCmMQ" name="KnobSection.cpp" compile="1" resource="0" file="Source/KnobSection.cpp"/>
         <FILE id="s97rVh" name="KnobSection.h" compile="0" resource="0" file="Source/KnobSection.h"/>
+        <FILE id="Cb29Me" name="SpectrumDrawable.cpp" compile="1" resource="0"
+              file="Source/SpectrumDrawable.cpp"/>
+        <FILE id="wc38s4" name="SpectrumDrawable.h" compile="0" resource="0"
+              file="Source/SpectrumDrawable.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
         <FILE id="xnsULc" name="SequenceStrategy.cpp" compile="1" resource="0"
