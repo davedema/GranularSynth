@@ -78,7 +78,8 @@ Grain* GrainCloud::getNextGrain(Grain* currentGrain)
     if (model->getHasLoadedFile())
     {
         nextGrain = new Grain(round(model->getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000),
-            round(model->getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100));
+            round(model->getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100),
+            this->highresolution);
            
     }
 
