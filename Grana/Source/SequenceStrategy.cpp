@@ -35,13 +35,20 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
         userLength, 
         grainLength
     ); //compute correlation
-    int interOnset = (int)std::distance(correlationArray->begin(), std::max_element(
+    float maxvalue = *std::max_element(
+        correlationArray->begin(),
+        correlationArray->end());
+    DBG("maxvalue:" + std::to_string(maxvalue));
+    float interOnset = (float)std::distance(correlationArray->begin(), std::max_element(
         correlationArray->begin(), 
-        correlationArray->end())) + userLength; //add lag
+        correlationArray->end())); //add lag
+    DBG("lag:" + std::to_string(interOnset));
+    interOnset += userLength;
     delete correlationArray;
     float spreadControl = this->quasiSyncRange * distribution(engine);
     interOnset += spreadControl; //add random
-    //crossFade(currentBuffer, nextBuffer, juce::jmax(interOnset, 31 * grainLength / 32), grainLength); //crossfade grains
+    //crossFade(currentBuffer, nextBuffer, interOnset, grainLength); //crossfade grains
+    DBG("interonset:" + std::to_string(interOnset));
     return interOnset;
 }
 
@@ -57,14 +64,14 @@ Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* curr
     correlationArray->clear();
 
     //begin compute autocorrelation
-    for (int i = 0; i < userLength; i++) {
+    for (int i = 0; i < grainLength - userLength; i++) {
         float totalValue = 0;
-        for (int channel = 0; channel > numChannels; channel++) {
+        for (int channel = 0; channel < numChannels; channel++) {
             float newValue = 0;
-            for (int j = 0; j < grainLength - i - 1; j++) {
-                newValue += currentBuffer->getSample(channel, userLength + j) * nextBuffer->getSample(channel, j) / 
-                    (grainLength - userLength);
+            for (int j = userLength; j < grainLength - i; j++) {
+                newValue += currentBuffer->getSample(channel, j) * nextBuffer->getSample(channel, j - userLength);
             }
+            newValue /= (float)(grainLength - userLength);
             totalValue += newValue;
         }
         totalValue /= numChannels; //average over channels
@@ -80,6 +87,6 @@ void SequenceStrategy::crossFade(AudioBuffer<float>* currentBuffer, AudioBuffer<
     int linearCoeff = 1 / (grainLength - interOnset - 1);
     for (int i = 0; i < grainLength - interOnset; i++) {
         currentBuffer->applyGain(interOnset + i, 1, 1 - linearCoeff * i);
-        nextBuffer->applyGain(interOnset + i, 1, linearCoeff * i);
+        nextBuffer->applyGain(i, 1, linearCoeff * i);
     }
 }
