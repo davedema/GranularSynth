@@ -14,6 +14,10 @@ GrainCloud::GrainCloud()
 {
     this->highresolution = false;
     this->grains.clearQuick();
+    this->filePos = 0;
+    this->sectionSize = 0;
+    this->model = nullptr;
+
 }
 
 GrainCloud::~GrainCloud()
@@ -61,18 +65,49 @@ int GrainCloud::getCloudLength()
 
 Grain* GrainCloud::getNextGrain(Grain* currentGrain)
 {
+    /*
     if (currentGrain == nullptr) return grains.getFirst();
 
     int idx = grains.indexOf(currentGrain);
-    DBG("Number of grains: " + std::to_string(grains.size()));
-    DBG("Grain index: " + std::to_string(idx));
     if (idx != -1) return grains.getUnchecked((idx + 1)%grains.size());
 
     return grains.getFirst();
+
+    */
+    Grain* nextGrain = nullptr;
+    if (model->getHasLoadedFile())
+    {
+        nextGrain = new Grain(round(model->getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000),
+            round(model->getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100));
+           
+    }
+
+    return nextGrain;
 
 }
 
 void GrainCloud::setHighResolution(bool highResolution)
 {
     this->highresolution = highResolution;
+}
+
+void GrainCloud::setModel(Model* model)
+{
+    this->model = model;
+}
+
+void GrainCloud::setfilePos()
+{
+    this->filePos = this->model->getFilePos();
+}
+
+void GrainCloud::setsectionSize()
+{
+    this->sectionSize = this->model->getSectionSize();
+
+}
+
+void GrainCloud::setFileLoader(FileLoader* fileLoader)
+{
+    this->fileLoader = fileLoader;
 }

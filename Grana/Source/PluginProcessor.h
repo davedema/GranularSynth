@@ -58,7 +58,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     AudioProcessorValueTreeState* getValueTreeState();
-
+    Model* getModel();
     void granulate();
     void resetEnvelopes();
     void play();            // Called from editor (when PLAY button pressed)

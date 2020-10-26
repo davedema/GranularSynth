@@ -15,6 +15,7 @@ Granulator::Granulator()
     this->activeGrains.clearQuick();
     this->currentSampleIdx = 0;
     this->totalHops = 0;
+    this->model = nullptr;
 
     masterLowPassFilter.setType(dsp::LinkwitzRileyFilterType::lowpass);
     masterHighPassFilter.setType(dsp::LinkwitzRileyFilterType::highpass);
@@ -39,6 +40,7 @@ void Granulator::initialize()
 {
     this->currentSampleIdx = 0;
     this->activeGrains.clearQuick();
+    this->cloud.setModel(this->model);
     activeGrains.add(this->cloud.getNextGrain(nullptr));
     activeGrains.add(this->cloud.getNextGrain(activeGrains.getLast()));
     lastActivatedGrain = activeGrains.getFirst();
@@ -127,6 +129,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 void Granulator::setSamplesPerBlock(int samplesPerBlock)
 {
     this->samplesPerBlock = samplesPerBlock;
+}
+
+void Granulator::setModel(Model* model)
+{
+    this->model = model;
 }
 
 
