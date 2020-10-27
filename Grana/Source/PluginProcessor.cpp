@@ -13,7 +13,7 @@
 // define constant values for knobs
 // GRAIN DURATIONS
 #define GRAIN_MIN 5.0f //in ms
-#define GRAIN_MAX 10000.0f //in ms
+#define GRAIN_MAX 200.0f //in ms
 
 // GRAIN DENSITY
 #define GRAIN_DENSITY_MIN 2.0f // in #
@@ -230,22 +230,6 @@ Model* LaGranaAudioProcessor::getModel()
     return &granulatorModel;
 }
 
-void LaGranaAudioProcessor::granulate()
-{
-    //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
-    /*
-    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000;
-    int sampleDuration = (int)durationValue;
-    GrainCloud* cloud = granulator.getCloud();
-    float floatPos = granulatorModel.getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
-    int filePos = (int)floatPos;
-    cloud->granulatePortion(filePos, sampleDuration, FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
-    granulatorModel.setHasGranulatedCloud(true);
-    DBG("Filepos:" + std::to_string(filePos));
-    DBG("duration:" + std::to_string(sampleDuration));
-    */
-}
-
 void LaGranaAudioProcessor::resetEnvelopes()
 {
     //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
@@ -260,7 +244,7 @@ void LaGranaAudioProcessor::resetEnvelopes()
 void LaGranaAudioProcessor::play()
 {
     if (granulatorModel.getHasLoadedFile()) {
-        this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
+        this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
     }
 }
 

@@ -11,7 +11,6 @@
 #include <JuceHeader.h>
 #include "Granulator.h"
 #include "FileLoader.h"
-#include "GrainCloud.h"
 #include "Model.h"
 
 //==============================================================================
@@ -59,7 +58,6 @@ public:
 
     AudioProcessorValueTreeState* getValueTreeState();
     Model* getModel();
-    void granulate();
     void resetEnvelopes();
     void play();            // Called from editor (when PLAY button pressed)
 

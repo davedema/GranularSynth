@@ -56,10 +56,14 @@
               file="Source/SpectrumDrawable.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="qn1MjM" name="SimpsonIntegrator.cpp" compile="1" resource="0"
+              file="Source/SimpsonIntegrator.cpp"/>
+        <FILE id="eTMBgV" name="SimpsonIntegrator.h" compile="0" resource="0"
+              file="Source/SimpsonIntegrator.h"/>
+        <FILE id="dyO24f" name="SequenceStrategy.h" compile="0" resource="0"
+              file="Source/SequenceStrategy.h"/>
         <FILE id="xnsULc" name="SequenceStrategy.cpp" compile="1" resource="0"
               file="Source/SequenceStrategy.cpp"/>
-        <FILE id="QkKo9x" name="GrainCloud.cpp" compile="1" resource="0" file="Source/GrainCloud.cpp"/>
-        <FILE id="jMa8VN" name="GrainCloud.h" compile="0" resource="0" file="Source/GrainCloud.h"/>
         <FILE id="KByKoB" name="Granulator.cpp" compile="1" resource="0" file="Source/Granulator.cpp"/>
         <FILE id="Q8juSn" name="Granulator.h" compile="0" resource="0" file="Source/Granulator.h"/>
         <GROUP id="{4319CCE1-3102-FCFE-E6BD-FFD9D2354BE2}" name="GrainEnvelopes">
@@ -83,8 +87,6 @@
         <FILE id="KqUnco" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
         <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
         <FILE id="Y8xRvN" name="Grain.h" compile="0" resource="0" file="Source/Grain.h"/>
-        <FILE id="dyO24f" name="SequenceStrategy.h" compile="0" resource="0"
-              file="Source/SequenceStrategy.h"/>
       </GROUP>
       <FILE id="IaUD9G" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

@@ -169,7 +169,6 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
             loader->loadWaveform(file); 
             audioProcessor.getModel()->setHasLoadedFile(true);
             audioProcessor.resetEnvelopes();
-            audioProcessor.granulate();
         }
 
         delete reader;

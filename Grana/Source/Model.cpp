@@ -73,8 +73,8 @@ float Model::getSectionSize()
 
 float Model::getDensity()
 {
-    //return this->density;
-    return 10;
+    return this->density;
+    //return 10;
 }
 
 int Model::getEnvIndex()
