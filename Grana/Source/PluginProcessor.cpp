@@ -52,6 +52,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Grain Size", &granulatorModel);
     treeState.addParameterListener("Speed", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
+    resetEnvelopes();
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
@@ -248,7 +249,8 @@ void LaGranaAudioProcessor::granulate()
 void LaGranaAudioProcessor::resetEnvelopes()
 {
     //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
-    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000;
+    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() > 0 ? FileLoader::getInstance()->getSampleRate() :
+        44100 / 1000; 
     int sampleDuration = (int)durationValue;
     GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
     TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
