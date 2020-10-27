@@ -9,14 +9,13 @@
 */
 #include "Granulator.h"
 
-
+/*
 Granulator::Granulator() 
 {
     this->activeGrains.clearQuick();
     this->currentSampleIdx = 0;
     this->totalHops = 0;
     this->model = nullptr;
-
     masterLowPassFilter.setType(dsp::LinkwitzRileyFilterType::lowpass);
     masterHighPassFilter.setType(dsp::LinkwitzRileyFilterType::highpass);
     masterLowPassFilter.setCutoffFrequency(8000);
@@ -29,7 +28,6 @@ Granulator::~Granulator()
         delete buff;
     this->activeGrains.clearQuick();
 }
-
 GrainCloud* Granulator::getCloud()
 {
     return &this->cloud;
@@ -60,6 +58,7 @@ void Granulator::initialize()
     masterLowPassFilter.prepare(spec);
     masterHighPassFilter.prepare(spec);
 }
+
 
 // Process the sound
 void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
@@ -135,5 +134,78 @@ void Granulator::setModel(Model* model)
 {
     this->model = model;
 }
+*/
+
+Granulator::Granulator()
+{
+    this->activeGrains.clearQuick();
+    this->model = nullptr;
+    this->nextOnset = 0;
+    this->position = 0;
+}
+
+Granulator::~Granulator()
+{
+    this->activeGrains.clearQuick();
+}
+
+//Initialize everything. Called when PLAY button is clicked
+void Granulator::initialize(int fileLength)
+{
+    this->activeGrains.clearQuick();
+    this->activeGrains.add(new Grain(model->getGrainSize(), this->position));
+    this->nextOnset = this->strategy.getNextOnset();
+    this->fileLength = fileLength;
+}
 
 
+// Process the sound
+void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
+{
+    for (int samplePos = 0; samplePos < numSamples; samplePos++) {
+
+        //If there are no active grains put 0 on output buffer
+        if (this->activeGrains.isEmpty()) {
+            for (int i = 0; i < outputBuffer.getNumChannels(); i++) {
+                outputBuffer.addSample(i, samplePos, 0);
+            }
+        }
+        else {
+            //Cycles through the active grains, if the grain is finished remove it otherwise play the current sample
+            for (auto grain : this->activeGrains) {
+                if (grain->isFinished()) {
+                    this->activeGrains.remove(this->activeGrains.indexOf(grain));
+                    delete grain;
+                }
+                else {
+                    for (int i = 0; i < outputBuffer.getNumChannels(); i++) {
+                        outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i));   //Should add the sample already envelopped
+                    }
+                }
+            }
+        }
+
+        //Increment the position in the audio file
+        this->position++;
+        if (this->position == this->fileLength) {
+            this->position = 0;
+        }
+
+        //Decrement the next onset time, if it's 0 add a new grain and get the next one
+        this->nextOnset--;
+        if (this->nextOnset == 0) {
+            this->activeGrains.add(new Grain(model->getGrainSize(), this->position));
+            this->nextOnset = this->strategy.getNextOnset();
+        }
+    }
+}
+
+void Granulator::setSampleRate(double sampleRate)
+{
+    this->strategy.setSampleRate(sampleRate);
+}
+
+void Granulator::setModel(Model* model)
+{
+    this->model = model;
+}

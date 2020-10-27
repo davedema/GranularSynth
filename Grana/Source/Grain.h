@@ -54,20 +54,47 @@ private:
 
 class Grain {
 
+public:
+    Grain(int grainDuration, int startPos);
+    Grain(int grainDuration, int startPos, bool highreSolution);
+    ~Grain();
+
+    AudioBuffer<float>* processBuffer();
+    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
+    void equalTemperament();
+    inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
+    void changeEnvelope(EnvType type);
+
+    float getCurrentSample(int channel);    //Return the current sample playing on the given channel
+
+    //--------GETTERS AND SETTERS
+    int getLength();
+    int getCeiledLength(); //lowest power of 2 > grainlength, for fft and hilbert transforms
+    int getNextOnsetTime();
+    int getNumChannels();
+    float getMaxValue();
+    int getStartPosition();
+    float getAverageFrequency();
+    float getAverageTime();
+    GrainEnvelope* getEnvelope();
+    AudioBuffer<float>* getBuffer();
+    double* getHilbertTransform(); //hilbert transform for each channel --> 2 * channel * ceiledlength samples 
+    Array<AudioBuffer<float>*> getFreqShiftedGrains();
+    bool isFinished();
 
 private:
-
+    int startPosition;      //in the loaded audio file
     int length;
-    int startPosition;
-    int nextOnsetTime;
-    float sampleRate; 
+    int currentPosition;    //current playing sample in the grain
+    float fileSampleRate; 
+    bool finished;
 
     float averageFrequency;
     float averageTime;
     float maxValue;
 
     bool highResolution;
-
+    //int nextOnsetTime;
 
 
     FileLoader* fileLoader;
@@ -89,43 +116,7 @@ private:
     int bufferHilbertIndex(int channel, int index);
     int bufferIndex(int channel, int index);
 
-public:
-    Grain(int length, int startPos);
-    Grain(int length, int startPos, bool highreSolution);
-    ~Grain();
-
-    AudioBuffer<float>* processBuffer();
-
-    AudioBuffer<float>* freqShift(float freqshift); //shifts every channel of freqShift [Hz] 
-    void equalTemperament();
-
-
-    inline float cubicinterp(float x, float y0, float y1, float y2, float y3);
-    void changeEnvelope(EnvType type);
-    void activate();
-    void synthesize();
-
-    
-
-
-
-    //--------GETTERS AND SETTERS
-
-
-    int getLength();
-    int getCeiledLength(); //lowest power of 2 > grainlength, for fft and hilbert transforms
-    int getNextOnsetTime();
-    int getNumChannels();
-    float getMaxValue();
-    int getStartPosition();
-    float getAverageFrequency();
-    float getAverageTime();
-    GrainEnvelope* getEnvelope();
-    AudioBuffer<float>* getBuffer();  
-    double* getHilbertTransform(); //hilbert transform for each channel --> 2 * channel * ceiledlength samples 
-    Array<AudioBuffer<float>*> getFreqShiftedGrains();
-    
-
+    void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
 };
 
 

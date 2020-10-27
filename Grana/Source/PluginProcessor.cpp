@@ -13,7 +13,7 @@
 // define constant values for knobs
 // GRAIN DURATIONS
 #define GRAIN_MIN 5.0f //in ms
-#define GRAIN_MAX 100.0f //in ms
+#define GRAIN_MAX 10000.0f //in ms
 
 // GRAIN DENSITY
 #define GRAIN_DENSITY_MIN 2.0f // in #
@@ -131,7 +131,7 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // initialisation that you need..
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
-    granulator.setSamplesPerBlock(samplesPerBlock);
+    granulator.setSampleRate(this->sampleRate);
 }
 
 void LaGranaAudioProcessor::releaseResources()
@@ -257,8 +257,9 @@ void LaGranaAudioProcessor::resetEnvelopes()
 
 void LaGranaAudioProcessor::play()
 {
-    if(granulatorModel.getHasLoadedFile())
-        this->granulator.initialize();
+    if (granulatorModel.getHasLoadedFile()) {
+        this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
+    }
 }
 
 //==============================================================================

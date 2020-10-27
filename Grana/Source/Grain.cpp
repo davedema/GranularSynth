@@ -23,50 +23,52 @@ extern "C" {
 #endif
 
 
-Grain::Grain(int length, int startPos) :
-    length(length), startPosition(startPos), highResolution(false)
-    
+Grain::Grain(int grainDuration, int startPos) :
+    length(grainDuration), startPosition(startPos), highResolution(false) 
 {
     fileLoader = FileLoader::getInstance();
-    sampleRate = fileLoader->getSampleRate();
-    this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
-    envelope = GaussianEnvelope::getInstance();
-    if (sampleRate / (2 * length) <= 20)                                    //if under JND keep length 
-        ceiledLength = pow(2, ceil(log2(length)));                          //zero pad
+    fileSampleRate = fileLoader->getSampleRate();
+    numChannels = fileLoader->getAudioBuffer()->getNumChannels();
+    this->envelope = GaussianEnvelope::getInstance();
+    this->currentPosition = 0;
+    this->finished = false;
+/*
+    if (this->fileSampleRate / (2 * this->length) <= 20)                    //if under JND keep length 
+        this->ceiledLength = pow(2, ceil(log2(this->length)));              //zero pad
     else                                                                    //JND as resoulion maximum
-        ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));
+        this->ceiledLength = pow(2, ceil(log2(this->fileSampleRate / 2 * 20)));
     //allocate a transform for every channel
-    hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
-
-    buffer = processBuffer(); 
+    this->hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * this->ceiledLength), sizeof(double));
+       */
+    this->buffer = processBuffer(); 
     float mainLobeWidth = 0.95;                                               //connect to treestate
-    nextOnsetTime = 0;
+    //nextOnsetTime = 0;
     
-    maxValue = buffer->getMagnitude(0, length);
+    this->maxValue = this->buffer->getMagnitude(0, this->length);
 }
 
-Grain::Grain(int length, int startPos, bool highreSolution) :
-    length(length), startPosition(startPos), highResolution(highreSolution)
+Grain::Grain(int grainDuration, int startPos, bool highreSolution) :
+    length(grainDuration), startPosition(startPos), highResolution(highreSolution)
 {
     fileLoader = FileLoader::getInstance();
-    sampleRate = fileLoader->getSampleRate();
+    fileSampleRate = fileLoader->getSampleRate();
     this->numChannels = fileLoader->getAudioBuffer()->getNumChannels();
     envelope = GaussianEnvelope::getInstance();
     ceiledLength = pow(2, ceil(log2(length)));
-    if (sampleRate / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
-        ceiledLength = pow(2, ceil(log2(sampleRate / 2 * 20)));                                                    
+    if (fileSampleRate / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
+        ceiledLength = pow(2, ceil(log2(fileSampleRate / 2 * 20)));                                                    
     //allocate a transform for every channel
     hilbertTransform = (double*)calloc((size_t)(numChannels * (size_t)2 * ceiledLength), sizeof(double));
 
     buffer = processBuffer();
-    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, this->length);
+    integrator = new SimpsonIntegrator(hilbertTransform, fileSampleRate, ceiledLength, this->numChannels, this->length);
     averageFrequency = integrator->getAverageFrequency();
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
 
     delete integrator;                                                             //useless after
     float mainLobeWidth = 0.95;                                                    //connect to treestate
-    nextOnsetTime = 0;
+    //nextOnsetTime = 0;
 
     maxValue = buffer->getMagnitude(0, length);
 }
@@ -74,9 +76,11 @@ Grain::Grain(int length, int startPos, bool highreSolution) :
 
 Grain::~Grain()
 {
+    /*
     free(hilbertTransform);
     for (auto buff : freqShiftedGrains)
         delete buff;
+        */
     
 }
 
@@ -84,7 +88,7 @@ AudioBuffer<float>* Grain::processBuffer()
 {
     AudioBuffer<float>* returnBuffer = fileLoader->getAudioBuffer();
     //returnBuffer->clear();
- 
+ /*
     for (int i = 0; i < this->numChannels; i++) {
         for (int j = 0; j < length; j++) { //apply envelope
             //returnBuffer->applyGain(i, j, 1, envelope->currentValue(j));
@@ -97,12 +101,13 @@ AudioBuffer<float>* Grain::processBuffer()
         }
 
     }
-    integrator = new SimpsonIntegrator(hilbertTransform, sampleRate, ceiledLength, this->numChannels, this->length);
+    integrator = new SimpsonIntegrator(hilbertTransform, fileSampleRate, ceiledLength, this->numChannels, this->length);
     averageFrequency = integrator->getAverageFrequency();
     averageFrequencies.add(averageFrequency);
     averageTime = integrator->getAverageTime();
 
     delete integrator;                                                        //useless after
+    */
     return returnBuffer;
 }
 
@@ -191,6 +196,20 @@ void Grain::changeEnvelope(EnvType type){
     }
 }
 
+float Grain::getCurrentSample(int channel)
+{
+    float outputSample = buffer->getSample(channel, this->startPosition + this->currentPosition);
+    this->updateIndex();
+    return outputSample;
+}
+
+void Grain::updateIndex()
+{
+    this->currentPosition++;
+    if (this->currentPosition == this->length)
+        this->finished = true;
+}
+
 int Grain::getLength()
 {
     return this->length;
@@ -210,8 +229,6 @@ int Grain::bufferIndex(int channel, int index)
 {
     return channel * buffer->getNumSamples() + startPosition + index;
 }
-
-
 
 int Grain::getNextOnsetTime(){
 
@@ -262,6 +279,16 @@ Array<AudioBuffer<float>*> Grain::getFreqShiftedGrains()
 {
     return this->freqShiftedGrains;
 }
+
+bool Grain::isFinished()
+{
+    return this->finished;
+}
+
+
+
+
+// SIMPSON INTERGATOR (new file?)
 
 SimpsonIntegrator::SimpsonIntegrator(double* hilbertTransform, int samplingFrequency, int length, int numChannels, int notCeiledLength) :
     samplingFrequency(samplingFrequency), length(length), numChannels(numChannels), notCeiledLength(notCeiledLength)
