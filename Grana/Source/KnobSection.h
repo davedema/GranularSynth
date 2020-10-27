@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "EnvelopeDrawable.h"
 
 typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
 constexpr auto NUM_CONTROLS = 3;
@@ -39,6 +40,7 @@ private:
     SliderAttachment * envAttachment;
 
     ComboBox envelopeList; //list of envelopes
+    EnvelopeDrawable envDraw;
     Slider envShape; // shape of the envelope to apply
     Label envShapelab;
 

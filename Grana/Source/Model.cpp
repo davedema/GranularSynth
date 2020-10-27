@@ -13,8 +13,9 @@
 Model::Model()
 {
     this->isPlaying = false;
-    this->hasGranulatedCloud = false;
+    this->hasLoadedFile = false;
     this->filePos = 0;
+    this->envIndex = 1;
     this->envAmt = 0.5;
     this->sectionSize = 50.;
     this->density = 25.;
@@ -25,31 +26,33 @@ Model::Model()
 void Model::parameterChanged(const String& parameterID, float newValue)
 {
     if (parameterID == "filepos") {
-        this->newFilePos = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::filepos);
+        this->filePos = newValue;
     }
     else if (parameterID == "envAmt") {
         this->newenvAmt = newValue;
         changedParameters.addIfNotAlreadyThere(UserControls::envAmt);
+
     }
     else if (parameterID == "isPlaying") {
         this->isPlaying = (bool)newValue;
     }
     else if (parameterID == "Section Size") {
-        this->newSectionSize = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::sectionSize);
+        this->sectionSize = newValue;
     }
     else if (parameterID == "Density") {
-        this->newDensity = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::density);
+        this->density = newValue;
     }
     else if (parameterID == "Grain Size") {
         this->grainSize = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::grainSize);
     }
     else if (parameterID == "Speed") {
         this->speed = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::speed);
+    }
+
+    else if (parameterID == "envIndex")
+    {
+        this->envIndex = newValue;
+        changedParameters.addIfNotAlreadyThere(UserControls::envIndex);
     }
 }
 
@@ -71,6 +74,12 @@ float Model::getSectionSize()
 float Model::getDensity()
 {
     return this->density;
+    //return 10;
+}
+
+int Model::getEnvIndex()
+{
+    return this->envIndex;
 }
 
 float Model::getGrainSize()
@@ -88,14 +97,15 @@ bool Model::getIsPlaying()
     return this->isPlaying;
 }
 
-void Model::setHasGranulatedCloud(bool hasDone)
+void Model::setHasLoadedFile(bool hasDone)
 {
-    this->hasGranulatedCloud = hasDone;
+    this->hasLoadedFile = hasDone;
 }
 
-bool Model::getHasGranulatedCloud()
+
+bool Model::getHasLoadedFile()
 {
-    return this->hasGranulatedCloud;
+    return this->hasLoadedFile;
 }
 
 bool Model::detectChange(UserControls parameter)

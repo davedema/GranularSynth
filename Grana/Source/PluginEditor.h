@@ -12,7 +12,6 @@
 #include "PluginProcessor.h"
 #include "FileLoader.h"
 #include "KnobSection.h"
-#include "FileSection.h"
 
 //==============================================================================
 /**
@@ -54,7 +53,6 @@ private:
 
 
     KnobSection controlSection;
-    FileSection fileSection;
     TextButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 

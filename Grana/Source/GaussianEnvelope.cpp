@@ -122,6 +122,20 @@ void GaussianEnvelope::filterCreation()
 	}
 }
 
+
+int GaussianEnvelope::getDuration()
+{
+	if (!instance)
+		instance = new GaussianEnvelope();
+	return instance->getSamples();
+
+}
+
+int GaussianEnvelope::getSamples()
+{
+	return this->duration;
+}
+
 GaussianEnvelope::~GaussianEnvelope()
 {
 	kernel.clear();

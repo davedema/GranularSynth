@@ -37,9 +37,10 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
     envelopeList.addItem("Trapezoidal", 3);
     envelopeList.onChange = [this] { envelopeSelected(); };
     addAndMakeVisible(envelopeList);
+    addAndMakeVisible(envDraw);
 
     envShape.setSliderStyle(Slider::LinearHorizontal);
-    envShape.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+    envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     envAttachment = new SliderAttachment(apvts, "envShape", envShape);
 
     envShapelab.setText("Envelope", dontSendNotification);
@@ -69,7 +70,6 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
 
 void KnobSection::paint(Graphics& g)
 {
-
 }
 
 void KnobSection::resized()
@@ -78,11 +78,15 @@ void KnobSection::resized()
     FlexBox layout;
     FlexBox knobBox;
     FlexBox envelopeBox;
+    //FlexBox envelopeDrawable;
+
+    //envelopeDrawable.items.add(envDraw);
 
     envelopeBox.flexDirection = FlexBox::Direction::column;
     envelopeBox.justifyContent = FlexBox::JustifyContent::spaceBetween;
-    envelopeBox.items.add(FlexItem(envelopeList).withFlex(1).withMargin(FlexItem::Margin(0,0,20,0)));
-    envelopeBox.items.add(FlexItem(envShape).withFlex(2));
+    envelopeBox.items.add(FlexItem(envDraw).withFlex(4));
+    envelopeBox.items.add(FlexItem(envelopeList).withFlex(2).withMargin(FlexItem::Margin(0,0,20,0)));
+    envelopeBox.items.add(FlexItem(envShape).withFlex(1));
 
 
     knobBox.flexDirection = FlexBox::Direction::row;

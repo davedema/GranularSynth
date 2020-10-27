@@ -72,9 +72,6 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     addAndMakeVisible(sectionsize);
     addAndMakeVisible(labsectionsize);
 
-    //FILE MANAGEMENT SECTION   
-    fileSection.init(*valueTreeState);
-    addAndMakeVisible(fileSection);
     //GRAIN CONTROLS SECTION
     controlSection.init(*valueTreeState);
     addAndMakeVisible(controlSection);
@@ -170,8 +167,8 @@ void LaGranaAudioProcessorEditor::loadBtnClicked() {
 
         if (reader != nullptr) { 
             loader->loadWaveform(file); 
+            audioProcessor.getModel()->setHasLoadedFile(true);
             audioProcessor.resetEnvelopes();
-            audioProcessor.granulate();
         }
 
         delete reader;
@@ -204,8 +201,9 @@ void LaGranaAudioProcessorEditor::filesDropped(const juce::StringArray& files, i
 {
     if (isInterestedInFileDrag(files)) {
         loader->loadFile(files[0]);
+        audioProcessor.getModel()->setHasLoadedFile(true);
         audioProcessor.resetEnvelopes();
-        audioProcessor.granulate();
+        //audioProcessor.granulate();
     }
 }
 

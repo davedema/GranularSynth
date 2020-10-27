@@ -15,11 +15,6 @@
 #include <iomanip> 
 #include <vector>
 
-
-
-
-
-
 class GaussianEnvelope : public GrainEnvelope
 {
 public:
@@ -31,8 +26,7 @@ public:
     static GaussianEnvelope* setMainLobeWidth(int mainLobeWidth);
     static GaussianEnvelope* getInstance();
     
-    
-    
+    static int getDuration(); //in samples
 
 private:
 
@@ -42,6 +36,7 @@ private:
     GaussianEnvelope(int duration, int sampleRate, float mainLobeWidth);
     
     void filterCreation();
+    int getSamples(); //in samples
 
     ~GaussianEnvelope();
 

@@ -13,7 +13,7 @@
 // define constant values for knobs
 // GRAIN DURATIONS
 #define GRAIN_MIN 5.0f //in ms
-#define GRAIN_MAX 100.0f //in ms
+#define GRAIN_MAX 200.0f //in ms
 
 // GRAIN DENSITY
 #define GRAIN_DENSITY_MIN 2.0f // in #
@@ -37,6 +37,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 0.0f), // id, name, min,max, initial value
         std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0, 100, 50),
         std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
+        std::make_unique<AudioParameterFloat>("envIndex", "envIndex", 1, 3, 1), // 1 gaussian, 2raised, 3 trapezoidal
         std::make_unique<AudioParameterFloat>("envShape","envShape", 0, 1, 0.5),
         std::make_unique< AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), 
@@ -50,6 +51,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Density", &granulatorModel);
     treeState.addParameterListener("Grain Size", &granulatorModel);
     treeState.addParameterListener("Speed", &granulatorModel);
+    this->granulator.setModel(&granulatorModel);
+    resetEnvelopes();
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
@@ -129,7 +132,7 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // initialisation that you need..
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
-    granulator.setSamplesPerBlock(samplesPerBlock);
+    granulator.setSampleRate(this->sampleRate);
 }
 
 void LaGranaAudioProcessor::releaseResources()
@@ -178,7 +181,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, currentBufferLength);
 
-    if (granulatorModel.getHasGranulatedCloud() && !granulatorModel.getIsPlaying())
+    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying())
         granulator.process(buffer, buffer.getNumSamples());
     else if (granulatorModel.detectAnyChange())
         return; //trigger stuff here, easy solution to handle parameter changes
@@ -222,24 +225,16 @@ AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
     return &treeState;
 }
 
-void LaGranaAudioProcessor::granulate()
+Model* LaGranaAudioProcessor::getModel()
 {
-    //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
-    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000;
-    int sampleDuration = (int)durationValue;
-    GrainCloud* cloud = granulator.getCloud();
-    float floatPos = granulatorModel.getFilePos() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() / 100;
-    int filePos = (int)floatPos;
-    cloud->granulatePortion(filePos, sampleDuration, FileLoader::getInstance()->getAudioBuffer()->getNumSamples());
-    granulatorModel.setHasGranulatedCloud(true);
-    DBG("Filepos:" + std::to_string(filePos));
-    DBG("duration:" + std::to_string(sampleDuration));
+    return &granulatorModel;
 }
 
 void LaGranaAudioProcessor::resetEnvelopes()
 {
     //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
-    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() / 1000;
+    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() > 0 ? FileLoader::getInstance()->getSampleRate() :
+        44100 / 1000; 
     int sampleDuration = (int)durationValue;
     GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
     TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
@@ -248,8 +243,9 @@ void LaGranaAudioProcessor::resetEnvelopes()
 
 void LaGranaAudioProcessor::play()
 {
-    if(granulatorModel.getHasGranulatedCloud())
-        this->granulator.initialize();
+    if (granulatorModel.getHasLoadedFile()) {
+        this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
+    }
 }
 
 //==============================================================================

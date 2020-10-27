@@ -18,6 +18,11 @@ SequenceStrategy::SequenceStrategy()
     distribution = std::uniform_real_distribution<float>(-1.0f, std::nextafter(1.0f, std::numeric_limits<float>::max())); //c++ docs
 }
 
+void SequenceStrategy::setModel(Model* model)
+{
+    this->model = model;
+}
+
 int SequenceStrategy::nextInterOnset(int userLength)
 {
     float spreadControl = this->quasiSyncRange * distribution(engine);
@@ -55,6 +60,16 @@ int SequenceStrategy::nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuf
 void SequenceStrategy::setQuasiSyncRange(float quasiSyncRange)
 {
     this->quasiSyncRange = quasiSyncRange;
+}
+
+void SequenceStrategy::setSampleRate(double sampleRate)
+{
+    this->sampleRate = sampleRate;
+}
+
+int SequenceStrategy::getNextOnset()
+{
+    return round(this->sampleRate/this->model->getDensity());
 }
 
 Array<float>* SequenceStrategy::computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)

@@ -17,6 +17,7 @@ FileLoader* FileLoader::instance = 0;
 // Constructor
 FileLoader::FileLoader()
 {
+    hilbertTransform = nullptr;
     formatManager = new juce::AudioFormatManager();
     readerSource = new std::unique_ptr<juce::AudioFormatReaderSource>();
     thumbnailCache = new juce::AudioThumbnailCache(5);

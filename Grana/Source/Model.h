@@ -11,7 +11,7 @@
 #pragma once
 #include "JuceHeader.h"
 
-enum class UserControls{filepos, sectionSize, envAmt, density, grainSize, speed, isPlaying, hasGranulatedSounds};
+enum class UserControls{filepos, sectionSize, envIndex, envAmt, density, grainSize, speed, isPlaying, hasGranulatedSounds};
 
 class Model : public AudioProcessorValueTreeState::Listener {
 public:
@@ -25,11 +25,12 @@ public:
     float getenvAmt();
     float getSectionSize();
     float getDensity();
+    int getEnvIndex();
     float getGrainSize();
     float getSpeed();
     bool getIsPlaying();
-    void setHasGranulatedCloud(bool hasDone);
-    bool getHasGranulatedCloud();
+    void setHasLoadedFile(bool hasDone);
+    bool getHasLoadedFile();
 
     bool detectChange(UserControls parameter);
     bool detectAnyChange();
@@ -40,20 +41,15 @@ private:
     float sectionSize;
     float envAmt;
     float density;
+    int envIndex;
     float grainSize;
     float speed;
     bool isPlaying;
-    bool hasGranulatedCloud;
+    bool hasLoadedFile;
 
     Array<UserControls> changedParameters;
 
-    float newFilePos;
-    float newSectionSize;
     float newenvAmt;
-    float newDensity;
-    float newGrainSize;
-    float newSpeed;
-
 
 
  
