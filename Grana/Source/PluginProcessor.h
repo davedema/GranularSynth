@@ -12,6 +12,7 @@
 #include "Granulator.h"
 #include "FileLoader.h"
 #include "Model.h"
+#include "Extractor.h"
 
 //==============================================================================
 /**
@@ -66,7 +67,7 @@ private:
     AudioProcessorValueTreeState treeState; // save the current state of the plugin
     Granulator granulator; // processor kernel where all operations on audio occur
     Model granulatorModel; // a model in which we store the audiotreestate values in order to access them easily
-
+    Extractor extractor;
     double sampleRate;
     int samplesPerBlock;
 

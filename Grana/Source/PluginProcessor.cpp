@@ -181,8 +181,13 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, currentBufferLength);
 
-    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying())
+    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
         granulator.process(buffer, buffer.getNumSamples());
+        for (int i = 0; i < buffer.getNumSamples(); i++) // cycle through samples and fill the fft input (might be different from buffer sizes)
+        {
+            //fill extractor input 
+        }
+    }
     else if (granulatorModel.detectAnyChange())
         return; //trigger stuff here, easy solution to handle parameter changes
 }

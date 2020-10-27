@@ -233,3 +233,4 @@ void LaGranaAudioProcessorEditor::hasChanged()
 {
     repaint();
 }
+

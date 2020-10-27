@@ -12,7 +12,7 @@
 #include "PluginProcessor.h"
 #include "FileLoader.h"
 #include "KnobSection.h"
-
+#include "SpectrumDrawable.h"
 //==============================================================================
 /**
 */
@@ -42,8 +42,6 @@ private:
     AudioThumbnail* thumbnail;
     FileLoader *loader;
 
-    /*KnobSection* grainSection;
-    KnobSection* fileSection;*/
     Slider filepos;
     Slider sectionsize;
     Label labfilepos;
@@ -56,6 +54,7 @@ private:
     TextButton playStop;
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
+    SpectrumDrawable spectrum;
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
     void paintSelected(juce::Graphics& g);

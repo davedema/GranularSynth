@@ -10,7 +10,7 @@
 
 #include "SpectrumDrawable.h"
 
-SpectrumDrawable::SpectrumDrawable(): forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::hamming)
+SpectrumDrawable::SpectrumDrawable()
 {
 }
 
@@ -25,3 +25,4 @@ void SpectrumDrawable::paint(Graphics&)
 void SpectrumDrawable::resized()
 {
 }
+
