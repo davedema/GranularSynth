@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    FileSection.h
-    Created: 21 Oct 2020 11:02:26pm
+    EnvelopeDrawable.h
+    Created: 26 Oct 2020 10:33:07pm
     Author:  amere
 
   ==============================================================================
@@ -10,19 +10,15 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "./GaussianEnvelope.h"
 
-class FileSection : public Component, public Slider::Listener
-{
+class EnvelopeDrawable : public Component {
 public:
-    FileSection();
-    ~FileSection();
-    void init(AudioProcessorValueTreeState& apvts);
+    EnvelopeDrawable();
+    ~EnvelopeDrawable();
+
     void paint(Graphics&) override;
     void resized() override;
-    void sliderValueChanged(Slider* slider) override;
 
-private:
-
-
-
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeDrawable)
 };
