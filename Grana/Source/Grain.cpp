@@ -58,7 +58,7 @@ void Grain::channelFreqShift(float freqShift, int channel)
 
 float Grain::getCurrentSample(int channel, int portionLength)
 {
-    return buffer->getSample(channel, this->currentPosition);
+    return buffer->getSample(channel % FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->currentPosition);
 }
 
 void Grain::updateIndex()
