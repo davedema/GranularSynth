@@ -30,7 +30,12 @@ Granulator::~Granulator()
 void Granulator::initialize(int portionLength)
 {
     this->activeGrains.clearQuick();
-    this->activeGrains.add(new Grain(model->getGrainSize(), this->position, false, 100));
+    this->activeGrains.add(new Grain(model->getGrainSize(), 
+                                     this->position, 
+                                     false, 
+                                     100,
+                                     model->getEnvIndex(),
+                                     model->getEnvWidth()));
     this->nextOnset = this->strategy.getNextOnset();
     this->portionLength = portionLength;
 }
@@ -72,7 +77,13 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         //Decrement the next onset time, if it's 0 add a new grain and get the next one
         this->nextOnset--;
         if (this->nextOnset == 0) {
-            this->activeGrains.add(new Grain(model->getGrainSize(), this->position, false, 100));
+            this->activeGrains.add(new Grain(model->getGrainSize(), 
+                                             this->position,
+                                             false, 
+                                             100,
+                                             model->getEnvIndex(),
+                                             model->getEnvWidth()));
+
             this->nextOnset = this->strategy.getNextOnset();
         }
     }

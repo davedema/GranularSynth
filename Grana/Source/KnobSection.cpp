@@ -41,7 +41,7 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
 
     envShape.setSliderStyle(Slider::LinearHorizontal);
     envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    envAttachment = new SliderAttachment(apvts, "envShape", envShape);
+    envAttachment = new SliderAttachment(apvts, "envWidth", envShape);
 
     envShapelab.setText("Envelope", dontSendNotification);
     envShapelab.setFont(Font(12.0f));

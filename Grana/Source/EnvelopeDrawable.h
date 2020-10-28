@@ -10,7 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "./GaussianEnvelope.h"
+#include "./GrainEnvelope.h"
 
 class EnvelopeDrawable : public Component {
 public:

@@ -16,7 +16,7 @@ Model::Model()
     this->hasLoadedFile = false;
     this->filePos = 0;
     this->envIndex = 1;
-    this->envAmt = 0.5;
+    this->envWidth = 0.5;
     this->sectionSize = 50.;
     this->density = 25.;
     this->grainSize = 25.;
@@ -28,10 +28,8 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     if (parameterID == "filepos") {
         this->filePos = newValue;
     }
-    else if (parameterID == "envAmt") {
-        this->newenvAmt = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::envAmt);
-
+    else if (parameterID == "envWidth") {
+        this->envWidth = newValue;
     }
     else if (parameterID == "isPlaying") {
         this->isPlaying = (bool)newValue;
@@ -52,7 +50,6 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     else if (parameterID == "envIndex")
     {
         this->envIndex = newValue;
-        changedParameters.addIfNotAlreadyThere(UserControls::envIndex);
     }
 }
 
@@ -61,9 +58,9 @@ float Model::getFilePos()
     return this->filePos;
 }
 
-float Model::getenvAmt()
+float Model::getEnvWidth()
 {
-    return this->envAmt;
+    return this->envWidth;
 }
 
 float Model::getSectionSize()
@@ -74,7 +71,6 @@ float Model::getSectionSize()
 float Model::getDensity()
 {
     return this->density;
-    //return 10;
 }
 
 int Model::getEnvIndex()
@@ -106,14 +102,4 @@ void Model::setHasLoadedFile(bool hasDone)
 bool Model::getHasLoadedFile()
 {
     return this->hasLoadedFile;
-}
-
-bool Model::detectChange(UserControls parameter)
-{
-    return changedParameters.contains(parameter);
-}
-
-bool Model::detectAnyChange()
-{
-    return !changedParameters.isEmpty();
 }

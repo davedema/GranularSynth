@@ -59,7 +59,6 @@ public:
 
     AudioProcessorValueTreeState* getValueTreeState();
     Model* getModel();
-    void resetEnvelopes();
     void play();            // Called from editor (when PLAY button pressed)
 
 

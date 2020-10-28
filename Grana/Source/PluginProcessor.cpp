@@ -38,7 +38,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0, 100, 50),
         std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
         std::make_unique<AudioParameterFloat>("envIndex", "envIndex", 1, 3, 1), // 1 gaussian, 2raised, 3 trapezoidal
-        std::make_unique<AudioParameterFloat>("envShape","envShape", 0, 1, 0.5),
+        std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.5),
         std::make_unique< AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), 
         std::make_unique< AudioParameterFloat>("Speed", "Speed", -2, 2, 1)
@@ -52,15 +52,11 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Grain Size", &granulatorModel);
     treeState.addParameterListener("Speed", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
-    resetEnvelopes();
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
     FileLoader::resetInstance();
-    GaussianEnvelope::reset();
-    TrapezoidalEnvelope::reset();
-    RaisedCosineBellEnvelope::reset();
 }
 
 //==============================================================================
@@ -165,11 +161,11 @@ bool LaGranaAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 }
 #endif
 
-void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     int currentBufferLength = buffer.getNumSamples();
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // In case we have more outputs than inputs, this code clears any output
@@ -179,7 +175,7 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, currentBufferLength);
+        buffer.clear(i, 0, currentBufferLength);
 
     if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
         granulator.process(buffer, buffer.getNumSamples());
@@ -188,8 +184,6 @@ void LaGranaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             //fill extractor input 
         }
     }
-    else if (granulatorModel.detectAnyChange())
-        return; //trigger stuff here, easy solution to handle parameter changes
 }
 
 //==============================================================================
@@ -233,17 +227,6 @@ AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
 Model* LaGranaAudioProcessor::getModel()
 {
     return &granulatorModel;
-}
-
-void LaGranaAudioProcessor::resetEnvelopes()
-{
-    //float durationValue = treeState.getRawParameterValue("grain_durations")->load() * FileLoader::getInstance()->getSampleRate() / 1000;
-    float durationValue = granulatorModel.getGrainSize() * FileLoader::getInstance()->getSampleRate() > 0 ? FileLoader::getInstance()->getSampleRate() :
-        44100 / 1000; 
-    int sampleDuration = (int)durationValue;
-    GaussianEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
-    TrapezoidalEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
-    RaisedCosineBellEnvelope::reset(sampleDuration, FileLoader::getInstance()->getSampleRate(), 0.8f);
 }
 
 void LaGranaAudioProcessor::play()

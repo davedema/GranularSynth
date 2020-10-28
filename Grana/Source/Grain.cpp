@@ -10,14 +10,14 @@
 
 #include "Grain.h"
 
-Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift) :
-    length(grainDuration), startPosition(startPos), highResolution(highreSolution)
+Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth) :
+    length(grainDuration), startPosition(startPos)
+  
 {
     this->buffer = new AudioBuffer<float>(FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->length);
     this->hilbertTransform = FileLoader::getInstance()->getHilbertTransform();
     this->currentPosition = 0;
     this->finished = false;
-    //envelope = GaussianEnvelope::getInstance();
     ceiledLength = pow(2, ceil(log2(length)));
     if (FileLoader::getInstance()->getSampleRate() / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
         ceiledLength = pow(2, ceil(log2(FileLoader::getInstance()->getSampleRate() / 2 * 20)));                                                    
@@ -25,9 +25,8 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     this->averageFrequency = this->integrator->getAverageFrequency();
 
     delete integrator;                                                             //useless after
-    float mainLobeWidth = 0.95;                                                    //connect to treestate
     for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
-        channelFreqShift(freqShift, i);
+        channelFreqShift(freqShift, i, envelopeType, envelopeWidth);
 }
 
 Grain::~Grain()
@@ -35,7 +34,7 @@ Grain::~Grain()
     delete buffer;
 }
 
-void Grain::channelFreqShift(float freqShift, int channel)
+void Grain::channelFreqShift(float freqShift, int channel, int envType, int envWidth)
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / FileLoader::getInstance()->getSampleRate();
@@ -49,8 +48,9 @@ void Grain::channelFreqShift(float freqShift, int channel)
         jassert(abs(phaseInc) <= 1);
 
         float theta = TWOPI * phaseInc; //angle
-        float newValue = hilbertTransform[bufferHilbertIndex(channel, i)] * cos(theta) /* envelope->currentValue(i)*/ -
-            hilbertTransform[bufferHilbertIndex(channel, i) + 1] * sin(theta) /* envelope->currentValue(i)*/; //rotation
+        float newValue = hilbertTransform[bufferHilbertIndex(channel, i)] * cos(theta) -
+            hilbertTransform[bufferHilbertIndex(channel, i) + 1] * sin(theta); //rotation
+        newValue *= GrainEnvelope::getEnvelopeValue(i, envType, this->length, envWidth);
         this->buffer->setSample(channel, i, newValue); //rewrite channel
     }
 
