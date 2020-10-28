@@ -36,9 +36,9 @@ float GrainEnvelope::getGaussian(int index, int duration, float mainLobeWidth)
 
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
-	float sigma_per_two = mainLobeWidth * (float)duration;
+	float sigma_per_two = mainLobeWidth * (float)(duration - 5);
 	float sigma = sigma_per_two / 2;
-	float r, s = sigma * sigma;
+	float s = sigma * sigma;
 	float triangularCoeff = pow(10, -(1 - sigma_per_two / duration) * 4);  //guessing 
 
 	if (duration % 2 == 0) { //this is done in order to solve the problem of having an array
@@ -47,7 +47,7 @@ float GrainEnvelope::getGaussian(int index, int duration, float mainLobeWidth)
 	}
 
 	index = index - halfDurationPositive;
-	return (exp(-(index * index) / (2 * s))) * pow(1 - abs(index) / halfDuration, 0.5);
+	return (exp(-(index * index) / (2 * s))) * pow(1 - abs(index + halfDurationPositive) / halfDuration, 0.5);
 }
 
 float GrainEnvelope::getTrapezoidal(int index, int duration, float mainLobeWidth)

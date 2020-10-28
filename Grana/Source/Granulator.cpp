@@ -35,7 +35,7 @@ void Granulator::initialize(int portionLength)
                                      false, 
                                      100,
                                      model->getEnvIndex(),
-                                     model->getEnvWidth()));
+                                     model->getEnvWidth() / 10000.0f));
     this->nextOnset = this->strategy.getNextOnset();
     this->portionLength = portionLength;
 }
@@ -82,7 +82,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                                              false, 
                                              100,
                                              model->getEnvIndex(),
-                                             model->getEnvWidth()));
+                                             model->getEnvWidth() / 10000.0f));
 
             this->nextOnset = this->strategy.getNextOnset();
         }
