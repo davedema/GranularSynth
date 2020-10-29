@@ -68,23 +68,9 @@
               file="Source/SequenceStrategy.cpp"/>
         <FILE id="KByKoB" name="Granulator.cpp" compile="1" resource="0" file="Source/Granulator.cpp"/>
         <FILE id="Q8juSn" name="Granulator.h" compile="0" resource="0" file="Source/Granulator.h"/>
-        <GROUP id="{4319CCE1-3102-FCFE-E6BD-FFD9D2354BE2}" name="GrainEnvelopes">
-          <FILE id="MgZ6ec" name="GaussianEnvelope.cpp" compile="1" resource="0"
-                file="Source/GaussianEnvelope.cpp"/>
-          <FILE id="ubk5jd" name="GaussianEnvelope.h" compile="0" resource="0"
-                file="Source/GaussianEnvelope.h"/>
-          <FILE id="j6SqWH" name="GrainEnvelope.cpp" compile="1" resource="0"
-                file="Source/GrainEnvelope.cpp"/>
-          <FILE id="Zj6pVi" name="GrainEnvelope.h" compile="0" resource="0" file="Source/GrainEnvelope.h"/>
-          <FILE id="GltNx9" name="RaisedCosineBellEnvelope.cpp" compile="1" resource="0"
-                file="Source/RaisedCosineBellEnvelope.cpp"/>
-          <FILE id="XOirhN" name="RaisedCosineBellEnvelope.h" compile="0" resource="0"
-                file="Source/RaisedCosineBellEnvelope.h"/>
-          <FILE id="ZDGvab" name="TrapezoidalEnvelope.cpp" compile="1" resource="0"
-                file="Source/TrapezoidalEnvelope.cpp"/>
-          <FILE id="Jkj2Ep" name="TrapezoidalEnvelope.h" compile="0" resource="0"
-                file="Source/TrapezoidalEnvelope.h"/>
-        </GROUP>
+        <FILE id="j6SqWH" name="GrainEnvelope.cpp" compile="1" resource="0"
+              file="Source/GrainEnvelope.cpp"/>
+        <FILE id="Zj6pVi" name="GrainEnvelope.h" compile="0" resource="0" file="Source/GrainEnvelope.h"/>
         <FILE id="h3IyQX" name="FileLoader.cpp" compile="1" resource="0" file="Source/FileLoader.cpp"/>
         <FILE id="KqUnco" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
         <FILE id="i3h58L" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>

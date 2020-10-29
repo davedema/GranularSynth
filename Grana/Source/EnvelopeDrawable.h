@@ -10,7 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "./GaussianEnvelope.h"
+#include "./GrainEnvelope.h"
 
 class EnvelopeDrawable : public Component {
 public:
@@ -19,6 +19,11 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    void setType(int envType);
+    void setWidth(float envWidth);
 
+private: 
+    int envType{ 1 };
+    float envWidth{ 0.5 };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeDrawable)
 };

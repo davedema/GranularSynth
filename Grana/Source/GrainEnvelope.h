@@ -10,7 +10,7 @@
 
 #pragma once
 #include"JuceHeader.h"
-
+#include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"
 
 
 class GrainEnvelope
@@ -18,24 +18,14 @@ class GrainEnvelope
 
 public:
 	
-    float currentValue(int time);
-
-    static void reset();
-    static void reset(int duration, int sampleRate, float mainLobeWidth);
-
+    static float getEnvelopeValue(int index, int selectedEnv, int length, float mainlobewidth); //sample index, selected envelope type, grain length, main lobe width  
     
-    
-protected:
-
-    std::vector<double> kernel;
-    int duration; //duration in samples
-    int sampleRate;
-    float mainLobeWidth;
-    
+protected:    
 
 private:
-    
-    
+    static float getGaussian(int index, int length, float mainLobeWidth);
+    static float getTrapezoidal(int index, int length, float mainLobeWidth);
+    static float getRaisedCosine(int index, int length, float mainLobeWidth);
     
 };
 

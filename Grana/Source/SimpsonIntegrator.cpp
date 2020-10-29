@@ -72,8 +72,8 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
                     pow(hilbertSpectrum[i * 2 * length + j * 2 + 1], 2));
                 float averageFreqIncrement = normIncrement * step * i;
                 if (j < notCeiledLength) {//if under original length apply envelope
-                    averageFreqIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
-                    normIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                   /* averageFreqIncrement *= GaussianEnvelope::getInstance()->currentValue(j);
+                    normIncrement *= GaussianEnvelope::getInstance()->currentValue(j); */
                 }
                 //simpson rule
                 if (j == 0 || j == length - 1) {
@@ -101,6 +101,7 @@ void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform)
 
 void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
 {
+    /*
     float step = 1 / samplingFrequency; //time resolution
     float totalAverageTime = 0;
 
@@ -141,6 +142,7 @@ void SimpsonIntegrator::computeAverageTime(double* hilbertTransform)
         totalAverageTime /= numChannels; //average of channels (probably overkilling here)
         this->averageTime = totalAverageTime;
     }
+    */
 }
 
 void SimpsonIntegrator::computeAverageFrequency(double* hilbertTransform, float freqShift)

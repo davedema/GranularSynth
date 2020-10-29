@@ -20,8 +20,8 @@ public:
     ~Granulator();
     void initialize(int portionLength);
     void process(AudioBuffer<float>& outputBuffer, int numSamples);
-    void setSampleRate(double sampleRate);
     void setModel(Model* model);
+    void setProcessorSampleRate(double processorSampleRate);
 
 private:
     Array<Grain*> activeGrains;     // Grains to be played (extracted from the cloud)
@@ -29,5 +29,6 @@ private:
     Model* model;
     int nextOnset;      //Tells us when the next grain should play
     int position;       //Position in the audio file
-    int portionLength;  //Total length of the portion to play
+    int portionLength;
+    double processorSampleRate;
 };

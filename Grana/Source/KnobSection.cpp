@@ -35,13 +35,15 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
     envelopeList.addItem("Gaussian", 1); //idx starting from 1!
     envelopeList.addItem("RaisedCosineBell", 2);
     envelopeList.addItem("Trapezoidal", 3);
+    envelopeList.setSelectedId(1, dontSendNotification); // default value set to Gaussian
     envelopeList.onChange = [this] { envelopeSelected(); };
     addAndMakeVisible(envelopeList);
     addAndMakeVisible(envDraw);
 
     envShape.setSliderStyle(Slider::LinearHorizontal);
     envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    envAttachment = new SliderAttachment(apvts, "envShape", envShape);
+    envAttachment = new SliderAttachment(apvts, "envWidth", envShape);
+    envShape.onValueChange = [this] { widthChanged(); };
 
     envShapelab.setText("Envelope", dontSendNotification);
     envShapelab.setFont(Font(12.0f));
@@ -112,9 +114,13 @@ void KnobSection::sliderValueChanged(Slider* slider)
 
 void KnobSection::envelopeSelected()
 {
+    this->envDraw.setType(envelopeList.getSelectedId()); // set new type of envelope in the drawable
+    this->envDraw.repaint(); // repaints the envelope
 }
 
-void drawEnvelope()
+void KnobSection::widthChanged()
 {
+    this->envDraw.setWidth(envShape.getValue());
+    this->envDraw.repaint();
 
 }

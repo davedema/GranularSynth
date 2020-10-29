@@ -10,7 +10,6 @@
 
 #pragma once
 #include<JuceHeader.h>
-#include "GaussianEnvelope.h"
 #include <cmath>
 
 #include "./Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"

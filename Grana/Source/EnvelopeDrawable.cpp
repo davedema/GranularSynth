@@ -21,24 +21,33 @@ EnvelopeDrawable::~EnvelopeDrawable()
 
 void EnvelopeDrawable::paint(Graphics&g)
 {
-    float current_size = GaussianEnvelope::getDuration();
-    if (current_size == 0) return;
     g.setColour(juce::Colours::cadetblue);
     //g.drawRect(Rectangle<float>(0, 0, this->getWidth(), this->getHeight()));
     float size_x = this->getWidth();
-    float ratio = size_x / current_size;
+    if (size_x == 0) return;
 
     Path myPath;
-    myPath.startNewSubPath(ratio, this->getHeight() * (1 - GaussianEnvelope::getInstance()->currentValue(1)) + 5);          // move the current position to (10, 10)
+    myPath.startNewSubPath(0, this->getHeight() * (1 - GrainEnvelope::getEnvelopeValue(0, this->envType, size_x, this->envWidth)) + 5);
 
-    for (int i = 1; i < current_size - 1; i++) {
+    for (int i = 1; i < size_x - 1; i++) {
 
-       myPath.lineTo(i * ratio, this->getHeight() * (1 - GaussianEnvelope::getInstance()->currentValue(i)) + 5);
+       myPath.lineTo(i, this->getHeight() * (1 - GrainEnvelope::getEnvelopeValue(i, this->envType, size_x, this->envWidth)) + 5);
     }
+    myPath.applyTransform(AffineTransform::scale(1.0f, 0.75f));
     g.strokePath(myPath, PathStrokeType(3.0f));
 
 }
 
 void EnvelopeDrawable::resized()
 {
+}
+
+void EnvelopeDrawable::setType(int envType)
+{
+    this->envType = envType;
+}
+
+void EnvelopeDrawable::setWidth(float envWidth)
+{
+    this->envWidth = envWidth;
 }
