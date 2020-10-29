@@ -58,29 +58,27 @@ float GrainEnvelope::getRaisedCosine(int index, int duration, float mainLobeWidt
 
 	if (index < attack)
 		return (1 + cos(PI + PI * index / attack)) / 2;
-	if (index < sustain)
+	if (index < sustain + attack)
 		return 1;
-
-	return (1 + cos(PI + PI * (index - sustain) / attack)) / 2;
+	index -= sustain + attack;  //shift
+	return (1 - cos(PI - PI * index / attack)) / 2;  //index  ---> -1 * index
 
 }
 
 float GrainEnvelope::getTrapezoidal(int index, int duration, float mainLobeWidth)
 {
-	int sampleLength = duration;
-	int sustain = mainLobeWidth * sampleLength;
-	int attack = (sampleLength - sustain) / 2;
-	float angularCoeff;
+	int sustain = mainLobeWidth * duration;
+	int attack = (duration - sustain) / 2;
 	if (attack == 0)
 		return 1;
 
-	angularCoeff = 1 / attack;
+	float angularCoeff = 1.0f / attack;
 
 	if (index <= attack)
 		return angularCoeff * index;
-	if (index < sustain)
+	if (index < sustain + attack)
 		return 1;
-
-	return 1 - angularCoeff * (index - sustain);
+	index -= sustain + attack;  //shift
+	return 1 - angularCoeff * index;
 
 }

@@ -82,7 +82,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                              this->position,
                                              false, 
-                                             0,
+                                             200,
                                              this->model->getEnvIndex(),
                                              this->model->getEnvWidth()));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
