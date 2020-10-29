@@ -72,7 +72,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 
         //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
-        if ((this->position < this->model->getFilePos()) || (this->position >= (this->model->getFilePos() + this->model->getSectionSize()))) {
+        if ((this->position < this->model->getFilePos()) || (this->position >= (std::min(this->model->getFilePos() + this->model->getSectionSize(), FileLoader::getInstance()->getAudioBuffer()->getNumSamples())))) {
             this->position = this->model->getFilePos();
         }
 
@@ -82,7 +82,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                              this->position,
                                              false, 
-                                             200,
+                                             0,
                                              this->model->getEnvIndex(),
                                              this->model->getEnvWidth()));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
