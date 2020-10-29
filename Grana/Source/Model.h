@@ -21,15 +21,15 @@ public:
     void parameterChanged(const String& parameterID, float newValue) override;
 
 
-    float getFilePos();
+    int getFilePos();
     float getEnvWidth();
-    float getSectionSize();
+    int getSectionSize();
     float getDensity();
     int getEnvIndex();
     float getGrainSize();
     float getSpeed();
     bool getIsPlaying();
-    void setHasLoadedFile(bool hasDone);
+    void setHasLoadedFile(bool hasDone, int fileLength);
     bool getHasLoadedFile();
     void setSampleRate(double sampleRate);
 
@@ -45,4 +45,5 @@ private:
     bool isPlaying;
     bool hasLoadedFile;
     double sampleRate;
+    int fileLength;
 };

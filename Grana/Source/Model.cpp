@@ -22,6 +22,7 @@ Model::Model()
     this->grainSize = 25.;
     this->speed = 1;
     this->sampleRate = 0;
+    this->fileLength = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -54,9 +55,9 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     }
 }
 
-float Model::getFilePos()
+int Model::getFilePos()
 {
-    return this->filePos;
+    return round(this->filePos*this->fileLength/100);
 }
 
 float Model::getEnvWidth()
@@ -64,9 +65,9 @@ float Model::getEnvWidth()
     return this->envWidth;
 }
 
-float Model::getSectionSize()
+int Model::getSectionSize()
 {
-    return this->sectionSize;
+    return round(this->sectionSize*this->fileLength/100);
 }
 
 float Model::getDensity()
@@ -94,11 +95,11 @@ bool Model::getIsPlaying()
     return this->isPlaying;
 }
 
-void Model::setHasLoadedFile(bool hasDone)
+void Model::setHasLoadedFile(bool hasDone, int fileLength)
 {
     this->hasLoadedFile = hasDone;
+    this->fileLength = fileLength;
 }
-
 
 bool Model::getHasLoadedFile()
 {

@@ -37,7 +37,7 @@ void Granulator::initialize(int portionLength)
                                      false, 
                                      0,
                                      this->model->getEnvIndex(),
-                                     this->model->getEnvWidth() / 10000.0f));
+                                     this->model->getEnvWidth()));
     this->nextOnset = round(this->processorSampleRate/this->model->getDensity());
     this->portionLength = portionLength;
 }
@@ -72,7 +72,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 
         //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
-        if (this->position >= this->portionLength) {
+        if ((this->position < this->model->getFilePos()) || (this->position >= (this->model->getFilePos() + this->model->getSectionSize()))) {
             this->position = this->model->getFilePos();
         }
 
@@ -84,7 +84,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                                              false, 
                                              0,
                                              this->model->getEnvIndex(),
-                                             this->model->getEnvWidth() / 10000.0f));
+                                             this->model->getEnvWidth()));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
         }
     }
