@@ -21,6 +21,7 @@ Model::Model()
     this->density = 25.;
     this->grainSize = 25.;
     this->speed = 1;
+    this->sampleRate = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -80,7 +81,7 @@ int Model::getEnvIndex()
 
 float Model::getGrainSize()
 {
-    return this->grainSize;
+    return pow(10, -3) * this->grainSize * this->sampleRate;
 }
 
 float Model::getSpeed()
@@ -102,4 +103,9 @@ void Model::setHasLoadedFile(bool hasDone)
 bool Model::getHasLoadedFile()
 {
     return this->hasLoadedFile;
+}
+
+void Model::setSampleRate(double sampleRate)
+{
+    this->sampleRate = sampleRate;
 }

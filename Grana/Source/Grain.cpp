@@ -18,6 +18,8 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     this->hilbertTransform = FileLoader::getInstance()->getHilbertTransform();
     this->currentPosition = 0;
     this->finished = false;
+
+    //Computing the frequency shifted buffer
     ceiledLength = pow(2, ceil(log2(length)));
     if (FileLoader::getInstance()->getSampleRate() / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
         ceiledLength = pow(2, ceil(log2(FileLoader::getInstance()->getSampleRate() / 2 * 20)));                                                    
@@ -27,7 +29,6 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
                                              FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), 
                                              this->length);
     this->averageFrequency = this->integrator->getAverageFrequency();
-
     delete integrator;                                                             //useless after
     for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
         channelFreqShift(freqShift, i, envelopeType, envelopeWidth);
@@ -60,7 +61,7 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
 
 }
 
-float Grain::getCurrentSample(int channel, int portionLength)
+float Grain::getCurrentSample(int channel)
 {
     return buffer->getSample(channel % FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->currentPosition);
 }

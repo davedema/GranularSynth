@@ -31,6 +31,7 @@ public:
     bool getIsPlaying();
     void setHasLoadedFile(bool hasDone);
     bool getHasLoadedFile();
+    void setSampleRate(double sampleRate);
 
 private:
 
@@ -43,5 +44,5 @@ private:
     float speed;
     bool isPlaying;
     bool hasLoadedFile;
- 
+    double sampleRate;
 };

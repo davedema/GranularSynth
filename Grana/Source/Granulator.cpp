@@ -15,6 +15,7 @@ Granulator::Granulator()
     this->model = nullptr;
     this->nextOnset = 0;
     this->position = 0;
+    this->processorSampleRate = 0;
     this->portionLength = 0;
 }
 
@@ -26,17 +27,18 @@ Granulator::~Granulator()
     }
 }
 
-//Initialize everything. Called when PLAY button is clicked
+//Initialize everything, add the first grain and take the onSet time for the next grain. Called when PLAY button is clicked
 void Granulator::initialize(int portionLength)
 {
     this->activeGrains.clearQuick();
-    this->activeGrains.add(new Grain(model->getGrainSize(), 
+    this->position = this->model->getFilePos();
+    this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                      this->position, 
                                      false, 
                                      0,
-                                     model->getEnvIndex(),
-                                     model->getEnvWidth() / 10000.0f));
-    this->nextOnset = this->strategy.nextInterOnset(activeGrains.getFirst()->getBuffer(), activeGrains.getFirst()->getBuffer());
+                                     this->model->getEnvIndex(),
+                                     this->model->getEnvWidth() / 10000.0f));
+    this->nextOnset = round(this->processorSampleRate/this->model->getDensity());
     this->portionLength = portionLength;
 }
 
@@ -61,34 +63,29 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                 }
                 else {
                     for (int i = 0; i < outputBuffer.getNumChannels(); i++) {
-                        outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i, this->portionLength));   //Should add the sample already envelopped
+                        outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i));   //Should add the sample already envelopped
                     }
-                    outputBuffer.applyGain(1 / activeGrains.size());
                     grain->updateIndex();
                 }
             }
         }
 
-        //Increment the position in the audio file
+        //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
-        if (this->position == this->portionLength) {
-            this->position = 0;
+        if (this->position >= this->portionLength) {
+            this->position = this->model->getFilePos();
         }
 
         //Decrement the next onset time, if it's 0 add a new grain and get the next one
         this->nextOnset--;
         if (this->nextOnset == 0) {
-            Grain* previous = activeGrains.getLast();
-            this->activeGrains.add(new Grain(model->getGrainSize(), 
+            this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                              this->position,
                                              false, 
                                              0,
-                                             model->getEnvIndex(),
-                                             model->getEnvWidth() / 10000.0f));
-            if(previous)
-                this->nextOnset = this->strategy.nextInterOnset(previous->getBuffer(), activeGrains.getLast()->getBuffer());
-            else
-                this->nextOnset = this->strategy.nextInterOnset(activeGrains.getLast()->getBuffer(), activeGrains.getLast()->getBuffer());
+                                             this->model->getEnvIndex(),
+                                             this->model->getEnvWidth() / 10000.0f));
+            this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
         }
     }
 }

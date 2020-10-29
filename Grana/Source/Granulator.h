@@ -29,6 +29,6 @@ private:
     Model* model;
     int nextOnset;      //Tells us when the next grain should play
     int position;       //Position in the audio file
-    int portionLength;  //Total length of the portion to play
+    int portionLength;
     double processorSampleRate;
 };

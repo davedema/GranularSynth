@@ -16,8 +16,8 @@
 #define GRAIN_MAX 100.0f //in ms
 
 // GRAIN DENSITY
-#define GRAIN_DENSITY_MIN 2.0f // in #
-#define GRAIN_DENSITY_MAX 200.0f //in #
+#define GRAIN_DENSITY_MIN 2.0f // in grains per second
+#define GRAIN_DENSITY_MAX 200.0f //in grains per second
 
 
 //==============================================================================
@@ -47,6 +47,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("envIndex", &granulatorModel);
     treeState.addParameterListener("envWidth", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
+    this->sampleRate = 0;
+    this->samplesPerBlock = 0;
 }
 
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
@@ -121,7 +123,8 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
     FileLoader::getInstance()->setHostRate(sampleRate);
-    granulator.setProcessorSampleRate(sampleRate);
+    this->granulatorModel.setSampleRate(sampleRate);
+    this->granulator.setProcessorSampleRate(sampleRate);
 }
 
 void LaGranaAudioProcessor::releaseResources()
