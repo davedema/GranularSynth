@@ -33,10 +33,10 @@ void Granulator::initialize(int portionLength)
     this->activeGrains.add(new Grain(model->getGrainSize(), 
                                      this->position, 
                                      false, 
-                                     100,
+                                     0,
                                      model->getEnvIndex(),
                                      model->getEnvWidth() / 10000.0f));
-    this->nextOnset = this->strategy.getNextOnset();
+    this->nextOnset = this->strategy.nextInterOnset(activeGrains.getFirst()->getBuffer(), activeGrains.getFirst()->getBuffer());
     this->portionLength = portionLength;
 }
 
@@ -63,6 +63,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                     for (int i = 0; i < outputBuffer.getNumChannels(); i++) {
                         outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i, this->portionLength));   //Should add the sample already envelopped
                     }
+                    outputBuffer.applyGain(1 / activeGrains.size());
                     grain->updateIndex();
                 }
             }
@@ -77,25 +78,29 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         //Decrement the next onset time, if it's 0 add a new grain and get the next one
         this->nextOnset--;
         if (this->nextOnset == 0) {
+            Grain* previous = activeGrains.getLast();
             this->activeGrains.add(new Grain(model->getGrainSize(), 
                                              this->position,
                                              false, 
-                                             100,
+                                             0,
                                              model->getEnvIndex(),
                                              model->getEnvWidth() / 10000.0f));
-
-            this->nextOnset = this->strategy.getNextOnset();
+            if(previous)
+                this->nextOnset = this->strategy.nextInterOnset(previous->getBuffer(), activeGrains.getLast()->getBuffer());
+            else
+                this->nextOnset = this->strategy.nextInterOnset(activeGrains.getLast()->getBuffer(), activeGrains.getLast()->getBuffer());
         }
     }
-}
-
-void Granulator::setSampleRate(double sampleRate)
-{
-    this->strategy.setSampleRate(sampleRate);
 }
 
 void Granulator::setModel(Model* model)
 {
     this->model = model;
     this->strategy.setModel(model);
+}
+
+void Granulator::setProcessorSampleRate(double processorSampleRate)
+{
+    this->processorSampleRate = processorSampleRate;
+    this->strategy.setSampleRate(processorSampleRate);
 }
