@@ -27,6 +27,7 @@ public:
     void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
     float getAverageFrequency();
     bool isFinished();
+    AudioBuffer<float>* getBuffer();
 
 private:
     int startPosition;      //in the loaded audio file
@@ -42,7 +43,7 @@ private:
     //GrainEnvelope* envelope;
     SimpsonIntegrator *integrator;
 
-    void channelFreqShift(float freqShift, int channel, int envType, int envWidth); //shifts a channel of freqshift [Hz]
+    void channelFreqShift(float freqShift, int channel, int envType, float envWidth); //shifts a channel of freqshift [Hz]
     int bufferHilbertIndex(int channel, int index);
 };
 

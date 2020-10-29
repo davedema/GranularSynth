@@ -38,7 +38,7 @@ Grain::~Grain()
     delete buffer;
 }
 
-void Grain::channelFreqShift(float freqShift, int channel, int envType, int envWidth)
+void Grain::channelFreqShift(float freqShift, int channel, int envType, float envWidth)
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / FileLoader::getInstance()->getSampleRate();
@@ -86,5 +86,10 @@ float Grain::getAverageFrequency()
 bool Grain::isFinished()
 {
     return this->finished;
+}
+
+AudioBuffer<float>* Grain::getBuffer()
+{
+    return this->buffer;
 }
 

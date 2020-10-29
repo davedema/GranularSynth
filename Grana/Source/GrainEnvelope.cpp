@@ -11,7 +11,7 @@
 #include "GrainEnvelope.h"
 
 
-float GrainEnvelope::getEnvelopeValue(int index, int selectedEnv, int length, int mainlobewidth)
+float GrainEnvelope::getEnvelopeValue(int index, int selectedEnv, int length, float mainlobewidth)
 {
     switch (selectedEnv)
     {

@@ -24,6 +24,7 @@ FileLoader::FileLoader()
     thumbnail = new juce::AudioThumbnail(512, *formatManager, *thumbnailCache);
     buffer = new juce::AudioBuffer<float>();
     sampleRate = 0;
+    this->hostRate = 44100;
 }
 
 // Destructor
@@ -58,14 +59,36 @@ void FileLoader::resetInstance()
 void FileLoader::loadWaveform(juce::File file)
 {
     auto* reader = formatManager->createReaderFor(file);
+    sampleRate = reader->sampleRate;
+    AudioSampleBuffer temp, waveBuffer;
     std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));                                                                                                          // [13]
     thumbnail->setSource(new juce::FileInputSource(file));
     readerSource->reset(newSource.release());
     buffer->setSize(reader->numChannels, reader->lengthInSamples);
-    reader->read(buffer, 0, reader->lengthInSamples, 0, true, true);
+
+
+    double ratio = reader->sampleRate / this->hostRate;
+
+    temp.setSize((int)reader->numChannels, (int)reader->lengthInSamples);
+    waveBuffer.setSize((int)reader->numChannels, (int)(((double)reader->lengthInSamples) / ratio));
+
+    reader->read(&temp, 0, (int)reader->lengthInSamples, 0, true, true);
+
+    ScopedPointer<LagrangeInterpolator> resampler = new LagrangeInterpolator();
+
+    const float** inputs = temp.getArrayOfReadPointers();
+    float** outputs = waveBuffer.getArrayOfWritePointers();
+    for (int c = 0; c < waveBuffer.getNumChannels(); c++)
+    {
+        resampler->reset();
+        resampler->process(ratio, inputs[c], outputs[c], waveBuffer.getNumSamples());
+    }
+
+    buffer = new AudioBuffer<float>(waveBuffer);
+
+
     ceiledLength = pow(2, ceil(log2(buffer->getNumSamples())));
     hilbertTransform = (double*)calloc((size_t)(buffer->getNumChannels() * (size_t)2 * ceiledLength), sizeof(double));
-    sampleRate = reader->sampleRate;
 
     for (int i = 0; i < this->buffer->getNumChannels(); i++) {
         for (int j = 0; j < buffer->getNumSamples(); j++) { //apply envelope
@@ -122,10 +145,6 @@ int FileLoader::getSampleRate()
     return this->sampleRate;
 }
 
-void FileLoader::setSampleRate(int sampleRate)
-{
-    this->sampleRate = sampleRate;
-}
 
 double* FileLoader::getHilbertTransform()
 {
@@ -135,6 +154,11 @@ double* FileLoader::getHilbertTransform()
 int FileLoader::getCeiledLength()
 {
     return this->ceiledLength;
+}
+
+void FileLoader::setHostRate(double hostRate)
+{
+    this->hostRate = hostRate;
 }
 
 

@@ -37,6 +37,7 @@ private:
     juce::AudioBuffer<float> *buffer;                               // Contains the complete audio source (gives access to the sample)
     double* hilbertTransform;                                       //hilbert transform for each channel
     int ceiledLength;
+    double hostRate;
 
 public:
 
@@ -54,7 +55,7 @@ public:
     juce::AudioThumbnail* getThumbnail() const;
     juce::AudioBuffer<float> *getAudioBuffer() const;
     int getSampleRate();
-    void setSampleRate(int sampleRate);
     double* getHilbertTransform();
     int getCeiledLength();
+    void setHostRate(double hostRate);
 };

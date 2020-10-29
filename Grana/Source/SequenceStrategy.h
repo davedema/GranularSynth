@@ -23,20 +23,18 @@ class SequenceStrategy {
 public:
     SequenceStrategy();
     int nextInterOnset(int userLength);
-    int nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
+    int nextInterOnset(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer);
     void setQuasiSyncRange(float quasiSyncRange);
+    void setSampleRate(double sampleRate);
 
     void setModel(Model* model);
-    void setSampleRate(double sampleRate);
     int getNextOnset();
 
 private:
-    float grainDensity;
-    int grainLength;
     float quasiSyncRange;
+    double sampleRate;
 
     Model* model;
-    double sampleRate;
 
     Array<float>* computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
     void crossFade(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int interOnset, int grainLength);

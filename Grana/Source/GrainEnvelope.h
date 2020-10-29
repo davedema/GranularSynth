@@ -18,7 +18,7 @@ class GrainEnvelope
 
 public:
 	
-    static float getEnvelopeValue(int index, int selectedEnv, int length, int mainlobewidth); //sample index, selected envelope type, grain length, main lobe width  
+    static float getEnvelopeValue(int index, int selectedEnv, int length, float mainlobewidth); //sample index, selected envelope type, grain length, main lobe width  
     
 protected:    
 
