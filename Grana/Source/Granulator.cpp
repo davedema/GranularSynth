@@ -72,15 +72,18 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
 
         //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
-        if ((this->position < this->model->getFilePos()) || (this->position >= (std::min(this->model->getFilePos() + this->model->getSectionSize(), FileLoader::getInstance()->getAudioBuffer()->getNumSamples())))) {
-            this->position = this->model->getFilePos();
-        }
 
         //Decrement the next onset time, if it's 0 add a new grain and get the next one
         this->nextOnset--;
         if (this->nextOnset == 0) {
+            int timePassed = this->position - model->getFilePos(); //time passed in samples
+            float readPositionShift = model->getSpeedModule() * timePassed;  //read position shift = speed * time
+            int circularShift = (int)readPositionShift % model->getSectionSize();
+            int readPosition = model->getFilePos() + circularShift * model->getSpeedDirection(); //forward loop
+            if (readPosition <= 0) //backward loop
+                readPosition = model->getFilePos() + readPosition;
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                             this->position,
+                                             readPosition,
                                              false, 
                                              0,
                                              this->model->getEnvIndex(),

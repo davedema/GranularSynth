@@ -20,9 +20,10 @@ Model::Model()
     this->sectionSize = 50.;
     this->density = 25.;
     this->grainSize = 25.;
-    this->speed = 1;
+    this->speedModule = 1;
     this->sampleRate = 0;
     this->fileLength = 0;
+    this->speedDirection = 1;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -46,7 +47,8 @@ void Model::parameterChanged(const String& parameterID, float newValue)
         this->grainSize = newValue;
     }
     else if (parameterID == "Speed") {
-        this->speed = newValue;
+        this->speedModule = abs(newValue);  //speed module
+        this->speedDirection = newValue == 0 ? 0 : (newValue /abs(newValue)); // 1 or -1 for now
     }
 
     else if (parameterID == "envIndex")
@@ -85,9 +87,9 @@ float Model::getGrainSize()
     return pow(10, -3) * this->grainSize * this->sampleRate;
 }
 
-float Model::getSpeed()
+float Model::getSpeedModule()
 {
-    return this->speed;
+    return this->speedModule;
 }
 
 bool Model::getIsPlaying()
@@ -109,4 +111,9 @@ bool Model::getHasLoadedFile()
 void Model::setSampleRate(double sampleRate)
 {
     this->sampleRate = sampleRate;
+}
+
+int Model::getSpeedDirection()
+{
+    return this->speedDirection;
 }
