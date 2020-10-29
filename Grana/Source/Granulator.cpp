@@ -84,7 +84,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
                                              false, 
                                              0,
                                              model->getEnvIndex(),
-                                             model->getEnvWidth() / 10000.0f));
+                                             model->getEnvWidth()));
             if(previous)
                 this->nextOnset = this->strategy.nextInterOnset(previous->getBuffer(), activeGrains.getLast()->getBuffer());
             else

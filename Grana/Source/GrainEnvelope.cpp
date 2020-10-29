@@ -34,11 +34,10 @@ float GrainEnvelope::getEnvelopeValue(int index, int selectedEnv, int length, fl
 float GrainEnvelope::getGaussian(int index, int duration, float mainLobeWidth)
 {
 	if (mainLobeWidth == 0)
-		return 0.1;
-
+		return index == duration / 2 ? 1 : 0;
 	int halfDuration = (int)duration / 2;
 	int halfDurationPositive = halfDuration;
-	float alpha = 1/mainLobeWidth * 10;
+	float alpha = duration /  (1 - 1/mainLobeWidth);
 
 	if (duration % 2 == 0) { //this is done in order to solve the problem of having an array
 								 //1 cell longer than needed when working with a even duration
