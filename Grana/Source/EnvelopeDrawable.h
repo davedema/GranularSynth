@@ -19,6 +19,9 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    void setType(int envType);
 
+private: 
+    int envType = 1;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeDrawable)
 };
