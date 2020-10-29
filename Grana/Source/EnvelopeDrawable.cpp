@@ -27,12 +27,13 @@ void EnvelopeDrawable::paint(Graphics&g)
     if (size_x == 0) return;
 
     Path myPath;
-    myPath.startNewSubPath(0, GrainEnvelope::getEnvelopeValue(0, 1, size_x, 1));         // move the current position to (10, 10)
+    myPath.startNewSubPath(0, this->getHeight() * (1 - GrainEnvelope::getEnvelopeValue(0, this->envType, size_x, this->envWidth)) + 5);
 
     for (int i = 1; i < size_x - 1; i++) {
 
-       myPath.lineTo(i, this->getHeight() * (1 - GrainEnvelope::getEnvelopeValue(i, this->envType, size_x, 1)));
+       myPath.lineTo(i, this->getHeight() * (1 - GrainEnvelope::getEnvelopeValue(i, this->envType, size_x, this->envWidth)) + 5);
     }
+    myPath.applyTransform(AffineTransform::scale(1.0f, 0.75f));
     g.strokePath(myPath, PathStrokeType(3.0f));
 
 }
@@ -44,4 +45,9 @@ void EnvelopeDrawable::resized()
 void EnvelopeDrawable::setType(int envType)
 {
     this->envType = envType;
+}
+
+void EnvelopeDrawable::setWidth(float envWidth)
+{
+    this->envWidth = envWidth;
 }

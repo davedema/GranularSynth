@@ -30,6 +30,7 @@ public:
     void resized() override;
     void sliderValueChanged(Slider* slider) override;
     void envelopeSelected();
+    void widthChanged();
 
 private:
     Slider controls[NUM_CONTROLS];

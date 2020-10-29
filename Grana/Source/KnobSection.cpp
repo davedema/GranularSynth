@@ -43,6 +43,7 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
     envShape.setSliderStyle(Slider::LinearHorizontal);
     envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     envAttachment = new SliderAttachment(apvts, "envWidth", envShape);
+    envShape.onValueChange = [this] { widthChanged(); };
 
     envShapelab.setText("Envelope", dontSendNotification);
     envShapelab.setFont(Font(12.0f));
@@ -115,4 +116,11 @@ void KnobSection::envelopeSelected()
 {
     this->envDraw.setType(envelopeList.getSelectedId()); // set new type of envelope in the drawable
     this->envDraw.repaint(); // repaints the envelope
+}
+
+void KnobSection::widthChanged()
+{
+    this->envDraw.setWidth(envShape.getValue());
+    this->envDraw.repaint();
+
 }
