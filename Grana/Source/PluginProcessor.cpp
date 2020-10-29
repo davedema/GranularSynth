@@ -27,8 +27,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     // constructors
     treeState(*this, nullptr, Identifier("CURRENT_STATE"),
         {
-        std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 100, 0.0f), // id, name, min,max, initial value
-        std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0, 100, 50),
+        std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 1, 0.0f), // id, name, min,max, initial value
+        std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0, 1, 0.5f),
         std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
         std::make_unique<AudioParameterFloat>("envIndex", "envIndex", 1, 3, 1), // 1 gaussian, 2raised, 3 trapezoidal
         std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.5),

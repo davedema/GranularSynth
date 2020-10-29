@@ -59,7 +59,7 @@ void Model::parameterChanged(const String& parameterID, float newValue)
 
 int Model::getFilePos()
 {
-    return round(this->filePos*this->fileLength/100);
+    return round(this->filePos*this->fileLength);
 }
 
 float Model::getEnvWidth()
@@ -69,7 +69,7 @@ float Model::getEnvWidth()
 
 int Model::getSectionSize()
 {
-    return round(this->sectionSize*this->fileLength/100);
+    return round(this->sectionSize*this->fileLength);
 }
 
 float Model::getDensity()

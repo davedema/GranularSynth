@@ -139,8 +139,8 @@ void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juc
 
 void LaGranaAudioProcessorEditor::paintSelected(juce::Graphics& g)
 {
-    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH / 100); // tree state stores value in percentage!
-    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH / 100); 
+    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH); // tree state stores value in percentage!
+    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH); 
     int rest = filepos + selectionWidth;
     Rectangle<int> selectionBounds;
     if ( rest <= WAV_WIDTH ) 
