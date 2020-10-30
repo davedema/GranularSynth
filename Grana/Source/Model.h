@@ -35,6 +35,9 @@ public:
     void setReadPosition(int readPosition);
     Array<Point<float>>* getxyPlane();
 
+    int getCurrentPosition();
+    float getCurrentFrequencyShift();
+
 private:
 
     float filePos;

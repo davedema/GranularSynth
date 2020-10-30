@@ -32,10 +32,12 @@ void Granulator::initialize(int portionLength)
 {
     this->activeGrains.clearQuick();
     this->position = this->model->getFilePos();
+    model->setReadPosition(0);
+
     this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                     this->position, 
+                                     model->getCurrentPosition(), 
                                      false, 
-                                     0,
+                                     model->getCurrentFrequencyShift(),
                                      this->model->getEnvIndex(),
                                      this->model->getEnvWidth(),
                                      this->processorSampleRate));
@@ -96,15 +98,17 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             if (readPosition == model->getFilePos()) //this is done not to increment position forever
                 this->position = model->getFilePos();
 
+            model->setReadPosition(readPosition);
+
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                             readPosition,
+                                             model->getCurrentPosition(),
                                              false, 
-                                             0,
+                                             model->getCurrentFrequencyShift(),
                                              this->model->getEnvIndex(),
                                              this->model->getEnvWidth(),
                                              this->processorSampleRate));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
-            model->setReadPosition(readPosition);
+            
         }
     }
 }

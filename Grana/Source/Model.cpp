@@ -9,6 +9,7 @@
 */
 
 #include "Model.h"
+#include "FileLoader.h"
 
 Model::Model()
 {
@@ -133,4 +134,22 @@ void Model::setReadPosition(int readPosition)
 Array<Point<float>>* Model::getxyPlane()
 {
     return &xyPlane;
+}
+
+int Model::getCurrentPosition()
+{
+    int pos = round(jmap<int>(readposition, 0,
+                              sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
+                              0, xyPlane.size() ));
+    float ret = xyPlane[pos].getX() * sectionSize;
+    return ret ;
+}
+
+float Model::getCurrentFrequencyShift()
+{
+    int pos = round(jmap<int>(readposition, 0,
+                              sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
+                              0, xyPlane.size()));
+    float freq = xyPlane[pos].getY() * 2000.0f - 1000.0f;
+    return freq;
 }

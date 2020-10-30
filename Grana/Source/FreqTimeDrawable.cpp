@@ -26,11 +26,12 @@ void FreqTimeDrawable::paint(Graphics&g)
     Path path;
 
     if (drawnPoints->size() != 0) {
-        path.startNewSubPath(drawnPoints->getFirst());
+        path.startNewSubPath(drawnPoints->getFirst().getX() * (float)getWidth(),
+                             drawnPoints->getFirst().getY() * (float)getHeight());
 
         for (auto p : *drawnPoints)
         {
-            path.lineTo(p);
+            path.lineTo(p.getX() * (float)getWidth(), p.getY() * (float)getHeight());
         }
         g.strokePath(path, PathStrokeType(3.0f));
     }
@@ -45,12 +46,13 @@ void FreqTimeDrawable::mouseDown(const MouseEvent& event)
     DBG("down" << std::to_string(event.x) << "  " << std::to_string(event.y));
     drawnPoints->clear();
     repaint();
-    drawnPoints->add(Point<float>(event.x, event.y));
+
+    drawnPoints->add(Point<float>(event.x / (float)getWidth(), event.y / (float)getHeight()));
 }
 
 void FreqTimeDrawable::mouseDrag(const MouseEvent& event)
 {
-    drawnPoints->add(Point<float>(event.x, event.y));
+    drawnPoints->add(Point<float>(event.x / (float)getWidth(), event.y / (float)getHeight()));
     repaint();
 
 }
