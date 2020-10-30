@@ -10,7 +10,7 @@
 
 #include "Grain.h"
 
-Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate) :
+Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate, int direction) :
     length(grainDuration), startPosition(startPos)
   
 {
@@ -32,6 +32,10 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     delete integrator;                                                             //useless after
     for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
         channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate);
+
+    //If the speed is negative reverse the buffer
+    if (direction == -1)
+        this->buffer->reverse(0, this->length);
 }
 
 Grain::~Grain()

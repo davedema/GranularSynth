@@ -40,7 +40,8 @@ void Granulator::initialize(int portionLength)
                                      model->getCurrentFrequencyShift(),
                                      this->model->getEnvIndex(),
                                      this->model->getEnvWidth(),
-                                     this->processorSampleRate));
+                                     this->processorSampleRate,
+                                     this->model->getSpeedDirection()));
     this->nextOnset = round(this->processorSampleRate/this->model->getDensity());
     this->portionLength = portionLength;
 }
@@ -106,7 +107,8 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                                              model->getCurrentFrequencyShift(),
                                              this->model->getEnvIndex(),
                                              this->model->getEnvWidth(),
-                                             this->processorSampleRate));
+                                             this->processorSampleRate,
+                                             this->model->getSpeedDirection()));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
             
         }

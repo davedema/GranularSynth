@@ -21,7 +21,7 @@ enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
 class Grain {
 
 public:
-    Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate);
+    Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate, int direction);
     ~Grain();
     float getCurrentSample(int channel);    //Return the current sample playing on the given channel
     void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
