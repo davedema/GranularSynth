@@ -141,8 +141,8 @@ int Model::getxyArrayPosition()
     if (!getHasLoadedFile())
         return 0;
     return round(jmap<int>(readposition, 0,
-        FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
-        0, xyPlane.size()));;
+        sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
+        0, xyPlane.size() - 1));;
 }
 
 Point<float> Model::getCurrentxyPosition()
@@ -156,9 +156,7 @@ float Model::getCurrentFrequencyShift()
 {
     if (xyPlane.isEmpty())
         return 0;
-    int pos = round(jmap<int>(readposition, 0,
-                              sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
-                              0, xyPlane.size()));
+    int pos = getxyArrayPosition();
     float freq = xyPlane[pos].getY() * 2000.0f - 1000.0f;
     return freq;
 }
