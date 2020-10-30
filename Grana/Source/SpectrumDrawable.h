@@ -11,8 +11,6 @@
 #pragma once
 #include <JuceHeader.h>
 
-
-
 class SpectrumDrawable : public Component {
 public:
     SpectrumDrawable();
@@ -20,9 +18,10 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    void drawNextFrame(float* bins);
 
 private: 
-    void drawFrame();
+    float* currentFrame;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SpectrumDrawable)
 };

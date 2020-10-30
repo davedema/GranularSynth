@@ -19,7 +19,7 @@ constexpr auto WAV_HEIGHT = 160;
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState())
 {
-
+    p.setFeatureDrawers(&this->spectrum); 
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
@@ -76,6 +76,10 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     controlSection.init(*valueTreeState);
     addAndMakeVisible(controlSection);
    
+
+    //OUT SPECTRUM
+    addAndMakeVisible(spectrum);
+    spectrum.setBounds(520, this->getHeight() / 2, 280, 150);
 
 }
 
@@ -139,8 +143,8 @@ void LaGranaAudioProcessorEditor::paintIfFileLoaded(juce::Graphics& g, const juc
 
 void LaGranaAudioProcessorEditor::paintSelected(juce::Graphics& g)
 {
-    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH / 100); // tree state stores value in percentage!
-    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH / 100); 
+    int selectionWidth = floor(this->valueTreeState->getRawParameterValue("Section Size")->load() * WAV_WIDTH); // tree state stores value in percentage!
+    int filepos = floor(this->valueTreeState->getRawParameterValue("filepos")->load() * WAV_WIDTH); 
     int rest = filepos + selectionWidth;
     Rectangle<int> selectionBounds;
     if ( rest <= WAV_WIDTH ) 

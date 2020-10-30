@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "SequenceStrategy.h"
 #include "Model.h"
+#include "Extractor.h"
 
 class Granulator
 {
@@ -19,7 +20,7 @@ public:
     Granulator();
     ~Granulator();
     void initialize(int portionLength);
-    void process(AudioBuffer<float>& outputBuffer, int numSamples);
+    void process(AudioBuffer<float>& outputBuffer, int numSamples, Extractor* featureExtractor);
     void setModel(Model* model);
     void setProcessorSampleRate(double processorSampleRate);
 

@@ -61,6 +61,7 @@ public:
     Model* getModel();
     void play();            // Called from editor (when PLAY button pressed)
 
+    void setFeatureDrawers(SpectrumDrawable* s);
 
 private:
     AudioProcessorValueTreeState treeState; // save the current state of the plugin

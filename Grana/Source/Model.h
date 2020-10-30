@@ -27,11 +27,14 @@ public:
     float getDensity();
     int getEnvIndex();
     float getGrainSize();
-    float getSpeed();
+    float getSpeedModule();
     bool getIsPlaying();
     void setHasLoadedFile(bool hasDone, int fileLength);
     bool getHasLoadedFile();
     void setSampleRate(double sampleRate);
+    int getSpeedDirection();
+    int getReadPosition();
+    void setReadPosition(int readPosition);
 
 private:
 
@@ -41,9 +44,11 @@ private:
     float density;
     int envIndex;
     float grainSize;
-    float speed;
+    float speedModule;
     bool isPlaying;
     bool hasLoadedFile;
     double sampleRate;
     int fileLength;
+    int speedDirection;
+    int readposition;
 };
