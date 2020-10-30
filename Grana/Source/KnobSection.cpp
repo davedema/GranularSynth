@@ -26,7 +26,7 @@ KnobSection::~KnobSection()
 
     }
 
-    delete envAttachment;
+    delete widthAttachment, typeAttachment;
  
 }
 
@@ -37,12 +37,13 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts)
     envelopeList.addItem("Trapezoidal", 3);
     envelopeList.setSelectedId(1, dontSendNotification); // default value set to Gaussian
     envelopeList.onChange = [this] { envelopeSelected(); };
+    typeAttachment = new ComboBoxParameterAttachment(*apvts.getParameter("envIndex"), envelopeList);
     addAndMakeVisible(envelopeList);
     addAndMakeVisible(envDraw);
 
     envShape.setSliderStyle(Slider::LinearHorizontal);
     envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    envAttachment = new SliderAttachment(apvts, "envWidth", envShape);
+    widthAttachment = new SliderAttachment(apvts, "envWidth", envShape);
     envShape.onValueChange = [this] { widthChanged(); };
 
     envShapelab.setText("Envelope", dontSendNotification);

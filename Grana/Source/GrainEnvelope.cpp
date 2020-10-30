@@ -75,7 +75,7 @@ float GrainEnvelope::getTrapezoidal(int index, int duration, float mainLobeWidth
 	float angularCoeff = 1.0f / attack;
 
 	if (index <= attack)
-		return angularCoeff * index;
+		return (angularCoeff * (float)index);
 	if (index < sustain + attack)
 		return 1;
 	index -= sustain + attack;  //shift
