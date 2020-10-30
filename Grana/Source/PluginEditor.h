@@ -13,6 +13,7 @@
 #include "FileLoader.h"
 #include "KnobSection.h"
 #include "SpectrumDrawable.h"
+#include "FreqTimeDrawable.h"
 //==============================================================================
 /**
 */
@@ -55,6 +56,7 @@ private:
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
 
     SpectrumDrawable spectrum;
+    FreqTimeDrawable xyPlane;
 
     void paintIfNoFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds);

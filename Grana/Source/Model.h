@@ -11,8 +11,6 @@
 #pragma once
 #include "JuceHeader.h"
 
-enum class UserControls{filepos, sectionSize, envIndex, envWidth, density, grainSize, speed, isPlaying, hasGranulatedSounds};
-
 class Model : public AudioProcessorValueTreeState::Listener {
 public:
 
@@ -35,6 +33,7 @@ public:
     int getSpeedDirection();
     int getReadPosition();
     void setReadPosition(int readPosition);
+    Array<Point<float>>* getxyPlane();
 
 private:
 
@@ -51,4 +50,5 @@ private:
     int fileLength;
     int speedDirection;
     int readposition;
+    Array<Point<float>> xyPlane;
 };

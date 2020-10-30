@@ -128,3 +128,9 @@ void Model::setReadPosition(int readPosition)
 {
     this->readposition = readPosition;
 }
+
+
+Array<Point<float>>* Model::getxyPlane()
+{
+    return &xyPlane;
+}

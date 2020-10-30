@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 constexpr auto GLOBAL_WIDTH = 800;
-constexpr auto GLOBAL_HEIGHT = 500;
+constexpr auto GLOBAL_HEIGHT = 600;
 
 constexpr auto WAV_WIDTH = 480;
 constexpr auto WAV_HEIGHT = 160;
@@ -20,6 +20,9 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState())
 {
     p.setFeatureDrawers(&this->spectrum); 
+    xyPlane.setModel(p.getModel());
+
+
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
@@ -78,9 +81,12 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
    
 
     //OUT SPECTRUM
+    spectrum.setBounds(520, this->getHeight() / 2 - 100, 280, 150);
     addAndMakeVisible(spectrum);
-    spectrum.setBounds(520, this->getHeight() / 2, 280, 150);
 
+    //XY plane
+    addAndMakeVisible(xyPlane);
+    xyPlane.setBounds(520, this->getHeight() / 2 + 100 , 200, 150);
 }
 
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
