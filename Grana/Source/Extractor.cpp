@@ -14,6 +14,9 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
 {
     this->isBlockReady = false;
     this->write_idx = 0;
+    zeromem(bins, sizeof(bins));
+    startTimerHz(60);
+
 }
 
 Extractor::~Extractor()
@@ -32,7 +35,8 @@ void Extractor::pushSample(float sample)
 
         write_idx = 0;
     }
-    input[write_idx++] = sample;
+    input[write_idx] = sample;
+    write_idx++;
 }
 
 void Extractor::computeSpectrum()
@@ -49,6 +53,22 @@ void Extractor::computeSpectrum()
         auto level = jmap(jlimit(mindB, maxdB, 
             Decibels::gainToDecibels(spectrum[fftDataIndex]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
+        bins[i] = level;
     }
 
+}
+
+void Extractor::timerCallback()
+{
+    if (isBlockReady) {
+        computeSpectrum();
+        this->spectrumDrawable->drawNextFrame(bins);
+        isBlockReady = false;
+
+    }
+}
+
+void Extractor::setTarget(SpectrumDrawable* s)
+{
+    this->spectrumDrawable = s;
 }

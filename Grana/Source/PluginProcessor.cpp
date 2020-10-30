@@ -157,11 +157,8 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
         buffer.clear(i, 0, currentBufferLength);
 
     if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
-        granulator.process(buffer, buffer.getNumSamples());
-        for (int i = 0; i < buffer.getNumSamples(); i++) // cycle through samples and fill the fft input (might be different from buffer sizes)
-        {
-            //fill extractor input 
-        }
+        granulator.process(buffer, buffer.getNumSamples(), &extractor);
+           
     }
 }
 
@@ -213,6 +210,11 @@ void LaGranaAudioProcessor::play()
     if (granulatorModel.getHasLoadedFile()) {
         this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
     }
+}
+
+void LaGranaAudioProcessor::setFeatureDrawers(SpectrumDrawable* s)
+{
+    this->extractor.setTarget(s);
 }
 
 //==============================================================================

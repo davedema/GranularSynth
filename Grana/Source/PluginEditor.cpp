@@ -19,7 +19,7 @@ constexpr auto WAV_HEIGHT = 160;
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState())
 {
-
+    p.setFeatureDrawers(&this->spectrum); 
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);                                    
     loader = FileLoader::getInstance();                            //singleton
     formatManager = loader->getFormatManager();
@@ -76,6 +76,10 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     controlSection.init(*valueTreeState);
     addAndMakeVisible(controlSection);
    
+
+    //OUT SPECTRUM
+    addAndMakeVisible(spectrum);
+    spectrum.setBounds(520, this->getHeight() / 2, 280, 150);
 
 }
 
