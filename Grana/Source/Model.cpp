@@ -136,13 +136,20 @@ Array<Point<float>>* Model::getxyPlane()
     return &xyPlane;
 }
 
-int Model::getCurrentPosition()
+int Model::getxyArrayPosition()
 {
-    int pos = round(jmap<int>(readposition, 0,
-                              FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
-                              0, xyPlane.size() ));
-    float ret = xyPlane[pos].getX() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
-    return ret ;
+    if (!getHasLoadedFile())
+        return 0;
+    return round(jmap<int>(readposition, 0,
+        FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
+        0, xyPlane.size()));;
+}
+
+Point<float> Model::getCurrentxyPosition()
+{
+    int pos = getxyArrayPosition();
+    auto ret = xyPlane[pos];
+    return ret;
 }
 
 float Model::getCurrentFrequencyShift()

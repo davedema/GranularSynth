@@ -13,6 +13,9 @@
 FreqTimeDrawable::FreqTimeDrawable()
 {
     setSize(200, 150);
+    setFramesPerSecond(60);
+    this->drawnPoints = nullptr;
+    this->model = nullptr;
 
 }
 
@@ -35,24 +38,27 @@ void FreqTimeDrawable::paint(Graphics&g)
         }
         g.strokePath(path, PathStrokeType(3.0f));
     }
+
+    enlightPoint(model->getCurrentxyPosition(), g);
 }
 
 void FreqTimeDrawable::resized()
 {
 }
 
+void FreqTimeDrawable::update()
+{
+    repaint();
+}
+
 void FreqTimeDrawable::mouseDown(const MouseEvent& event)
 {
-    DBG("down" << std::to_string(event.x) << "  " << std::to_string(event.y));
     drawnPoints->clear();
-    repaint();
 }
 
 void FreqTimeDrawable::mouseDrag(const MouseEvent& event)
 {
     drawnPoints->add(Point<float>(event.x / (float)getWidth(), event.y / (float)getHeight()));
-    repaint();
-
 }
 
 void FreqTimeDrawable::setModel(Model* model)
@@ -60,3 +66,10 @@ void FreqTimeDrawable::setModel(Model* model)
     this -> model = model;
     this->drawnPoints = model->getxyPlane();
 }
+
+void FreqTimeDrawable::enlightPoint(Point<float> point, Graphics& g)
+{
+    g.setColour(Colours::aliceblue);
+    g.drawEllipse(point.getX() * getWidth(), point.getY() * getHeight(), 3, 3, 1);
+}
+

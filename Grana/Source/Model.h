@@ -19,7 +19,7 @@ public:
     void parameterChanged(const String& parameterID, float newValue) override;
 
 
-    int getFilePos();
+    
     float getEnvWidth();
     int getSectionSize();
     float getDensity();
@@ -31,12 +31,15 @@ public:
     bool getHasLoadedFile();
     void setSampleRate(double sampleRate);
     int getSpeedDirection();
-    int getReadPosition();
+    
     void setReadPosition(int readPosition);
-    Array<Point<float>>* getxyPlane();
+    Array<Point<float>>* getxyPlane();     
 
-    int getCurrentPosition();
-    float getCurrentFrequencyShift();
+    int getReadPosition();                                  //get next position of grain in file
+    int getFilePos();                                       //get user starting position
+    int getxyArrayPosition();                               //get current position in xyArray [0, xyPlane.size()]
+    Point<float> getCurrentxyPosition();                    //get current position in xyplane [0, 1] X [0, 1] 
+    float getCurrentFrequencyShift();                       //get current frequency shift
 
 private:
 

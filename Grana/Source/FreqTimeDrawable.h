@@ -12,7 +12,7 @@
 #include <JuceHeader.h>
 #include "./Model.h"
 
-class FreqTimeDrawable : public Component, public MouseListener {
+class FreqTimeDrawable : public AnimatedAppComponent, public MouseListener {
 public:
 
     FreqTimeDrawable();
@@ -20,6 +20,7 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    void update() override;
 
     void mouseDown(const MouseEvent& event) override;
     void mouseDrag(const MouseEvent& event) override;
@@ -31,5 +32,6 @@ private:
     Model* model;
     void addPoint(float xpos, float ypos);
     Array<Point<float>>* drawnPoints;
-    //void enlightPoint(float xpos, float ypos);
+    Point<float> currentxyPlanePosition;
+    void enlightPoint(Point<float> point, Graphics& g);
 };

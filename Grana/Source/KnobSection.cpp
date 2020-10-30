@@ -26,7 +26,8 @@ KnobSection::~KnobSection()
 
     }
 
-    delete widthAttachment, typeAttachment;
+    delete widthAttachment;
+    delete typeAttachment;
  
 }
 

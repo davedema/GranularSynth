@@ -21,9 +21,9 @@ Granulator::Granulator()
 
 Granulator::~Granulator()
 {
-    for (auto grain : this->activeGrains) {
-        this->activeGrains.remove(this->activeGrains.indexOf(grain));
+    for (auto grain : this->activeGrains) {       
         delete grain;
+        grain = nullptr;
     }
 }
 
@@ -35,7 +35,7 @@ void Granulator::initialize(int portionLength)
     model->setReadPosition(0);
 
     this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                     model->getCurrentPosition(), 
+                                     this->position, 
                                      false, 
                                      model->getCurrentFrequencyShift(),
                                      this->model->getEnvIndex(),
