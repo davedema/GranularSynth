@@ -10,7 +10,7 @@
 
 #include "Grain.h"
 
-Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth) :
+Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate) :
     length(grainDuration), startPosition(startPos)
   
 {
@@ -31,7 +31,7 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     this->averageFrequency = this->integrator->getAverageFrequency();
     delete integrator;                                                             //useless after
     for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
-        channelFreqShift(freqShift, i, envelopeType, envelopeWidth);
+        channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate);
 }
 
 Grain::~Grain()
@@ -39,10 +39,10 @@ Grain::~Grain()
     delete buffer;
 }
 
-void Grain::channelFreqShift(float freqShift, int channel, int envType, float envWidth)
+void Grain::channelFreqShift(float freqShift, int channel, int envType, float envWidth, int hostRate)
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
-        float phaseInc = freqShift * i / FileLoader::getInstance()->getSampleRate();
+        float phaseInc = freqShift * i / hostRate;
         if (phaseInc > 1) //handle phase
             while(phaseInc > 1)
                 phaseInc -= 1;
