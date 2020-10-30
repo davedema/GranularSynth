@@ -46,8 +46,6 @@ void FreqTimeDrawable::mouseDown(const MouseEvent& event)
     DBG("down" << std::to_string(event.x) << "  " << std::to_string(event.y));
     drawnPoints->clear();
     repaint();
-
-    drawnPoints->add(Point<float>(event.x / (float)getWidth(), event.y / (float)getHeight()));
 }
 
 void FreqTimeDrawable::mouseDrag(const MouseEvent& event)

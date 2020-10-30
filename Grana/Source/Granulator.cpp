@@ -102,7 +102,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             model->setReadPosition(readPosition);
 
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                             model->getCurrentPosition(),
+                                             readPosition,
                                              false, 
                                              model->getCurrentFrequencyShift(),
                                              this->model->getEnvIndex(),

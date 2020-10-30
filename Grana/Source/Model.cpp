@@ -139,14 +139,16 @@ Array<Point<float>>* Model::getxyPlane()
 int Model::getCurrentPosition()
 {
     int pos = round(jmap<int>(readposition, 0,
-                              sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
+                              FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
                               0, xyPlane.size() ));
-    float ret = xyPlane[pos].getX() * sectionSize;
+    float ret = xyPlane[pos].getX() * FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
     return ret ;
 }
 
 float Model::getCurrentFrequencyShift()
 {
+    if (xyPlane.isEmpty())
+        return 0;
     int pos = round(jmap<int>(readposition, 0,
                               sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
                               0, xyPlane.size()));
