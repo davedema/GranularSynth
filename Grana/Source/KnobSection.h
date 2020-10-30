@@ -38,7 +38,8 @@ private:
     std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
 
     SliderAttachment *attachments[NUM_CONTROLS];
-    SliderAttachment * envAttachment;
+    SliderAttachment * widthAttachment;
+    ComboBoxParameterAttachment* typeAttachment;
 
     ComboBox envelopeList; //list of envelopes
     EnvelopeDrawable envDraw;
