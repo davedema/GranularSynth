@@ -77,20 +77,29 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
         //Decrement the next onset time, if it's 0 add a new grain and get the next one
         this->nextOnset--;
         if (this->nextOnset == 0) {
+            int sectionSize = jmin(model->getSectionSize(), //check not outside
+                FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - (int)model->getGrainSize() - model->getFilePos()); 
+            sectionSize = jmax(sectionSize, (int)model->getGrainSize()); //at least 1 grain
             int timePassed = this->position - model->getFilePos(); //time passed in samples
             float readPositionShift = model->getSpeedModule() * timePassed;  //read position shift = speed * time
-            int circularShift = (int)readPositionShift % model->getSectionSize();
-            int readPosition = model->getFilePos() + circularShift * model->getSpeedDirection(); //forward loop
-            if (readPosition <= 0) //backward loop
-                readPosition = model->getFilePos() + readPosition;
+            int circularShift = (int)readPositionShift % sectionSize; //0 <= circularshift < section size
+            int readPosition = model->getFilePos() + circularShift * model->getSpeedDirection(); //initial position + shift * direction
+           
+            if (model->getSpeedDirection() < 0) //if backward shift of sectionsize
+                readPosition += sectionSize;
+
+            if (readPosition == model->getFilePos()) //this is done not to increment position forever
+                this->position = model->getFilePos();
+
             this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                              readPosition,
                                              false, 
-                                             0,
+                                             -200,
                                              this->model->getEnvIndex(),
                                              this->model->getEnvWidth(),
                                              this->processorSampleRate));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
+            model->setReadPosition(readPosition);
         }
     }
 }

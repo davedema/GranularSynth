@@ -24,6 +24,7 @@ Model::Model()
     this->sampleRate = 0;
     this->fileLength = 0;
     this->speedDirection = 1;
+    this->readposition = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -116,4 +117,14 @@ void Model::setSampleRate(double sampleRate)
 int Model::getSpeedDirection()
 {
     return this->speedDirection;
+}
+
+int Model::getReadPosition()
+{
+    return this->readposition;
+}
+
+void Model::setReadPosition(int readPosition)
+{
+    this->readposition = readPosition;
 }

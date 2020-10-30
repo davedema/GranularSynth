@@ -33,6 +33,8 @@ public:
     bool getHasLoadedFile();
     void setSampleRate(double sampleRate);
     int getSpeedDirection();
+    int getReadPosition();
+    void setReadPosition(int readPosition);
 
 private:
 
@@ -48,4 +50,5 @@ private:
     double sampleRate;
     int fileLength;
     int speedDirection;
+    int readposition;
 };
