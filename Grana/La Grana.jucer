@@ -44,6 +44,10 @@
               file="Source/EnvelopeDrawable.cpp"/>
         <FILE id="NvtefY" name="EnvelopeDrawable.h" compile="0" resource="0"
               file="Source/EnvelopeDrawable.h"/>
+        <FILE id="IjOusL" name="FreqTimeDrawable.cpp" compile="1" resource="0"
+              file="Source/FreqTimeDrawable.cpp"/>
+        <FILE id="z3qhfR" name="FreqTimeDrawable.h" compile="0" resource="0"
+              file="Source/FreqTimeDrawable.h"/>
         <FILE id="M2pWGZ" name="KnobLookAndFeel.cpp" compile="1" resource="0"
               file="Source/KnobLookAndFeel.cpp"/>
         <FILE id="KxeUyY" name="KnobLookAndFeel.h" compile="0" resource="0"

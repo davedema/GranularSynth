@@ -25,6 +25,7 @@ FileLoader::FileLoader()
     buffer = new juce::AudioBuffer<float>();
     sampleRate = 0;
     this->hostRate = 44100;
+    this->ceiledLength = 0;
 }
 
 // Destructor

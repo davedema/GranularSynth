@@ -9,6 +9,7 @@
 */
 
 #include "Model.h"
+#include "FileLoader.h"
 
 Model::Model()
 {
@@ -17,7 +18,7 @@ Model::Model()
     this->filePos = 0;
     this->envIndex = 1;
     this->envWidth = 0.5;
-    this->sectionSize = 50.;
+    this->sectionSize = 0.5;
     this->density = 25.;
     this->grainSize = 25.;
     this->speedModule = 1;
@@ -127,4 +128,37 @@ int Model::getReadPosition()
 void Model::setReadPosition(int readPosition)
 {
     this->readposition = readPosition;
+}
+
+
+Array<Point<float>>* Model::getxyPlane()
+{
+    return &xyPlane;
+}
+
+int Model::getxyArrayPosition()
+{
+    if (!getHasLoadedFile() || getIsPlaying()) //TODO: Fix logic inversion on IsPlaying
+        return 0;
+
+    float position = (float)abs(readposition - filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) * //value to map
+        (float)xyPlane.size() /  //new range
+        (sectionSize * (float)FileLoader::getInstance()->getAudioBuffer()->getNumSamples()); //old range
+    return position;
+}
+
+Point<float> Model::getCurrentxyPosition()
+{
+    int pos = getxyArrayPosition();
+    auto ret = xyPlane[pos];
+    return ret;
+}
+
+float Model::getCurrentFrequencyShift()
+{
+    if (xyPlane.isEmpty())
+        return 0;
+    int pos = getxyArrayPosition();
+    float freq = xyPlane[pos].getY() * 2000.0f - 1000.0f;
+    return freq;
 }
