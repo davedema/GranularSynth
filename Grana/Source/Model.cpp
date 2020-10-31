@@ -18,7 +18,7 @@ Model::Model()
     this->filePos = 0;
     this->envIndex = 1;
     this->envWidth = 0.5;
-    this->sectionSize = 50.;
+    this->sectionSize = 0.5;
     this->density = 25.;
     this->grainSize = 25.;
     this->speedModule = 1;
@@ -138,11 +138,13 @@ Array<Point<float>>* Model::getxyPlane()
 
 int Model::getxyArrayPosition()
 {
-    if (!getHasLoadedFile())
+    if (!getHasLoadedFile() || getIsPlaying()) //TODO: Fix logic inversion on IsPlaying
         return 0;
-    return round(jmap<int>(readposition, 0,
-        sectionSize * FileLoader::getInstance()->getAudioBuffer()->getNumSamples(),
-        0, xyPlane.size() - 1));;
+
+    float position = (float)abs(readposition - filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) * //value to map
+        (float)xyPlane.size() /  //new range
+        (sectionSize * (float)FileLoader::getInstance()->getAudioBuffer()->getNumSamples()); //old range
+    return position;
 }
 
 Point<float> Model::getCurrentxyPosition()
