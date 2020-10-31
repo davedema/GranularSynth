@@ -56,6 +56,8 @@ void SpectrumDrawable::paint(Graphics& g)
         g.setGradientFill(*gradient);
 
         g.fillPath(myPath);
+
+        delete gradient;
     }
 }
 
