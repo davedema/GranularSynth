@@ -48,12 +48,7 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / hostRate;
-        if (phaseInc > 1) //handle phase
-            while(phaseInc > 1)
-                phaseInc -= 1;
-        else if (phaseInc < -1)
-            while(phaseInc < -1)
-                phaseInc += 1;
+        phaseInc -= floor(phaseInc); //handle phase
 
         jassert(abs(phaseInc) <= 1);
 
