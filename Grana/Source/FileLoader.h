@@ -29,7 +29,6 @@ class FileLoader {
 private:
 
     static FileLoader* instance;
-    int sampleRate;
     juce::AudioFormatManager *formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> *readerSource;   // Original file (saved in the buffer)
     juce::AudioThumbnailCache* thumbnailCache;                      // Keep the last 5 thumbnail saved 
@@ -54,7 +53,6 @@ public:
     juce::AudioThumbnailCache* getThumbnailCache() const;
     juce::AudioThumbnail* getThumbnail() const;
     juce::AudioBuffer<float> *getAudioBuffer() const;
-    int getSampleRate();
     double* getHilbertTransform();
     int getCeiledLength();
     void setHostRate(double hostRate);

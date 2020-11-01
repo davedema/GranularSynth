@@ -23,7 +23,6 @@ FileLoader::FileLoader()
     thumbnailCache = new juce::AudioThumbnailCache(5);
     thumbnail = new juce::AudioThumbnail(512, *formatManager, *thumbnailCache);
     buffer = new juce::AudioBuffer<float>();
-    sampleRate = 0;
     this->hostRate = 44100;
     this->ceiledLength = 0;
 }
@@ -60,7 +59,6 @@ void FileLoader::resetInstance()
 void FileLoader::loadWaveform(juce::File file)
 {
     auto* reader = formatManager->createReaderFor(file);
-    sampleRate = reader->sampleRate;
     AudioSampleBuffer temp, waveBuffer;
     std::unique_ptr<juce::AudioFormatReaderSource> newSource(new juce::AudioFormatReaderSource(reader, true));                                                                                                          // [13]
     thumbnail->setSource(new juce::FileInputSource(file));
@@ -139,11 +137,6 @@ juce::AudioThumbnail* FileLoader::getThumbnail() const
 juce::AudioBuffer<float> *FileLoader::getAudioBuffer() const
 {
     return buffer;
-}
-
-int FileLoader::getSampleRate()
-{
-    return this->sampleRate;
 }
 
 

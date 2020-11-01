@@ -21,10 +21,10 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
 
     //Computing the frequency shifted buffer
     ceiledLength = pow(2, ceil(log2(length)));
-    if (FileLoader::getInstance()->getSampleRate() / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
-        ceiledLength = pow(2, ceil(log2(FileLoader::getInstance()->getSampleRate() / 2 * 20)));                                                    
+    if (hostRate / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
+        ceiledLength = pow(2, ceil(log2(hostRate / 2 * 20)));                                                    
     this->integrator = new SimpsonIntegrator(hilbertTransform, 
-                                             FileLoader::getInstance()->getSampleRate(),
+                                             hostRate,
                                              ceiledLength, 
                                              FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), 
                                              this->length);
