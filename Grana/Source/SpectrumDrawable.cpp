@@ -25,23 +25,39 @@ void SpectrumDrawable::paint(Graphics& g)
     g.fillAll(Colours::black);
 
     g.setOpacity(1.0f);
-    g.setColour(Colours::aliceblue);
+    g.setColour(Colours::limegreen);
 
     if (this->currentFrame != nullptr)
     {
+        auto height = getLocalBounds().getHeight();
+        auto width = getLocalBounds().getWidth();
+
+        Path myPath;
+        myPath.startNewSubPath(0, getHeight());
         int size = 256;
-        for (int i = 1; i < size; ++i)
+        for (int i = 0; i < size - 1; ++i)
         {
-            auto width = getLocalBounds().getWidth();
-            auto height = getLocalBounds().getHeight();
-
-            g.drawLine({ (float)jmap(i - 1, 0, size - 1, 0, width),
-                                  jmap(*(currentFrame + i), 0.0f, 1.0f, (float)height, 0.0f),
-                          (float)jmap(i,     0, size - 1, 0, width),
-                                  jmap(*(currentFrame + i - 1) ,     0.0f, 1.0f, (float)height, 0.0f) });
+            myPath.quadraticTo(Point<float>((float)jmap(i, 0, size, 0, width),
+                jmap(*(currentFrame + i), 0.0f, 1.0f, (float)height, 0.0f)),
+                Point<float>((float)jmap(i + 1, 0, size, 0, width),
+                    jmap(*(currentFrame + i + 1), 0.0f, 1.0f, (float)height, 0.0f)));
         }
+        myPath.lineTo(getWidth(), getHeight());
+        g.strokePath(myPath, PathStrokeType(3.0f));
+        
 
+        ColourGradient* gradient = new ColourGradient(Colours::grey.brighter(0.2), 0, getHeight(), Colours::aliceblue, 0, 0, false);
+        gradient->clearColours();
+        gradient->addColour(0, Colours::yellow);
+        gradient->addColour(0.2, Colours::yellowgreen);
+        gradient->addColour(0.4, Colours::greenyellow);
+        gradient->addColour(0.7, Colours::limegreen);
 
+        g.setGradientFill(*gradient);
+
+        g.fillPath(myPath);
+
+        delete gradient;
     }
 }
 
