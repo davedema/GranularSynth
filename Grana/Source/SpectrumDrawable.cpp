@@ -35,12 +35,12 @@ void SpectrumDrawable::paint(Graphics& g)
         Path myPath;
         myPath.startNewSubPath(0, getHeight());
         int size = 256;
-        for (int i = 0; i < size - 1; ++i)
+        for (int i = 0; i < size / 2; ++i)
         {
-            myPath.quadraticTo(Point<float>((float)jmap(i, 0, size, 0, width),
-                jmap(*(currentFrame + i), 0.0f, 1.0f, (float)height, 0.0f)),
-                Point<float>((float)jmap(i + 1, 0, size, 0, width),
-                    jmap(*(currentFrame + i + 1), 0.0f, 1.0f, (float)height, 0.0f)));
+            myPath.quadraticTo(Point<float>((float)jmap(2 * i, 0, size, 0, width),
+                jmap(*(currentFrame + 2 * i), 0.0f, 1.0f, (float)height, 0.0f)),
+                Point<float>((float)jmap(2 * i + 1, 0, size, 0, width),
+                    jmap(*(currentFrame + 2 * i + 1), 0.0f, 1.0f, (float)height, 0.0f)));
         }
         myPath.lineTo(getWidth(), getHeight());
         g.strokePath(myPath, PathStrokeType(3.0f));
