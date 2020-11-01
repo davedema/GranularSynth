@@ -16,7 +16,6 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     this->write_idx = 0;
     zeromem(bins, sizeof(bins));
     startTimerHz(60);
-
 }
 
 Extractor::~Extractor()
@@ -64,7 +63,6 @@ void Extractor::timerCallback()
         computeSpectrum();
         this->spectrumDrawable->drawNextFrame(bins);
         isBlockReady = false;
-
     }
 }
 

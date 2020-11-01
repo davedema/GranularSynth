@@ -28,6 +28,8 @@ public:
     float getAverageFrequency();
     bool isFinished();
     AudioBuffer<float>* getBuffer();
+    void setLag(int lag);
+    void applyCrossFade(int crossfade, bool atStart);
 
 private:
     int startPosition;      //in the loaded audio file
@@ -37,6 +39,7 @@ private:
     float averageFrequency;
     int ceiledLength; //lowest power of 2 > grainlength, for fft and hilbert transforms
     double* hilbertTransform; //hilbert transform for each channel
+    int lag;
 
     AudioBuffer<float>* buffer;  //points to the whole audiobuffer, to be accessed with the index methods
     SimpsonIntegrator *integrator;

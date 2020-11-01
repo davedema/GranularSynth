@@ -12,6 +12,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "./SpectrumDrawable.h"
+#include <thread>         // std::thread
 
 enum
 {
@@ -43,5 +44,4 @@ private:
 
     bool isBlockReady;
     int write_idx; // writing index - managing a different number of samples per block in processor
-
 };

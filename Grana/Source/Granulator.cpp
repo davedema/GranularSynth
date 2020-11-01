@@ -61,19 +61,19 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
         }
         else 
         {
-            //Cycles through the active grains, if the grain is finished remove it otherwise play the current sample
-            for (auto grain : this->activeGrains) {
-                if (grain->isFinished()) {
+            //Cycles through the active grains, play the current sample and check if the grain is finished remove it
+            for (auto grain : this->activeGrains) 
+            {
+                for (int i = 0; i < outputBuffer.getNumChannels(); i++) 
+                {
+                    outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i));   //Should add the sample already envelopped
+                    toExtract += grain->getCurrentSample(i);
+                }
+                grain->updateIndex();
+                if (grain->isFinished()) 
+                {
                     this->activeGrains.remove(this->activeGrains.indexOf(grain));
                     delete grain;
-                }
-                else 
-                {
-                    for (int i = 0; i < outputBuffer.getNumChannels(); i++) {
-                        outputBuffer.addSample(i, samplePos, grain->getCurrentSample(i));   //Should add the sample already envelopped
-                        toExtract += grain->getCurrentSample(i);
-                    }
-                    grain->updateIndex();
                 }
             }
         }
@@ -100,17 +100,28 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 this->position = model->getFilePos();
 
             model->setReadPosition(readPosition);
-
-            this->activeGrains.add(new Grain(this->model->getGrainSize(), 
-                                             readPosition,
-                                             false, 
-                                             model->getCurrentFrequencyShift(),
-                                             this->model->getEnvIndex(),
-                                             this->model->getEnvWidth(),
-                                             this->processorSampleRate,
-                                             this->model->getSpeedDirection()));
             this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
-            
+
+            Grain* toAdd = new Grain(this->model->getGrainSize(),
+                                     readPosition,
+                                     false,
+                                     model->getCurrentFrequencyShift(),
+                                     this->model->getEnvIndex(),
+                                     this->model->getEnvWidth(),
+                                     this->processorSampleRate,
+                                     this->model->getSpeedDirection());
+
+            //If there are active grains do SOLA
+            if (!this->activeGrains.isEmpty()) 
+            {
+                //int lag = this->computeLag(this->activeGrains.getLast()->getBuffer(), toAdd->getBuffer(), this->nextOnset, this->model->getGrainSize());
+                int lag = 0;
+                int crossfade = this->activeGrains.getLast()->getBuffer()->getNumSamples() - this->nextOnset - lag;
+                toAdd->setLag(lag);
+                toAdd->applyCrossFade(crossfade, true);
+                this->activeGrains.getLast()->applyCrossFade(crossfade, false);
+            }
+            this->activeGrains.add(toAdd);            
         }
     }
 }
@@ -126,3 +137,45 @@ void Granulator::setProcessorSampleRate(double processorSampleRate)
     this->processorSampleRate = processorSampleRate;
     this->strategy.setSampleRate(processorSampleRate);
 }
+
+int Granulator::computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
+{
+    int lag = 0;
+    Array<float>* correlationArray = computeCrossCorrelation(
+        currentBuffer,
+        nextBuffer,
+        userLength,
+        grainLength
+    ); //compute correlation
+    float* maxvalue = std::max_element(
+        correlationArray->begin(),
+        correlationArray->end());
+    lag = round(std::distance(correlationArray->begin(), std::max_element(
+        correlationArray->begin(),
+        correlationArray->end()))); //add lag
+
+    return lag;
+}
+
+Array<float>* Granulator::computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)
+{
+    Array<float>* correlationArray = new Array<float>();
+    int numChannels = currentBuffer->getNumChannels();
+    correlationArray->clear();
+
+    //begin compute autocorrelation
+    for (int i = 0; i < grainLength - userLength; i++) {
+        float totalValue = 0;
+        float newValue = 0;
+        for (int j = userLength; j < grainLength - i; j++) {
+            newValue += currentBuffer->getSample(0, j) * nextBuffer->getSample(0, j - userLength);
+        }
+        newValue /= (float)(grainLength - userLength);
+        totalValue += newValue;
+        totalValue /= numChannels; //average over channels
+        correlationArray->add(totalValue);
+    }
+    //end compute autocorrelation
+    return correlationArray;
+}
+

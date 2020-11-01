@@ -18,6 +18,7 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     this->hilbertTransform = FileLoader::getInstance()->getHilbertTransform();
     this->currentPosition = 0;
     this->finished = false;
+    this->lag = 0;
 
     //Computing the frequency shifted buffer
     ceiledLength = pow(2, ceil(log2(length)));
@@ -67,14 +68,28 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
 
 float Grain::getCurrentSample(int channel)
 {
-    return buffer->getSample(channel % FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->currentPosition);
+    float returnSample = 0;
+
+    if (this->lag == 0) 
+    {
+        returnSample = buffer->getSample(channel % FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->currentPosition);
+    }
+
+    return returnSample;
 }
 
 void Grain::updateIndex()
 {
-    this->currentPosition++;
-    if (this->currentPosition == this->length) {
-        this->finished = true;
+    if (this->lag == 0)
+    {
+        this->currentPosition++;
+        if (this->currentPosition == this->length) {
+            this->finished = true;
+        }
+    }
+    else
+    {
+        this->lag--;
     }
 }
 
@@ -96,5 +111,15 @@ bool Grain::isFinished()
 AudioBuffer<float>* Grain::getBuffer()
 {
     return this->buffer;
+}
+
+void Grain::setLag(int lag)
+{
+    this->lag = lag;
+}
+
+void Grain::applyCrossFade(int crossfade, bool atStart)
+{
+    atStart ? this->buffer->applyGainRamp(0, crossfade, 0, 1) : this->buffer->applyGainRamp(this->length - crossfade, crossfade, 1, 0);
 }
 
