@@ -34,9 +34,9 @@ public:
     void computeSpectrum();
     void setTarget(SpectrumDrawable* s);
 
-    void setShouldQuit(bool shouldQuit);
+    void setShouldQuit(bool shouldQuit);  //set to false to trigger fireThread(this) in this->aThread
 
-    static void fireThread(Extractor* extractor); //fired as a separate thread in PluginProcessor
+    static void fireThread(Extractor* extractor); //fired as a callable in this->aThread
 
 protected:
 
@@ -45,15 +45,17 @@ protected:
     bool isBlockReady;
      
 private:
-    void timerCallback() override;
-    std::thread aThread; //parallel thread fired at 60 Hz
-    bool shouldQuit;
+
+    void timerCallback() override; //fires thread if this->shouldQuit == false at 60Hz rate
+    std::thread aThread; //parallel thread 
+
+    bool shouldQuit; //set to false to fire threads, done when PluginProcessor::play() is triggered 
+                     //or to true to stop thread firing, done in destructor and in
+                     //PluginProcessor::ReleaseResources()
 
     dsp::FFT forwardFFT;
     dsp::WindowingFunction<float> window;
     
-    
-
     float input[fftSize]; // input block to transform
     float spectrum[2 * fftSize]; //output spectrum
   

@@ -21,8 +21,8 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
 
 Extractor::~Extractor()
 {
-    this->shouldQuit = true;
-    aThread.join();
+    this->shouldQuit = true; //stop timer
+    aThread.join(); //join thread
 }
 
 void Extractor::pushSample(float sample)
@@ -92,12 +92,12 @@ void Extractor::fireThread(Extractor* extractor)
 
 void Extractor::timerCallback()
 {
-    if (aThread.joinable())
+    if (aThread.joinable())  //join previous thread if not over
         aThread.join();
 
-    if (this->shouldQuit)
+    if (this->shouldQuit)  //quit if should quit
         return;
 
-    void (*fPointer)(Extractor*) = Extractor::fireThread;
-    aThread = std::thread(fPointer, this);
+    void (*fPointer)(Extractor*) = Extractor::fireThread; //function to call in separate thread
+    aThread = std::thread(fPointer, this);  //fire thread
 }
