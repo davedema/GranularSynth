@@ -36,8 +36,6 @@ public:
 
     void setShouldQuit(bool shouldQuit);  //set to false to trigger fireThread(this) in this->aThread
 
-    static void fireThread(Extractor* extractor); //fired as a callable in this->aThread
-
 protected:
 
     SpectrumDrawable* spectrumDrawable;
@@ -47,6 +45,7 @@ protected:
 private:
 
     void timerCallback() override; //fires thread if this->shouldQuit == false at 60Hz rate
+    static void fireThread(Extractor* extractor); //fired as a callable in this->aThread
     std::thread aThread; //parallel thread 
 
     bool shouldQuit; //set to false to fire threads, done when PluginProcessor::play() is triggered 
