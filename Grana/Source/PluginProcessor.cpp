@@ -131,6 +131,7 @@ void LaGranaAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    this->extractor.setShouldQuit(true);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -208,6 +209,7 @@ Model* LaGranaAudioProcessor::getModel()
 
 void LaGranaAudioProcessor::play()
 {
+    extractor.setShouldQuit(false);
     if (granulatorModel.getHasLoadedFile()) {
         this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
         this->granulatorModel.setInit(true);
