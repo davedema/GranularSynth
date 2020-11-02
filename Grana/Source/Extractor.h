@@ -21,7 +21,7 @@ enum
     scopeSize = 256 // graphic bins to be drawn
 };
 
-class Extractor: public Timer {
+class Extractor {
 public:
         
     Extractor();
@@ -29,19 +29,24 @@ public:
 
     void pushSample(float sample);
     void computeSpectrum();
-    void timerCallback() override;
     void setTarget(SpectrumDrawable* s);
 
-      
+    static void fireThread(Extractor* extractor); //fired as a separate thread in PluginProcessor
+
+protected:
+
+    SpectrumDrawable* spectrumDrawable;
+    float bins[scopeSize]; // frequency bins to plot
+    bool isBlockReady;
+     
 private:
     dsp::FFT forwardFFT;
     dsp::WindowingFunction<float> window;
-    SpectrumDrawable * spectrumDrawable;
+    
+    
 
     float input[fftSize]; // input block to transform
     float spectrum[2 * fftSize]; //output spectrum
-    float bins[scopeSize]; // frequency bins to plot
-
-    bool isBlockReady;
+  
     int write_idx; // writing index - managing a different number of samples per block in processor
 };

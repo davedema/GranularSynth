@@ -71,6 +71,8 @@ private:
     double sampleRate;
     int samplesPerBlock;
 
+    std::thread aThread; //parallel thread fired in processBlock
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaGranaAudioProcessor)
 };

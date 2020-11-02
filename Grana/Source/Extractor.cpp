@@ -15,7 +15,7 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     this->isBlockReady = false;
     this->write_idx = 0;
     zeromem(bins, sizeof(bins));
-    startTimerHz(60);
+    
 }
 
 Extractor::~Extractor()
@@ -57,16 +57,28 @@ void Extractor::computeSpectrum()
 
 }
 
-void Extractor::timerCallback()
-{
-    if (isBlockReady) {
-        computeSpectrum();
-        this->spectrumDrawable->drawNextFrame(bins);
-        isBlockReady = false;
-    }
-}
 
 void Extractor::setTarget(SpectrumDrawable* s)
 {
     this->spectrumDrawable = s;
+}
+
+void Extractor::fireThread(Extractor* extractor)
+{
+    
+    if (!extractor->isBlockReady) //return case
+        return;
+
+    MessageManagerLock mml(Thread::getCurrentThread()); //just recommended juce precautions, not really useful here
+    while(!mml.lockWasGained())
+    {   
+        std::cout << "waiting...";
+        _sleep(1);
+    }
+
+    //begin parallel computing
+    extractor->computeSpectrum();
+    extractor->spectrumDrawable->drawNextFrame(extractor->bins);
+    extractor->isBlockReady = false;
+    //end parallel computing
 }
