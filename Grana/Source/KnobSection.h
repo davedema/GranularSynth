@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "EnvelopeDrawable.h"
+#include "WaveformDrawable.h"
 
 typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
 constexpr auto NUM_CONTROLS = 3;
@@ -25,7 +26,7 @@ class KnobSection : public Component, public Slider::Listener
 public:
     KnobSection();
     ~KnobSection();
-    void init(AudioProcessorValueTreeState& apvts);
+    void init(AudioProcessorValueTreeState& apvts, WaveformDrawable* waveform);
     void paint(Graphics&) override;
     void resized() override;
     void sliderValueChanged(Slider* slider) override;
@@ -33,18 +34,29 @@ public:
     void widthChanged();
 
 private:
+    //filepos and section size
+    Slider filepos;
+    Slider sectionsize;
+    Label labfilepos;
+    Label labsectionsize;
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> fileposAttachment;
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> secsizeAttachment;
+
+    //grain controls
     Slider controls[NUM_CONTROLS];
     Label labels[NUM_CONTROLS];
     std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
-
     SliderAttachment *attachments[NUM_CONTROLS];
-    SliderAttachment * widthAttachment;
-    ComboBoxParameterAttachment* typeAttachment;
 
+    //envelopes
     ComboBox envelopeList; //list of envelopes
     EnvelopeDrawable envDraw;
     Slider envShape; // shape of the envelope to apply
     Label envShapelab;
+    SliderAttachment* widthAttachment;
+    ComboBoxParameterAttachment* typeAttachment;
+
+    WaveformDrawable* waveform; // pointer to waveform to repaint it on user's input
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KnobSection)

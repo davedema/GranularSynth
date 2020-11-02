@@ -26,6 +26,7 @@ Model::Model()
     this->fileLength = 0;
     this->speedDirection = 1;
     this->readposition = 0;
+    this->init = false;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -99,6 +100,11 @@ bool Model::getIsPlaying()
     return this->isPlaying;
 }
 
+void Model::setIsPlaying(bool val)
+{
+    this->isPlaying = val;
+}
+
 void Model::setHasLoadedFile(bool hasDone, int fileLength)
 {
     this->hasLoadedFile = hasDone;
@@ -118,6 +124,16 @@ void Model::setSampleRate(double sampleRate)
 int Model::getSpeedDirection()
 {
     return this->speedDirection;
+}
+
+bool Model::getInit()
+{
+    return this->init;
+}
+
+void Model::setInit(bool val)
+{
+    this->init = val;
 }
 
 int Model::getReadPosition()

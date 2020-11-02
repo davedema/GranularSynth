@@ -27,10 +27,13 @@ public:
     float getGrainSize();
     float getSpeedModule();
     bool getIsPlaying();
+    void setIsPlaying(bool val);
     void setHasLoadedFile(bool hasDone, int fileLength);
     bool getHasLoadedFile();
     void setSampleRate(double sampleRate);
     int getSpeedDirection();
+    bool getInit(); // if the granulator has been initialized
+    void setInit(bool val);
     
     void setReadPosition(int readPosition);
     Array<Point<float>>* getxyPlane();     
@@ -57,4 +60,5 @@ private:
     int speedDirection;
     int readposition;
     Array<Point<float>> xyPlane;
+    bool init;
 };
