@@ -6,6 +6,9 @@
     Author:  amere
     // class managing audio analysis and processing for outputting spectrum / features
 
+    If this->shouldQuit == false this class fires a thread at 60 Hz rate 
+    updating spectrum graphics
+
   ==============================================================================
 */
 
@@ -21,7 +24,7 @@ enum
     scopeSize = 256 // graphic bins to be drawn
 };
 
-class Extractor {
+class Extractor : public Timer{
 public:
         
     Extractor();
@@ -30,6 +33,8 @@ public:
     void pushSample(float sample);
     void computeSpectrum();
     void setTarget(SpectrumDrawable* s);
+
+    void setShouldQuit(bool shouldQuit);
 
     static void fireThread(Extractor* extractor); //fired as a separate thread in PluginProcessor
 
@@ -40,6 +45,10 @@ protected:
     bool isBlockReady;
      
 private:
+    void timerCallback() override;
+    std::thread aThread; //parallel thread fired at 60 Hz
+    bool shouldQuit;
+
     dsp::FFT forwardFFT;
     dsp::WindowingFunction<float> window;
     

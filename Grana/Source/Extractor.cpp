@@ -15,11 +15,14 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     this->isBlockReady = false;
     this->write_idx = 0;
     zeromem(bins, sizeof(bins));
-    
+    startTimerHz(60);
+    this->shouldQuit = true;
 }
 
 Extractor::~Extractor()
 {
+    this->shouldQuit = true;
+    aThread.join();
 }
 
 void Extractor::pushSample(float sample)
@@ -63,17 +66,21 @@ void Extractor::setTarget(SpectrumDrawable* s)
     this->spectrumDrawable = s;
 }
 
+void Extractor::setShouldQuit(bool shouldQuit)
+{
+    this->shouldQuit = shouldQuit;
+}
+
 void Extractor::fireThread(Extractor* extractor)
 {
     
     if (!extractor->isBlockReady) //return case
         return;
 
-    MessageManagerLock mml(Thread::getCurrentThread()); //just recommended juce precautions, not really useful here
-    while(!mml.lockWasGained())
+    MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
+    if(!mml.lockWasGained())
     {   
-        std::cout << "waiting...";
-        _sleep(1);
+        return;
     }
 
     //begin parallel computing
@@ -81,4 +88,16 @@ void Extractor::fireThread(Extractor* extractor)
     extractor->spectrumDrawable->drawNextFrame(extractor->bins);
     extractor->isBlockReady = false;
     //end parallel computing
+}
+
+void Extractor::timerCallback()
+{
+    if (aThread.joinable())
+        aThread.join();
+
+    if (this->shouldQuit)
+        return;
+
+    void (*fPointer)(Extractor*) = Extractor::fireThread;
+    aThread = std::thread(fPointer, this);
 }

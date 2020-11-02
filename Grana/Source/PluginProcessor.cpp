@@ -54,7 +54,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
     FileLoader::resetInstance();
-    aThread.join();
+    
 }
 
 //==============================================================================
@@ -132,6 +132,7 @@ void LaGranaAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    this->extractor.setShouldQuit(true);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -152,9 +153,6 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
         granulator.process(buffer, buffer.getNumSamples(), &extractor);          
     }
 
-    aThread.join();
-    void (*fPointer)(Extractor*) = extractor.fireThread;
-    aThread = std::thread(fPointer, &extractor);
 }
 
 //==============================================================================
@@ -202,6 +200,7 @@ Model* LaGranaAudioProcessor::getModel()
 
 void LaGranaAudioProcessor::play()
 {
+    extractor.setShouldQuit(false);
     if (granulatorModel.getHasLoadedFile()) {
         this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
     }
@@ -210,8 +209,6 @@ void LaGranaAudioProcessor::play()
 void LaGranaAudioProcessor::setFeatureDrawers(SpectrumDrawable* s)
 {
     this->extractor.setTarget(s);
-    void (*fPointer)(Extractor*) = Extractor::fireThread;
-    aThread = std::thread(fPointer, &extractor);
 }
 
 //==============================================================================
