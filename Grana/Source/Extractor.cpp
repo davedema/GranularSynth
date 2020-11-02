@@ -73,15 +73,15 @@ void Extractor::setShouldQuit(bool shouldQuit)
 
 void Extractor::fireThread(Extractor* extractor)
 {
-    
-    if (!extractor->isBlockReady) //return case
-        return;
 
     MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
     if(!mml.lockWasGained())
     {   
         return;
     }
+
+    if (!extractor->isBlockReady) //return case
+        return;
 
     //begin parallel computing
     extractor->computeSpectrum();
