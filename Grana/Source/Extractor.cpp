@@ -22,7 +22,8 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
 Extractor::~Extractor()
 {
     this->shouldQuit = true; //stop timer
-    aThread.join(); //join thread
+    if(aThread.joinable())
+        aThread.join(); //join thread
 }
 
 void Extractor::pushSample(float sample)
