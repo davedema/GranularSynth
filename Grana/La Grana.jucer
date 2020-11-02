@@ -44,6 +44,8 @@
               file="Source/EnvelopeDrawable.cpp"/>
         <FILE id="NvtefY" name="EnvelopeDrawable.h" compile="0" resource="0"
               file="Source/EnvelopeDrawable.h"/>
+        <FILE id="qpCP5p" name="FileSection.cpp" compile="1" resource="0" file="Source/FileSection.cpp"/>
+        <FILE id="GEZFQY" name="FileSection.h" compile="0" resource="0" file="Source/FileSection.h"/>
         <FILE id="IjOusL" name="FreqTimeDrawable.cpp" compile="1" resource="0"
               file="Source/FreqTimeDrawable.cpp"/>
         <FILE id="z3qhfR" name="FreqTimeDrawable.h" compile="0" resource="0"
@@ -58,6 +60,10 @@
               file="Source/SpectrumDrawable.cpp"/>
         <FILE id="wc38s4" name="SpectrumDrawable.h" compile="0" resource="0"
               file="Source/SpectrumDrawable.h"/>
+        <FILE id="Cg1q91" name="WaveformDrawable.cpp" compile="1" resource="0"
+              file="Source/WaveformDrawable.cpp"/>
+        <FILE id="J83oE3" name="WaveformDrawable.h" compile="0" resource="0"
+              file="Source/WaveformDrawable.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
         <FILE id="m5xn3a" name="Extractor.cpp" compile="1" resource="0" file="Source/Extractor.cpp"/>

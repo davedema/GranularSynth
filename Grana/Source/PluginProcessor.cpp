@@ -54,7 +54,6 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
     FileLoader::resetInstance();
-    
 }
 
 //==============================================================================
@@ -132,7 +131,6 @@ void LaGranaAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    this->extractor.setShouldQuit(true);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -149,10 +147,20 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
-        granulator.process(buffer, buffer.getNumSamples(), &extractor);          
-    }
+    // In case we have more outputs than inputs, this code clears any output
+    // channels that didn't contain input data, (because these aren't
+    // guaranteed to be empty - they may contain garbage).
+    // This is here to avoid people getting screaming feedback
+    // when they first compile a plugin, but obviously you don't need to keep
+    // this code if your algorithm always overwrites all the output channels.
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear(i, 0, currentBufferLength);
 
+    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
+        if (!granulatorModel.getInit()) this->play(); //init the granulator. if a new file has been loaded the init is set to false
+        granulator.process(buffer, buffer.getNumSamples(), &extractor);
+           
+    }
 }
 
 //==============================================================================
@@ -200,9 +208,9 @@ Model* LaGranaAudioProcessor::getModel()
 
 void LaGranaAudioProcessor::play()
 {
-    extractor.setShouldQuit(false);
     if (granulatorModel.getHasLoadedFile()) {
         this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
+        this->granulatorModel.setInit(true);
     }
 }
 
