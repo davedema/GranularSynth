@@ -35,7 +35,7 @@ Array<AudioBuffer<float>*> ExtractorModel::getLastGrainsPushed()
 
 Array<float>* ExtractorModel::getLastOutputBufferPushed()
 {
-    MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
+    MessageManagerLock mml(Thread::getCurrentThread());
     if (!mml.lockWasGained())
     {
         return nullptr;
@@ -53,6 +53,7 @@ bool ExtractorModel::pushBuffers(Array<Grain*>* grains, Array<float> outputBuffe
     if (!extractorModel->getHasSentUpdate())
         return false;
 
+    clearMemory(extractorModel);
     extractorModel->lastGrainsPushed.clearQuick();
     for (auto grain : *grains)
         grain != nullptr ? extractorModel->lastGrainsPushed.add(new AudioBuffer<float>(*grain->getBuffer())) : 0;
@@ -65,11 +66,6 @@ bool ExtractorModel::pushBuffers(Array<Grain*>* grains, Array<float> outputBuffe
 
 bool ExtractorModel::clearMemory(ExtractorModel* extractorModel)
 {
-    MessageManagerLock mml(Thread::getCurrentThread());
-    if (!mml.lockWasGained())
-    {
-        return false;
-    }
     for (auto buff : extractorModel->lastGrainsPushed)
         delete buff;
     delete extractorModel->lastOutputBufferPushed;
@@ -78,11 +74,6 @@ bool ExtractorModel::clearMemory(ExtractorModel* extractorModel)
 
 bool ExtractorModel::setHasSentUpdate(bool hasSentUpdate)
 {
-    MessageManagerLock mml(Thread::getCurrentThread());
-    if (!mml.lockWasGained())
-    {
-        return false;
-    }
     this->hasSentUpdate = hasSentUpdate;
     return true;
 }

@@ -80,24 +80,33 @@ void Extractor::setExtractorModel(ExtractorModel* model)
 
 void Extractor::fireThread(Extractor* extractor)
 {
-
-    MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
-    if(!mml.lockWasGained())
+    
+    Array<float>* samples;
+    while((samples = extractor->model->getLastOutputBufferPushed()) == nullptr ) //wait for new data
     {   
-        return;
+        Time::waitForMillisecondCounter(Time::getMillisecondCounter() + 2);
+    }
+
+    MessageManagerLock mml(Thread::getCurrentThread());
+    while(!mml.lockWasGained()) //wait for lock
+    {
+        Time::waitForMillisecondCounter(Time::getMillisecondCounter() + 2);
     }
 
     //begin parallel computing
-    auto samples = extractor->model->getLastOutputBufferPushed();
-    for (auto sample : *samples) {
-        extractor->pushSample(sample);
-        if (extractor->isBlockReady) {
-            extractor->computeSpectrum();
-            extractor->spectrumDrawable->drawNextFrame(extractor->bins);
-            extractor->isBlockReady = false;
+    if(samples->begin() != nullptr){
+        for (auto sample : *samples) {
+            extractor->pushSample(sample);
+            if (extractor->isBlockReady) {
+                extractor->computeSpectrum();
+                extractor->spectrumDrawable->drawNextFrame(extractor->bins);
+                extractor->isBlockReady = false;
+            }
         }
     }
     //end parallel computing
+
+    extractor->model->setHasSentUpdate(true);
 }
 
 void Extractor::timerCallback()
@@ -105,7 +114,6 @@ void Extractor::timerCallback()
     if (aThread.joinable())  //join previous thread if not over
         aThread.join();
 
-    this->model->setHasSentUpdate(true);
     if (this->shouldQuit)  //quit if should quit
         return;
 
