@@ -100,7 +100,6 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 this->position = model->getFilePos();
 
             model->setReadPosition(readPosition);
-            this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
 
             Grain* toAdd = new Grain(this->model->getGrainSize(),
                                      readPosition,
@@ -116,12 +115,14 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             {
                 //int lag = this->computeLag(this->activeGrains.getLast()->getBuffer(), toAdd->getBuffer(), this->nextOnset, this->model->getGrainSize());
                 int lag = 0;
-                int crossfade = this->activeGrains.getLast()->getBuffer()->getNumSamples() - this->nextOnset - lag;
+                int crossfade = this->activeGrains.getLast()->remainingLife();
                 toAdd->setLag(lag);
                 toAdd->applyCrossFade(crossfade, true);
                 this->activeGrains.getLast()->applyCrossFade(crossfade, false);
             }
-            this->activeGrains.add(toAdd);            
+
+            this->activeGrains.add(toAdd);  
+            this->nextOnset = round(this->processorSampleRate / this->model->getDensity());
         }
     }
 }
