@@ -66,6 +66,10 @@
               file="Source/WaveformDrawable.h"/>
       </GROUP>
       <GROUP id="{2F04B41A-E8A6-0F25-A78F-24CC1CBD728D}" name="Audio">
+        <FILE id="BC1wKP" name="ExtractorModel.cpp" compile="1" resource="0"
+              file="Source/ExtractorModel.cpp"/>
+        <FILE id="gGFzRa" name="ExtractorModel.h" compile="0" resource="0"
+              file="Source/ExtractorModel.h"/>
         <FILE id="m5xn3a" name="Extractor.cpp" compile="1" resource="0" file="Source/Extractor.cpp"/>
         <FILE id="yn6ye2" name="Extractor.h" compile="0" resource="0" file="Source/Extractor.h"/>
         <FILE id="qn1MjM" name="SimpsonIntegrator.cpp" compile="1" resource="0"
