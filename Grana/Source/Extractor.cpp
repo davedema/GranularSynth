@@ -17,6 +17,7 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     zeromem(bins, sizeof(bins));
     startTimerHz(60);
     this->shouldQuit = true;
+    this->model = nullptr;
 }
 
 Extractor::~Extractor()
@@ -72,6 +73,11 @@ void Extractor::setShouldQuit(bool shouldQuit)
     this->shouldQuit = shouldQuit;
 }
 
+void Extractor::setExtractorModel(ExtractorModel* model)
+{
+    this->model = model;
+}
+
 void Extractor::fireThread(Extractor* extractor)
 {
 
@@ -81,13 +87,16 @@ void Extractor::fireThread(Extractor* extractor)
         return;
     }
 
-    if (!extractor->isBlockReady) //return case
-        return;
-
     //begin parallel computing
-    extractor->computeSpectrum();
-    extractor->spectrumDrawable->drawNextFrame(extractor->bins);
-    extractor->isBlockReady = false;
+    auto samples = extractor->model->getLastOutputBufferPushed();
+    for (auto sample : *samples) {
+        extractor->pushSample(sample);
+        if (extractor->isBlockReady) {
+            extractor->computeSpectrum();
+            extractor->spectrumDrawable->drawNextFrame(extractor->bins);
+            extractor->isBlockReady = false;
+        }
+    }
     //end parallel computing
 }
 
@@ -96,6 +105,7 @@ void Extractor::timerCallback()
     if (aThread.joinable())  //join previous thread if not over
         aThread.join();
 
+    this->model->setHasSentUpdate(true);
     if (this->shouldQuit)  //quit if should quit
         return;
 

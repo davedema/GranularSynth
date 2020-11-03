@@ -44,12 +44,14 @@ void Granulator::initialize(int portionLength)
                                      this->model->getSpeedDirection()));
     this->nextOnset = round(this->processorSampleRate/this->model->getDensity());
     this->portionLength = portionLength;
+    this->savedBuffer.clear();
 }
 
 
 // Process the sound
-void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extractor* featureExtractor)
-{
+void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples)
+{       
+
     for (int samplePos = 0; samplePos < numSamples; samplePos++) {
         float toExtract = 0;
 
@@ -77,7 +79,9 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 }
             }
         }
-        featureExtractor->pushSample(toExtract / 2);  // pass the average between two channels to extractor
+
+        this->savedBuffer.add(toExtract / FileLoader::getInstance()->getAudioBuffer()->getNumChannels());
+        //featureExtractor->pushSample(toExtract / FileLoader::getInstance()->getAudioBuffer()->getNumChannels());  // pass the average between two channels to extractor
 
         //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
@@ -124,6 +128,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             this->activeGrains.add(toAdd);            
         }
     }
+
+    if (this->extractorModel->getHasSentUpdate()) {
+        ExtractorModel::pushBuffers(&this->activeGrains, this->savedBuffer, this->extractorModel);
+        this->savedBuffer.clear();
+    }
 }
 
 void Granulator::setModel(Model* model)
@@ -136,6 +145,11 @@ void Granulator::setProcessorSampleRate(double processorSampleRate)
 {
     this->processorSampleRate = processorSampleRate;
     this->strategy.setSampleRate(processorSampleRate);
+}
+
+void Granulator::setExtractorModel(ExtractorModel* extractorModel)
+{
+    this->extractorModel = extractorModel;
 }
 
 int Granulator::computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength)

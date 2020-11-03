@@ -19,17 +19,23 @@ public:
     ExtractorModel();
     ~ExtractorModel();
 
-    Array<AudioBuffer<float>>* getLastGrainsPushed();
-    AudioBuffer<float>* getLastOutputBufferPushed();
+    Array<AudioBuffer<float>*> getLastGrainsPushed();
+    Array<float>* getLastOutputBufferPushed();
 
-    void pushBuffers(Array<Grain*>* grains);
+    static bool pushBuffers(Array<Grain*>* grains, Array<float> outputBuffer, ExtractorModel *extractorModel);
+    static bool clearMemory(ExtractorModel* extractorModel);
 
-    void setHasSentUpdate(bool hasSentUpdate);
+    bool setHasSentUpdate(bool hasSentUpdate);
     bool getHasSentUpdate();
 
-private:
-    Array<AudioBuffer<float>> lastGrainsPushed;
-    AudioBuffer<float> lastOutputBufferPushed;
+    
 
+protected:
+    Array<AudioBuffer<float>*> lastGrainsPushed;
+    Array<float>* lastOutputBufferPushed;
+
+private:
     bool hasSentUpdate;
+
+    
 };

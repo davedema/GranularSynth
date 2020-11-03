@@ -14,39 +14,85 @@
 
 ExtractorModel::ExtractorModel()
 {
-    this->hasSentUpdate = true;
+    setHasSentUpdate(true);
+    this->lastGrainsPushed = nullptr;
+    this->lastOutputBufferPushed = nullptr;
 }
 
 ExtractorModel::~ExtractorModel()
 {
 }
 
-Array<AudioBuffer<float>>* ExtractorModel::getLastGrainsPushed()
+Array<AudioBuffer<float>*> ExtractorModel::getLastGrainsPushed()
 {
-    return &this->lastGrainsPushed;
+    MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
+    if (!mml.lockWasGained())
+    {
+        return nullptr;
+    }
+    return this->lastGrainsPushed;
 }
 
-AudioBuffer<float>* ExtractorModel::getLastOutputBufferPushed()
+Array<float>* ExtractorModel::getLastOutputBufferPushed()
 {
-    return &this->lastOutputBufferPushed;
+    MessageManagerLock mml(Thread::getCurrentThread()); //this ensures that only one thread at a time computes spectrum
+    if (!mml.lockWasGained())
+    {
+        return nullptr;
+    }
+    return this->lastOutputBufferPushed;
 }
 
-void ExtractorModel::pushBuffers(Array<Grain*>* grains)
+bool ExtractorModel::pushBuffers(Array<Grain*>* grains, Array<float> outputBuffer, ExtractorModel* extractorModel)
 {
-    if (!hasSentUpdate)
-        return;
+    MessageManagerLock mml(Thread::getCurrentThread()); 
+    if (!mml.lockWasGained())
+    {
+        return false;
+    }
+    if (!extractorModel->getHasSentUpdate())
+        return false;
 
-    lastGrainsPushed.clearQuick();
+    extractorModel->lastGrainsPushed.clearQuick();
     for (auto grain : *grains)
-        this->lastGrainsPushed.add(AudioBuffer<float>(*grain->getBuffer()));
+        grain != nullptr ? extractorModel->lastGrainsPushed.add(new AudioBuffer<float>(*grain->getBuffer())) : 0;
+
+    extractorModel->lastOutputBufferPushed = new Array<float>(outputBuffer);
+    extractorModel->setHasSentUpdate(false);
+
+    return true;
 }
 
-void ExtractorModel::setHasSentUpdate(bool hasSentUpdate)
+bool ExtractorModel::clearMemory(ExtractorModel* extractorModel)
 {
+    MessageManagerLock mml(Thread::getCurrentThread());
+    if (!mml.lockWasGained())
+    {
+        return false;
+    }
+    for (auto buff : extractorModel->lastGrainsPushed)
+        delete buff;
+    delete extractorModel->lastOutputBufferPushed;
+    return true;
+}
+
+bool ExtractorModel::setHasSentUpdate(bool hasSentUpdate)
+{
+    MessageManagerLock mml(Thread::getCurrentThread());
+    if (!mml.lockWasGained())
+    {
+        return false;
+    }
     this->hasSentUpdate = hasSentUpdate;
+    return true;
 }
 
 bool ExtractorModel::getHasSentUpdate()
 {
+    MessageManagerLock mml(Thread::getCurrentThread());
+    if (!mml.lockWasGained())
+    {
+        return false;
+    }
     return this->hasSentUpdate;
 }

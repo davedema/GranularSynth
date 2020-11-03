@@ -16,6 +16,7 @@
 #include <JuceHeader.h>
 #include "./SpectrumDrawable.h"
 #include <thread>         // std::thread
+#include "ExtractorModel.h"
 
 enum
 {
@@ -35,12 +36,15 @@ public:
     void setTarget(SpectrumDrawable* s);
 
     void setShouldQuit(bool shouldQuit);  //set to false to trigger fireThread(this) in this->aThread
+    void setExtractorModel(ExtractorModel* model);
 
 protected:
 
     SpectrumDrawable* spectrumDrawable;
     float bins[scopeSize]; // frequency bins to plot
     bool isBlockReady;
+
+    ExtractorModel* model;
      
 private:
 
@@ -59,4 +63,6 @@ private:
     float spectrum[2 * fftSize]; //output spectrum
   
     int write_idx; // writing index - managing a different number of samples per block in processor
+
+    
 };

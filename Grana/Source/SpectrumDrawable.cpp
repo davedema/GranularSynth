@@ -67,7 +67,9 @@ void SpectrumDrawable::resized()
 
 void SpectrumDrawable::drawNextFrame(float* bins)
 {
-    currentFrame = bins;
-    repaint();
+    if (bins != nullptr) {
+        currentFrame = bins;
+        repaint();
+    }
 }
 

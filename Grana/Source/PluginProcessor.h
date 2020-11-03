@@ -68,6 +68,7 @@ private:
     Granulator granulator; // processor kernel where all operations on audio occur
     Model granulatorModel; // a model in which we store the audiotreestate values in order to access them easily
     Extractor extractor;
+    ExtractorModel extractorModel;
     double sampleRate;
     int samplesPerBlock;
 

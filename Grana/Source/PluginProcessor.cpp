@@ -46,7 +46,10 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Speed", &granulatorModel);
     treeState.addParameterListener("envIndex", &granulatorModel);
     treeState.addParameterListener("envWidth", &granulatorModel);
+    
     this->granulator.setModel(&granulatorModel);
+    this->granulator.setExtractorModel(&extractorModel);
+    this->extractor.setExtractorModel(&extractorModel);
     this->sampleRate = 0;
     this->samplesPerBlock = 0;
 }
@@ -159,7 +162,7 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
 
     if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
         if (!granulatorModel.getInit()) this->play(); //init the granulator. if a new file has been loaded the init is set to false
-        granulator.process(buffer, buffer.getNumSamples(), &extractor);
+        granulator.process(buffer, buffer.getNumSamples());
            
     }
 }
@@ -209,6 +212,7 @@ Model* LaGranaAudioProcessor::getModel()
 
 void LaGranaAudioProcessor::play()
 {
+    
     extractor.setShouldQuit(false);
     if (granulatorModel.getHasLoadedFile()) {
         this->granulator.initialize(FileLoader::getInstance()->getAudioBuffer()->getNumSamples());  //file length needed for scheduling grains
