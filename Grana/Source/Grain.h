@@ -30,6 +30,7 @@ public:
     AudioBuffer<float>* getBuffer();
     void setLag(int lag);
     void applyCrossFade(int crossfade, bool atStart);
+    int remainingLife();
 
 private:
     int startPosition;      //in the loaded audio file
