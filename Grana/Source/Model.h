@@ -44,6 +44,8 @@ public:
     Point<float> getCurrentxyPosition();                    //get current position in xyplane [0, 1] X [0, 1] 
     float getCurrentFrequencyShift();                       //get current frequency shift
 
+    int getCurrentTime();
+
 private:
 
     float filePos;

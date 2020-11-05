@@ -33,6 +33,6 @@ private:
     int portionLength;
     double processorSampleRate;
 
-    int computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
-    Array<float>* computeCrossCorrelation(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength, int grainLength);
+    int computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength);
+    int computeCrossCorrelationLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength);
 };
