@@ -116,11 +116,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             if (!this->activeGrains.isEmpty()) 
             {
                 int lag = 0;
-                int crossfade = this->activeGrains.getLast()->remainingLife();
                 if (this->nextOnset < model->getGrainSize()) {
                     lag = this->computeLag(this->activeGrains.getLast()->getBuffer(), toAdd->getBuffer(), this->nextOnset);
-                    toAdd->applyCrossFade(crossfade, true);
-                    this->activeGrains.getLast()->applyCrossFade(crossfade, false);
+                    int crossfade = this->activeGrains.getLast()->remainingLife();
+                    toAdd->applyCrossFade(crossfade, true, lag);
+                    this->activeGrains.getLast()->applyCrossFade(crossfade, false, lag);
                 }
                 toAdd->setLag(lag);                
             }

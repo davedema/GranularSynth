@@ -28,7 +28,7 @@ public:
     bool isFinished();
     AudioBuffer<float>* getBuffer();
     void setLag(int lag);
-    void applyCrossFade(int crossfade, bool atStart);
+    void applyCrossFade(int crossfade, bool atStart, int lag);
     int remainingLife();
 
 private:

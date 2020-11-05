@@ -97,14 +97,15 @@ void Grain::setLag(int lag)
     this->lag = lag;
 }
 
-void Grain::applyCrossFade(int crossfade, bool atStart)
+void Grain::applyCrossFade(int crossfade, bool atStart, int lag)
 {
-    if (atStart) {
-        crossfade = std::min(crossfade, this->length-1);
+    if (atStart) {     
+        crossfade = std::min(crossfade, this->length - 1);
         this->buffer->applyGainRamp(0, crossfade, 0, 1);
     }
     else {
-        this->buffer->applyGainRamp(this->length - crossfade, crossfade, 1, 0);
+        int position = std::min(this->currentPosition + lag, this->length - 1);
+        this->buffer->applyGainRamp(position, this->length - 1 - position, 1, 0);
     }
 }
 
