@@ -175,7 +175,7 @@ float Model::getCurrentFrequencyShift()
     if (xyPlane.isEmpty())
         return 0;
     int pos = getxyArrayPosition();
-    float freq = xyPlane[pos].getY() * 2000.0f - 1000.0f;
+    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 2000.0f - 1000.0f;
     return freq;
 }
 
@@ -184,7 +184,7 @@ int Model::getCurrentTime()
     if (xyPlane.isEmpty())
         return this->readposition;
     int pos = getxyArrayPosition();
-    float freq = xyPlane[pos].getX() * 
+    float currentTime = jmax(0.0f, jmin(xyPlane[pos].getX(), 1.0f)) * 
         (this->filePos + FileLoader::getInstance()->getAudioBuffer()->getNumSamples() * this->sectionSize);
-    return freq;
+    return (int)currentTime;
 }

@@ -39,8 +39,6 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
         float phaseInc = freqShift * i / hostRate;
         phaseInc -= floor(phaseInc); //handle phase
 
-        jassert(abs(phaseInc) <= 1);
-
         float theta = TWOPI * phaseInc; //angle
         float newValue = hilbertTransform[bufferHilbertIndex(channel, i)] * cos(theta) -
             hilbertTransform[bufferHilbertIndex(channel, i) + 1] * sin(theta); //rotation
