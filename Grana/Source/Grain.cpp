@@ -20,17 +20,6 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution, float freqShi
     this->finished = false;
     this->lag = 0;
 
-    //Computing the frequency shifted buffer
-    ceiledLength = pow(2, ceil(log2(length)));
-    if (hostRate / (2 * ceiledLength) >= 20 && highreSolution)                  //if over JND and high resolution
-        ceiledLength = pow(2, ceil(log2(hostRate / 2 * 20)));                                                    
-    this->integrator = new SimpsonIntegrator(hilbertTransform, 
-                                             hostRate,
-                                             ceiledLength, 
-                                             FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), 
-                                             this->length);
-    this->averageFrequency = this->integrator->getAverageFrequency();
-    delete integrator;                                                             //useless after
     for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
         channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate);
 
@@ -49,8 +38,6 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / hostRate;
         phaseInc -= floor(phaseInc); //handle phase
-
-        jassert(abs(phaseInc) <= 1);
 
         float theta = TWOPI * phaseInc; //angle
         float newValue = hilbertTransform[bufferHilbertIndex(channel, i)] * cos(theta) -
@@ -93,11 +80,6 @@ int Grain::bufferHilbertIndex(int channel, int index)
    return 2 * (channel * FileLoader::getInstance()->getCeiledLength() + startPosition + index);
 }
 
-float Grain::getAverageFrequency()
-{
-    return this->averageFrequency;
-}
-
 bool Grain::isFinished()
 {
     return this->finished;
@@ -113,14 +95,15 @@ void Grain::setLag(int lag)
     this->lag = lag;
 }
 
-void Grain::applyCrossFade(int crossfade, bool atStart)
+void Grain::applyCrossFade(int crossfade, bool atStart, int lag)
 {
-    if (atStart) {
-        crossfade = std::min(crossfade, this->length-1);
+    if (atStart) {     
+        crossfade = std::min(crossfade, this->length - 1);
         this->buffer->applyGainRamp(0, crossfade, 0, 1);
     }
     else {
-        this->buffer->applyGainRamp(this->length - crossfade, crossfade, 1, 0);
+        int position = std::min(this->currentPosition + lag, this->length - 1);
+        this->buffer->applyGainRamp(position, this->length - 1 - position, 1, 0);
     }
 }
 

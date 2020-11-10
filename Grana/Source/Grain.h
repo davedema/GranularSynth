@@ -25,11 +25,10 @@ public:
     ~Grain();
     float getCurrentSample(int channel);    //Return the current sample playing on the given channel
     void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
-    float getAverageFrequency();
     bool isFinished();
     AudioBuffer<float>* getBuffer();
     void setLag(int lag);
-    void applyCrossFade(int crossfade, bool atStart);
+    void applyCrossFade(int crossfade, bool atStart, int lag);
     int remainingLife();
 
 private:
@@ -37,13 +36,10 @@ private:
     int length;
     int currentPosition;    //current playing sample in the grain
     bool finished;
-    float averageFrequency;
-    int ceiledLength; //lowest power of 2 > grainlength, for fft and hilbert transforms
     double* hilbertTransform; //hilbert transform for each channel
     int lag;
 
-    AudioBuffer<float>* buffer;  //points to the whole audiobuffer, to be accessed with the index methods
-    SimpsonIntegrator *integrator;
+    AudioBuffer<float>* buffer;  
     void channelFreqShift(float freqShift, int channel, int envType, float envWidth, int hostRate); //shifts a channel of freqshift [Hz]
     int bufferHilbertIndex(int channel, int index);
 };
