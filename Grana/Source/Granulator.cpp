@@ -17,6 +17,8 @@ Granulator::Granulator()
     this->position = 0;
     this->processorSampleRate = 0;
     this->portionLength = 0;
+    this->hiPass.setType(dsp::LinkwitzRileyFilterType::highpass);
+
 }
 
 Granulator::~Granulator()
@@ -32,7 +34,7 @@ void Granulator::initialize(int portionLength)
 {
     this->activeGrains.clearQuick();
     this->position = this->model->getFilePos();
-    model->setReadPosition(0);
+    model->setReadPosition(0); 
 
     this->activeGrains.add(new Grain(this->model->getGrainSize(), 
                                      this->position, 
@@ -41,7 +43,8 @@ void Granulator::initialize(int portionLength)
                                      this->model->getEnvIndex(),
                                      this->model->getEnvWidth(),
                                      this->processorSampleRate,
-                                     this->model->getSpeedDirection()));
+                                     this->model->getSpeedDirection(),&this->hiPass));
+
     this->nextOnset = round(this->processorSampleRate/this->model->getDensity());
     this->portionLength = portionLength;
 }
@@ -103,6 +106,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             readPosition = model->getCurrentTime();
             if(readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
                 readPosition = readPosition + model->getFilePos() - FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+
+            dsp::ProcessSpec spec{ this->processorSampleRate, static_cast<juce::uint32> (this->model->getGrainSize()), FileLoader::getInstance()->getAudioBuffer()->getNumChannels() };
+            this->hiPass.prepare(spec);
+
+
             Grain* toAdd = new Grain(this->model->getGrainSize(),
                                      readPosition,
                                      false,
@@ -110,7 +118,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                                      this->model->getEnvIndex(),
                                      this->model->getEnvWidth(),
                                      this->processorSampleRate,
-                                     this->model->getSpeedDirection());
+                                     this->model->getSpeedDirection(),&this->hiPass);
 
             //If there are active grains do SOLA
             if (!this->activeGrains.isEmpty()) 

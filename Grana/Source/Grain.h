@@ -21,7 +21,9 @@ enum class EnvType {raisedCosineBell, gaussian, trapezoidal};
 class Grain {
 
 public:
-    Grain(int grainDuration, int startPos, bool highreSolution, float freqShift, int envelopeType, float envelopeWidth, int hostRate, int direction);
+    Grain(int grainDuration, int startPos, bool highreSolution, 
+          float freqShift, int envelopeType, float envelopeWidth,
+          int hostRate, int direction, dsp::LinkwitzRileyFilter<float> * hiPass);
     ~Grain();
     float getCurrentSample(int channel);    //Return the current sample playing on the given channel
     void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
@@ -41,6 +43,7 @@ private:
 
     AudioBuffer<float>* buffer;  
     void channelFreqShift(float freqShift, int channel, int envType, float envWidth, int hostRate); //shifts a channel of freqshift [Hz]
+    void channelFreqShift(float freqShift, int channel, int envType, float envWidth, int hostRate, AudioBuffer<float>* analiticSignal);
     int bufferHilbertIndex(int channel, int index);
 };
 

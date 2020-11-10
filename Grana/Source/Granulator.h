@@ -32,6 +32,7 @@ private:
     int position;       //Position in the audio file
     int portionLength;
     double processorSampleRate;
+    dsp::LinkwitzRileyFilter<float> hiPass;
 
     int computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength);
     int computeCrossCorrelationLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength);
