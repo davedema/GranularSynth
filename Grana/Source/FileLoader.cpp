@@ -83,7 +83,7 @@ void FileLoader::loadWaveform(juce::File file)
         resampler->process(ratio, inputs[c], outputs[c], waveBuffer.getNumSamples());
     }
 
-    buffer = new AudioBuffer<float>(waveBuffer);
+    *this->buffer = AudioBuffer<float>(waveBuffer);
 
 
     ceiledLength = pow(2, ceil(log2(buffer->getNumSamples())));
