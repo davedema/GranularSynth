@@ -75,11 +75,9 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts, WaveformDrawable* wa
     envShape.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     widthAttachment = new SliderAttachment(apvts, "envWidth", envShape);
     envShape.onValueChange = [this] { widthChanged(); };
-
     envShapelab.setText("Envelope", dontSendNotification);
     envShapelab.setFont(Font(12.0f));
     envShapelab.setJustificationType(Justification(36));
-    envShapelab.attachToComponent(&envShape, false);
 
     addAndMakeVisible(envShape);
     addAndMakeVisible(envShapelab);
@@ -117,30 +115,34 @@ void KnobSection::resized()
     positionBox.flexDirection = FlexBox::Direction::column;
     positionBox.justifyContent = FlexBox::JustifyContent::center;
 
-    positionBox.items.add(FlexItem(filepos).withFlex(1).withMargin(FlexItem::Margin(15, 15, 0, 50)));
-    positionBox.items.add(FlexItem(sectionsize).withFlex(1).withMargin(FlexItem::Margin(0, 15, 15, 50)));
+    positionBox.items.add(FlexItem(filepos).withFlex(1).withMargin(FlexItem::Margin(5, 35, 0, 50)));
+    positionBox.items.add(FlexItem(sectionsize).withFlex(1).withMargin(FlexItem::Margin(0, 35, 5, 50)));
 
-
-    envelopeBox.flexDirection = FlexBox::Direction::column;
+    envelopeBox.flexDirection = FlexBox::Direction::row;
     envelopeBox.justifyContent = FlexBox::JustifyContent::spaceBetween;
-    envelopeBox.items.add(FlexItem(envDraw).withFlex(4));
-    envelopeBox.items.add(FlexItem(envelopeList).withFlex(2).withMargin(FlexItem::Margin(0,0,20,0)));
-    envelopeBox.items.add(FlexItem(envShape).withFlex(1));
+    envelopeBox.items.add(FlexItem(envDraw).withFlex(2).withMargin(FlexItem::Margin(0,20,0,0)));
+    FlexBox box2;
+    box2.flexDirection = FlexBox::Direction::column;
+    box2.justifyContent = FlexBox::JustifyContent::spaceAround;
+    box2.items.add(FlexItem(envelopeList).withHeight(30).withMargin(FlexItem::Margin(4, 0, 40, 0)));
+    box2.items.add(FlexItem(envShapelab).withFlex(0.5));
+    box2.items.add(FlexItem(envShape).withFlex(2).withMargin(FlexItem::Margin(5, 0, 4, 0)));
+    envelopeBox.items.add(FlexItem(box2).withFlex(2));
 
 
     knobBox.flexDirection = FlexBox::Direction::row;
-    knobBox.justifyContent = FlexBox::JustifyContent::center;
+    knobBox.justifyContent = FlexBox::JustifyContent::spaceBetween;
 
     for (auto& element : controls) {
         knobBox.items.add(FlexItem(element).withMargin(FlexItem::Margin(20, 0, 0, 0)).withFlex(1, 1));
     }
 
     level2.flexDirection = FlexBox::Direction::row;
-    level2.items.add(FlexItem(envelopeBox).withFlex(1).withMargin(FlexItem::Margin(0, 20, 0, 0)));
-    level2.items.add(FlexItem(knobBox).withFlex(2));
+    level2.items.add(FlexItem(envelopeBox).withFlex(2));
+    level2.items.add(FlexItem(knobBox).withFlex(3));
     
     layout.flexDirection = FlexBox::Direction::column;
-    layout.items.add(FlexItem(positionBox).withFlex(1));
+    layout.items.add(FlexItem(positionBox).withFlex(1).withMargin(FlexItem::Margin(0, 0, 10, 0)));
     layout.items.add(FlexItem(level2).withFlex(2));
 
     layout.performLayout(getLocalBounds());

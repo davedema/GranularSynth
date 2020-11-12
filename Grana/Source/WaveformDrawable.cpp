@@ -31,7 +31,7 @@ void WaveformDrawable::init(AudioProcessorValueTreeState* apvts, Model* model)
 
 void WaveformDrawable::paint(Graphics&g)
 {
-    juce::Rectangle<int> thumbnailBounds(40, 40, WAV_WIDTH, WAV_HEIGHT);
+    juce::Rectangle<int> thumbnailBounds(0, 0, this->getWidth(), this->getHeight());
 
     if (this->model->getHasLoadedFile())
     {
@@ -49,10 +49,14 @@ void WaveformDrawable::paint(Graphics&g)
         paintSelected(g);
     }
     else {
-        g.setColour(juce::Colours::darkgrey);
-        g.fillRect(thumbnailBounds);
-        g.setColour(juce::Colours::white);
-        g.drawFittedText("No File Loaded", thumbnailBounds, juce::Justification::centred, 1);
+        //g.setColour(juce::Colours::darkgrey);
+        // g.fillRect(thumbnailBounds);
+       // g.setColour(juce::Colours::white);
+       // g.drawFittedText("No File Loaded", thumbnailBounds, juce::Justification::centred, 1);
+        g.setColour(juce::Colours::cadetblue);
+
+        g.drawLine(Line<float>(0, this->getHeight() / 2, this->getWidth(), getHeight() / 2));
+
     }
 }
 
@@ -83,14 +87,14 @@ void WaveformDrawable::changeListenerCallback(ChangeBroadcaster* source)
 
 void WaveformDrawable::paintSelected(Graphics& g)
 {
-    int selectionWidth = floor(this->apvts->getRawParameterValue("Section Size")->load() * WAV_WIDTH); // tree state stores value in percentage!
-    int filepos = floor(this->apvts->getRawParameterValue("filepos")->load() * WAV_WIDTH);
+    int selectionWidth = floor(this->apvts->getRawParameterValue("Section Size")->load() * this->getWidth()); // tree state stores value in percentage!
+    int filepos = floor(this->apvts->getRawParameterValue("filepos")->load() * this->getWidth());
     int rest = filepos + selectionWidth;
     Rectangle<int> selectionBounds;
     if (rest <= WAV_WIDTH)
-        selectionBounds = Rectangle<int>(40 + filepos, 40, selectionWidth, WAV_HEIGHT);
+        selectionBounds = Rectangle<int>(filepos, 0, selectionWidth, this->getHeight());
     else
-        selectionBounds = Rectangle<int>(40 + filepos, 40, (WAV_WIDTH - filepos), WAV_HEIGHT);
+        selectionBounds = Rectangle<int>(filepos, 0, (this->getWidth() - filepos), this->getHeight());
 
     g.setColour(Colours::darkred);
     g.setOpacity(0.4);

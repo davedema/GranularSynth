@@ -36,5 +36,7 @@ private:
     Model* model;
     TextButton loadButton;
     TextButton playButton;
+
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> playAttachment; // button value
+
 };

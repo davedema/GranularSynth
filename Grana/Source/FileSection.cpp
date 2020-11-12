@@ -32,7 +32,7 @@ void FileSection::init(AudioProcessorValueTreeState* apvts, Model* model)
     this->model = model;
     //LOAD FILE BUTTON
     addAndMakeVisible(loadButton);
-    loadButton.setButtonText("Load...");
+    loadButton.setButtonText("Load");
     loadButton.addListener(this);
 
     //PLAY FILE BUTTON
@@ -43,6 +43,7 @@ void FileSection::init(AudioProcessorValueTreeState* apvts, Model* model)
     addAndMakeVisible(playButton);
     playAttachment.reset(new AudioProcessorValueTreeState::ButtonAttachment(*apvts, "isPlaying", playButton));
     playButton.setToggleState(false, dontSendNotification);
+
 }
 
 void FileSection::paint(Graphics&)
@@ -51,12 +52,15 @@ void FileSection::paint(Graphics&)
 
 void FileSection::resized()
 {
-    FlexBox container;
-    container.flexDirection = FlexBox::Direction::row;
-    container.items.add(FlexItem(loadButton).withFlex(1));
-    container.items.add(FlexItem(playButton).withFlex(1));
+    FlexBox loadplay;
 
-    container.performLayout(getLocalBounds());
+    loadplay.flexDirection = FlexBox::Direction::column;
+    loadplay.justifyContent = FlexBox::JustifyContent::center;
+    loadplay.alignContent = FlexBox::AlignContent::center;
+    loadplay.items.add(FlexItem(loadButton).withHeight(60).withWidth(50).withMargin(4));
+    loadplay.items.add(FlexItem(playButton).withHeight(60).withWidth(50).withMargin(4));
+    
+    loadplay.performLayout(getLocalBounds());
 }
 
 void FileSection::buttonClicked(Button* b)

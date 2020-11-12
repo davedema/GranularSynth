@@ -27,6 +27,7 @@ Model::Model()
     this->speedDirection = 1;
     this->readposition = 0;
     this->init = false;
+    this->currentGain = 0.75;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -53,11 +54,15 @@ void Model::parameterChanged(const String& parameterID, float newValue)
         this->speedModule = abs(newValue);  //speed module
         this->speedDirection = newValue == 0 ? 0 : (newValue /abs(newValue)); // 1 or -1 for now
     }
-
     else if (parameterID == "envIndex")
     {
         this->envIndex = newValue;
     }
+    else if (parameterID == "masterGain")
+    {
+        this->currentGain = Decibels::decibelsToGain(newValue);
+    }
+
 }
 
 int Model::getFilePos()
@@ -187,4 +192,9 @@ int Model::getCurrentTime()
     float currentTime = jmax(0.0f, jmin(xyPlane[pos].getX(), 1.0f)) * 
         (this->filePos + FileLoader::getInstance()->getAudioBuffer()->getNumSamples() * this->sectionSize);
     return (int)currentTime;
+}
+
+float Model::getCurrentGain()
+{
+    return this->currentGain;
 }

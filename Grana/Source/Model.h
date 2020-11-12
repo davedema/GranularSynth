@@ -45,6 +45,7 @@ public:
     float getCurrentFrequencyShift();                       //get current frequency shift
 
     int getCurrentTime();
+    float getCurrentGain();
 
 private:
 
@@ -63,4 +64,5 @@ private:
     int readposition;
     Array<Point<float>> xyPlane;
     bool init;
+    float currentGain;
 };

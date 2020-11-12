@@ -34,7 +34,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.5),
         std::make_unique< AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), 
-        std::make_unique< AudioParameterFloat>("Speed", "Speed", -2, 2, 1)
+        std::make_unique< AudioParameterFloat>("Speed", "Speed", -2, 2, 1),
+        std::make_unique< AudioParameterFloat>("masterGain", "masterGain", NormalisableRange<float>(-48, 6, 1, 2), 0), // in dB
 })
 #endif
 { 
@@ -46,6 +47,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Speed", &granulatorModel);
     treeState.addParameterListener("envIndex", &granulatorModel);
     treeState.addParameterListener("envWidth", &granulatorModel);
+    treeState.addParameterListener("masterGain", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
     this->sampleRate = 0;
     this->samplesPerBlock = 0;
@@ -159,7 +161,8 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
         if (!granulatorModel.getInit()) this->play(); //init the granulator. if a new file has been loaded the init is set to false
         granulator.process(buffer, buffer.getNumSamples(), &extractor);
-           
+        buffer.applyGain(granulatorModel.getCurrentGain());
+
     }
 }
 

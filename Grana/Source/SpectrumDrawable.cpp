@@ -24,8 +24,7 @@ void SpectrumDrawable::paint(Graphics& g)
 {
     g.fillAll(Colours::black);
 
-    g.setOpacity(1.0f);
-    g.setColour(Colours::limegreen);
+    g.setColour(Colours::cadetblue);
 
     if (this->currentFrame != nullptr)
     {
@@ -45,13 +44,13 @@ void SpectrumDrawable::paint(Graphics& g)
         myPath.lineTo(getWidth(), getHeight());
         g.strokePath(myPath, PathStrokeType(3.0f));
         
-
+        auto base = Colours::slateblue;
         ColourGradient* gradient = new ColourGradient(Colours::grey.brighter(0.2), 0, getHeight(), Colours::aliceblue, 0, 0, false);
         gradient->clearColours();
-        gradient->addColour(0, Colours::yellow);
-        gradient->addColour(0.2, Colours::yellowgreen);
-        gradient->addColour(0.4, Colours::greenyellow);
-        gradient->addColour(0.7, Colours::limegreen);
+        gradient->addColour(0, base.darker().darker());
+        gradient->addColour(0.2, base.darker());
+        gradient->addColour(0.4, base);
+        gradient->addColour(0.7, base.brighter());
 
         g.setGradientFill(*gradient);
 

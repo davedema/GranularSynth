@@ -25,7 +25,7 @@ FreqTimeDrawable::~FreqTimeDrawable()
 
 void FreqTimeDrawable::paint(Graphics&g)
 {
-    g.fillAll(Colours::darkred);
+    g.fillAll(Colours::aliceblue);
     Path path;
 
     if (drawnPoints->size() != 0) {
@@ -36,7 +36,8 @@ void FreqTimeDrawable::paint(Graphics&g)
         {
             path.lineTo(p.getX() * (float)getWidth(), p.getY() * (float)getHeight());
         }
-        g.strokePath(path, PathStrokeType(3.0f));
+        g.setColour(Colours::cadetblue);
+        g.strokePath(path, PathStrokeType(3.5f));
     }
 
     enlightPoint(model->getCurrentxyPosition(), g);
@@ -69,7 +70,7 @@ void FreqTimeDrawable::setModel(Model* model)
 
 void FreqTimeDrawable::enlightPoint(Point<float> point, Graphics& g)
 {
-    g.setColour(Colours::aliceblue);
+    g.setColour(Colours::cadetblue);
     g.drawEllipse(point.getX() * getWidth(), point.getY() * getHeight(), 3, 3, 1);
 }
 
