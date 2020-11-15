@@ -26,6 +26,7 @@ void WaveformDrawable::init(AudioProcessorValueTreeState* apvts, Model* model)
     this->loader = FileLoader::getInstance();
     this->thumbnail = loader->getThumbnail();
     thumbnail->addChangeListener(this); // Listen to new file uploads
+    startTimer(100);
 
 }
 
@@ -49,15 +50,14 @@ void WaveformDrawable::paint(Graphics&g)
         paintSelected(g);
     }
     else {
-        //g.setColour(juce::Colours::darkgrey);
-        // g.fillRect(thumbnailBounds);
-       // g.setColour(juce::Colours::white);
-       // g.drawFittedText("No File Loaded", thumbnailBounds, juce::Justification::centred, 1);
         g.setColour(juce::Colours::cadetblue);
 
         g.drawLine(Line<float>(0, this->getHeight() / 2, this->getWidth(), getHeight() / 2));
-
     }
+
+        if (this->model->getIsPlaying()) 
+            this->paintPlayBar(g);
+
 }
 
 void WaveformDrawable::resized()
@@ -85,6 +85,13 @@ void WaveformDrawable::changeListenerCallback(ChangeBroadcaster* source)
     if (source == thumbnail) repaint();
 }
 
+void WaveformDrawable::timerCallback()
+{
+    if (this->model->getIsPlaying() && this->model->getHasLoadedFile())
+        repaint();
+
+}
+
 void WaveformDrawable::paintSelected(Graphics& g)
 {
     int selectionWidth = floor(this->apvts->getRawParameterValue("Section Size")->load() * this->getWidth()); // tree state stores value in percentage!
@@ -99,4 +106,30 @@ void WaveformDrawable::paintSelected(Graphics& g)
     g.setColour(Colours::darkred);
     g.setOpacity(0.4);
     g.fillRect(selectionBounds);
+}
+
+void WaveformDrawable::paintPlayBar(Graphics& g)
+{
+    repaint();
+    g.setColour(Colours::yellow);
+    int current_pos = round(this->model->getCurrentTime() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
+    g.drawVerticalLine(current_pos, 0, this->getHeight());
+    paintGrains(g, current_pos);
+}
+
+void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
+{
+    int n_grains = ceil(jmap(this->model->getDensity() / GRAIN_DENSITY_MAX, 0.0f, 15.0f));
+    int mid = this->getHeight() / 2;
+    g.setColour(Colours::white);
+    
+    auto r = Random();
+    for (int i = 0; i < n_grains; i++)
+    {
+        Point<float> grain ( (float) current_pos + r.nextInt(Range<int>(-5,5)),
+                              (float)i / n_grains * mid + r.nextInt(Range<int>(-mid, mid)));
+
+        g.fillEllipse(grain.x, grain.y, 5.0f, 5.0f);
+                                
+    }
 }

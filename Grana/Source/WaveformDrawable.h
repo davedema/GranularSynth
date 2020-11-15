@@ -16,7 +16,10 @@
 constexpr auto WAV_WIDTH = 480;
 constexpr auto WAV_HEIGHT = 160;
 
-class WaveformDrawable : public Component, public FileDragAndDropTarget, public ChangeListener
+#define GRAIN_DENSITY_MAX 200.0f //in grains per second
+
+
+class WaveformDrawable : public Component, public FileDragAndDropTarget, public ChangeListener, public Timer
 {
 public:
     WaveformDrawable();
@@ -34,6 +37,8 @@ public:
 
     //change listener on audio thumbnail
     void changeListenerCallback(ChangeBroadcaster* source) override;
+
+    void timerCallback() override;
     
 private:
     AudioProcessorValueTreeState* apvts;
@@ -43,4 +48,7 @@ private:
     AudioThumbnail* thumbnail;
 
     void paintSelected(Graphics& g);
+    void paintPlayBar(Graphics& g);
+
+    void paintGrains(Graphics& g, int current_pos);
 };
