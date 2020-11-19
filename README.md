@@ -16,6 +16,18 @@ Gabor noticed that any analysis requiring signal windowing (such as STFT), entai
 Our approach to Gabor's brilliant article and our interpretation of frequency shifting with a parallelism to the quantum mechanical formalism ...
 ( COSE PAZZE JACO)
 ## Software implementation
+
+### Architecture
+The project is built around the JUCE framework and its core library. 
+We created some custom classes to work in an object-oriented paradigm. 
+The most important ones are:
+- **FileLoader**: file loader class manages the sample, storing it into an audio buffer. Also a thumbnail is created to plot the waveform. At load, we compute the Hilbert transform to later processing and pitch shifting.
+- **Grain**: each grain instance is able to manage itself. The grain knows where it starts in the audio buffer, how much will it last, which kind of envelope will be applied to it and is able to delete itself once its life-cycle is over.
+- **GrainEnvelope**: class to manage different types of envelopes. Each grain can access to its methods to get the current value of the envelope to apply at each sample.
+- **SequenceStrategy**: this class manages the time scheduling of grains, based on user-chosen parameters. We also implementd a SOLA (Synchronous-Overlap-And-Add) method to maximize the cross-correlation between successive grains, when overlapping occurs.
+- **Granulator**: this class is the core of the application. It contains a list of active grains, cycles through them and writes directly onto the output audio buffer.
+- **Model** : model class created to implement a Model-View-Control pattern. The state of the plugin parameters is stored here, and all the other classes can access to it in order to retrieve information about the different controls.
+
 ### File controls
 The user can upload a sample, and it will be used as a wavetable to be granulized.
 Also the starting position and the size of the section can be controlled, so that the granulator will reproduce cyclically through the selected area. 
@@ -35,9 +47,11 @@ An interesting aspect related to grain enveloping is that they contribute to an 
 ### Grain playback
 
 ### Spectral Output
-
+Extractor class takes a portion of the output buffer and everytime it has been filled an asynchronous call is made in order to plot the spectrum. 
+The FFT size is of 2048 samples. Then it is processed into 256 bins for representation purposes.
 ## Time-Frequency plane
 This section is a 2-D canvas where the user can draw. Clicking will enable the control and the user can decide when a grain will be played and how much it will be shifted in frequency. 
+The horizontal axis represents the position in the active section, while the y axis will decide the amount of shift (in Hz).
 ## References
 
 [[1]] Theory of Communication, D.Gabor, 
