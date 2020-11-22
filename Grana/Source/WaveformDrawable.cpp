@@ -100,7 +100,7 @@ void WaveformDrawable::paintSelected(Graphics& g)
     int filepos = floor(this->apvts->getRawParameterValue("filepos")->load() * this->getWidth());
     int rest = filepos + selectionWidth;
     Rectangle<int> selectionBounds;
-    if (rest <= WAV_WIDTH)
+    if (rest <= this->getWidth())
         selectionBounds = Rectangle<int>(filepos, 0, selectionWidth, this->getHeight());
     else
         selectionBounds = Rectangle<int>(filepos, 0, (this->getWidth() - filepos), this->getHeight());

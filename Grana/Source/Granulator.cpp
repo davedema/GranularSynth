@@ -139,13 +139,11 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
 void Granulator::setModel(Model* model)
 {
     this->model = model;
-    this->strategy.setModel(model);
 }
 
 void Granulator::setProcessorSampleRate(double processorSampleRate)
 {
     this->processorSampleRate = processorSampleRate;
-    this->strategy.setSampleRate(processorSampleRate);
 }
 
 int Granulator::computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength)

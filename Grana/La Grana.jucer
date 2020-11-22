@@ -72,10 +72,6 @@
               file="Source/SimpsonIntegrator.cpp"/>
         <FILE id="eTMBgV" name="SimpsonIntegrator.h" compile="0" resource="0"
               file="Source/SimpsonIntegrator.h"/>
-        <FILE id="dyO24f" name="SequenceStrategy.h" compile="0" resource="0"
-              file="Source/SequenceStrategy.h"/>
-        <FILE id="xnsULc" name="SequenceStrategy.cpp" compile="1" resource="0"
-              file="Source/SequenceStrategy.cpp"/>
         <FILE id="KByKoB" name="Granulator.cpp" compile="1" resource="0" file="Source/Granulator.cpp"/>
         <FILE id="Q8juSn" name="Granulator.h" compile="0" resource="0" file="Source/Granulator.h"/>
         <FILE id="j6SqWH" name="GrainEnvelope.cpp" compile="1" resource="0"

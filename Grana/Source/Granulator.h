@@ -10,8 +10,8 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "SequenceStrategy.h"
 #include "Model.h"
+#include "Grain.h"
 #include "Extractor.h"
 
 class Granulator
@@ -26,7 +26,6 @@ public:
 
 private:
     Array<Grain*> activeGrains;     // Grains to be played (extracted from the cloud)
-    SequenceStrategy strategy;
     Model* model;
     int nextOnset;      //Tells us when the next grain should play
     int position;       //Position in the audio file
