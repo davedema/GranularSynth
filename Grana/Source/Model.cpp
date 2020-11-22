@@ -159,7 +159,7 @@ Array<Point<float>>* Model::getxyPlane()
 
 int Model::getxyArrayPosition()
 {
-    if (!getHasLoadedFile() || !getIsPlaying()) //TODO: Fix logic inversion on IsPlaying
+    if (!getHasLoadedFile() || !getIsPlaying())
         return 0;
 
     float position = (float)abs(readposition - filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) * //value to map

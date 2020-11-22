@@ -13,10 +13,13 @@
 WaveformDrawable::WaveformDrawable()
 {
     setSize(WAV_WIDTH, WAV_HEIGHT);
+    startTimer(60);
+
 
 }
 WaveformDrawable::~WaveformDrawable()
 {
+    stopTimer();
 }
 
 void WaveformDrawable::init(AudioProcessorValueTreeState* apvts, Model* model)
@@ -26,7 +29,6 @@ void WaveformDrawable::init(AudioProcessorValueTreeState* apvts, Model* model)
     this->loader = FileLoader::getInstance();
     this->thumbnail = loader->getThumbnail();
     thumbnail->addChangeListener(this); // Listen to new file uploads
-    startTimer(100);
 
 }
 
@@ -119,7 +121,7 @@ void WaveformDrawable::paintPlayBar(Graphics& g)
 
 void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
 {
-    int n_grains = ceil(jmap(this->model->getDensity() / GRAIN_DENSITY_MAX, 0.0f, 15.0f));
+    int n_grains = ceil(jmap(this->model->getDensity() / GRAIN_DENSITY_MAX, 0.0f, 10.0f));
     int mid = this->getHeight() / 2;
     g.setColour(Colours::white);
     
@@ -129,7 +131,7 @@ void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
         Point<float> grain ( (float) current_pos + r.nextInt(Range<int>(-5,5)),
                               (float)i / n_grains * mid + r.nextInt(Range<int>(-mid, mid)));
 
-        g.fillEllipse(grain.x, grain.y, 5.0f, 5.0f);
+        g.fillEllipse(grain.x, grain.y, 8.0f, 8.0f);
                                 
     }
 }
