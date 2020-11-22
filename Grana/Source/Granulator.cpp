@@ -80,7 +80,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 }
             }
         }
-        featureExtractor->pushSample(toExtract / 2);  // pass the average between two channels to extractor
+        featureExtractor->pushSample(toExtract / 2 * this->model->getCurrentGain());  // pass the average between two channels to extractor
 
         //Increment the position in the audio file, if it's at the end of the portion get back to the starting pos
         this->position++;
@@ -104,13 +104,18 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
 
             model->setReadPosition(readPosition);
             readPosition = model->getCurrentTime();
-            if(readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
-                readPosition = readPosition + model->getFilePos() - FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
-
+           // if(readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
+             //   readPosition = readPosition + model->getFilePos() - FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+           
             dsp::ProcessSpec spec{ this->processorSampleRate, static_cast<juce::uint32> (this->model->getGrainSize()), FileLoader::getInstance()->getAudioBuffer()->getNumChannels() };
             this->hiPass.prepare(spec);
 
-
+            readPosition += this->model->getSpread();
+            if (readPosition < 0)
+                readPosition += FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+            else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
+                readPosition = readPosition % FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+            this->model->setRealPosition(readPosition);
             Grain* toAdd = new Grain(this->model->getGrainSize(),
                                      readPosition,
                                      false,

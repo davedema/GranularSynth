@@ -19,7 +19,7 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
     xyPlane.setModel(p.getModel());
 
 
-    setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);      
+    setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);  
     
     //draw waveform
     //upload and play file

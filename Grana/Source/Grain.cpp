@@ -54,14 +54,10 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution,
 
     }
 
-
-    
-
     //If the speed is negative reverse the buffer
     if (direction == -1)
         this->buffer->reverse(0, this->length);
 
-    
 }
 
 Grain::~Grain()

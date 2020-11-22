@@ -39,6 +39,8 @@ public:
     Array<Point<float>>* getxyPlane();     
 
     int getReadPosition();                                  //get next position of grain in file
+    int getRealPosition();
+    void setRealPosition(int newPos);
     int getFilePos();                                       //get user starting position
     int getxyArrayPosition();                               //get current position in xyArray [0, xyPlane.size()]
     Point<float> getCurrentxyPosition();                    //get current position in xyplane [0, 1] X [0, 1] 
@@ -46,11 +48,14 @@ public:
 
     int getCurrentTime();
     float getCurrentGain();
+    int getSpread(); // in samples
+
+
 
 private:
-
-    float filePos;
-    float sectionSize;
+    Random r;
+    float filePos; // [0,1]
+    float sectionSize; // [0,1]
     float envWidth;
     float density;
     int envIndex;
@@ -59,10 +64,13 @@ private:
     bool isPlaying;
     bool hasLoadedFile;
     double sampleRate;
-    int fileLength;
+    int fileLength; // in samples
     int speedDirection;
-    int readposition;
+    int readposition; // scanning position in the file
+    int realPosition; // true position (considering random spread)
     Array<Point<float>> xyPlane;
     bool init;
     float currentGain;
+
+    int spread;
 };

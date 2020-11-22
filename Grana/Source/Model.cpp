@@ -28,6 +28,7 @@ Model::Model()
     this->readposition = 0;
     this->init = false;
     this->currentGain = 0.75;
+    this->spread = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -52,7 +53,7 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     }
     else if (parameterID == "Speed") {
         this->speedModule = abs(newValue);  //speed module
-        this->speedDirection = newValue == 0 ? 0 : (newValue /abs(newValue)); // 1 or -1 for now
+        this->speedDirection = newValue == 0 ? 0 : (newValue / abs(newValue)); // 1 or -1 for now
     }
     else if (parameterID == "envIndex")
     {
@@ -62,7 +63,10 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     {
         this->currentGain = Decibels::decibelsToGain(newValue);
     }
-
+    else if (parameterID == "Spread")
+    {
+        this->spread = newValue * this->fileLength * this->sectionSize;
+    }
 }
 
 int Model::getFilePos()
@@ -146,6 +150,16 @@ int Model::getReadPosition()
     return this->readposition;
 }
 
+int Model::getRealPosition()
+{
+    return this->realPosition;
+}
+
+void Model::setRealPosition(int newPos)
+{
+    this->realPosition = newPos;
+}
+
 void Model::setReadPosition(int readPosition)
 {
     this->readposition = readPosition;
@@ -164,7 +178,7 @@ int Model::getxyArrayPosition()
 
     float position = (float)abs(readposition - filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) * //value to map
         (float)xyPlane.size() /  //new range
-        (sectionSize * (float)FileLoader::getInstance()->getAudioBuffer()->getNumSamples()); //old range
+        ((sectionSize ) * (float)FileLoader::getInstance()->getAudioBuffer()->getNumSamples()); //old range
     return position;
 }
 
@@ -188,13 +202,21 @@ int Model::getCurrentTime()
 {
     if (xyPlane.isEmpty())
         return this->readposition;
+
     int pos = getxyArrayPosition();
-    float currentTime = jmax(0.0f, jmin(xyPlane[pos].getX(), 1.0f)) * 
-        (this->filePos + FileLoader::getInstance()->getAudioBuffer()->getNumSamples() * this->sectionSize);
-    return (int)currentTime; // in samples
+    float currentTime = (this-> filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) 
+                        + jmax(0.0f, jmin(xyPlane[pos].getX(), 1.0f)) * this->sectionSize
+                        * FileLoader::getInstance()->getAudioBuffer()->getNumSamples() ;
+    return (int)jmin(currentTime, (float)fileLength - 1); // in samples
 }
 
 float Model::getCurrentGain()
 {
     return this->currentGain;
+}
+
+int Model::getSpread()
+{
+    if (this->spread == 0) return 0;
+    return r.nextInt(Range<int>(-this->spread, this->spread));
 }

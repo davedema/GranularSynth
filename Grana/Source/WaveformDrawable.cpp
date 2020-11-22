@@ -13,7 +13,7 @@
 WaveformDrawable::WaveformDrawable()
 {
     setSize(WAV_WIDTH, WAV_HEIGHT);
-    startTimer(60);
+    startTimerHz(60);
 
 
 }
@@ -114,14 +114,22 @@ void WaveformDrawable::paintPlayBar(Graphics& g)
 {
     repaint();
     g.setColour(Colours::yellow);
-    int current_pos = round(this->model->getCurrentTime() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
+    int current_pos = round(this->model->getReadPosition() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
+
     g.drawVerticalLine(current_pos, 0, this->getHeight());
     paintGrains(g, current_pos);
+
+    g.setOpacity(0.8); 
+    g.setColour(Colours::red);
+    current_pos = round(this->model->getRealPosition() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
+    g.drawVerticalLine(current_pos, this->getHeight() / 3, this->getHeight() * 2 / 3);
+
+
 }
 
 void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
 {
-    int n_grains = ceil(jmap(this->model->getDensity() / GRAIN_DENSITY_MAX, 0.0f, 10.0f));
+    int n_grains = ceil(jmap(this->model->getDensity() / GRAIN_DENSITY_MAX, 0.0f, 20.0f));
     int mid = this->getHeight() / 2;
     g.setColour(Colours::white);
     

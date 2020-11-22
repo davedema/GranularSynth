@@ -15,7 +15,7 @@
 #include "WaveformDrawable.h"
 
 typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment; //type for slider attachment
-constexpr auto NUM_CONTROLS = 3;
+constexpr auto NUM_CONTROLS = 4;
 
 //==============================================================================
 /*
@@ -45,7 +45,7 @@ private:
     //grain controls
     Slider controls[NUM_CONTROLS];
     Label labels[NUM_CONTROLS];
-    std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Speed" };
+    std::string controlNames[NUM_CONTROLS] = { "Density", "Grain Size", "Spread", "Speed" };
     SliderAttachment *attachments[NUM_CONTROLS];
 
     //envelopes
