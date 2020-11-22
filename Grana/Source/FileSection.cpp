@@ -36,13 +36,13 @@ void FileSection::init(AudioProcessorValueTreeState* apvts, Model* model)
     loadButton.addListener(this);
 
     //PLAY FILE BUTTON
+    playButton.setToggleState(false, dontSendNotification);
     playButton.addListener(this);
     playButton.setButtonText("PLAY");
     playButton.setColour(TextButton::buttonColourId, Colours::green);
     playButton.setColour(TextButton::buttonOnColourId, Colours::red);
     addAndMakeVisible(playButton);
     playAttachment.reset(new AudioProcessorValueTreeState::ButtonAttachment(*apvts, "isPlaying", playButton));
-    playButton.setToggleState(false, dontSendNotification);
 
 }
 
@@ -67,14 +67,19 @@ void FileSection::buttonClicked(Button* b)
 {
     if (b == &playButton)
     {
-        if (b->getToggleState()) { // if it is on 
+        if (b->getToggleState()) { // if it is playing 
             b->setButtonText("PLAY");
             b->setToggleState(false, dontSendNotification);
+            this->model->setIsPlaying(false);
+            DBG(std::to_string(this->model->getIsPlaying()));
+
         }
         else
         {
             b->setButtonText("STOP");
             b->setToggleState(true, dontSendNotification);
+            this->model->setIsPlaying(true);
+            DBG(std::to_string(this->model->getIsPlaying()));
             this->model->setInit(false);
         }
     }

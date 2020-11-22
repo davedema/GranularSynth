@@ -159,7 +159,7 @@ Array<Point<float>>* Model::getxyPlane()
 
 int Model::getxyArrayPosition()
 {
-    if (!getHasLoadedFile() || getIsPlaying()) //TODO: Fix logic inversion on IsPlaying
+    if (!getHasLoadedFile() || !getIsPlaying())
         return 0;
 
     float position = (float)abs(readposition - filePos * FileLoader::getInstance()->getAudioBuffer()->getNumSamples()) * //value to map
@@ -191,7 +191,7 @@ int Model::getCurrentTime()
     int pos = getxyArrayPosition();
     float currentTime = jmax(0.0f, jmin(xyPlane[pos].getX(), 1.0f)) * 
         (this->filePos + FileLoader::getInstance()->getAudioBuffer()->getNumSamples() * this->sectionSize);
-    return (int)currentTime;
+    return (int)currentTime; // in samples
 }
 
 float Model::getCurrentGain()

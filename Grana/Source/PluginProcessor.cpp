@@ -158,7 +158,7 @@ void LaGranaAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, currentBufferLength);
 
-    if (granulatorModel.getHasLoadedFile() && !granulatorModel.getIsPlaying()) {
+    if (granulatorModel.getHasLoadedFile() && granulatorModel.getIsPlaying()) {
         if (!granulatorModel.getInit()) this->play(); //init the granulator. if a new file has been loaded the init is set to false
         granulator.process(buffer, buffer.getNumSamples(), &extractor);
         buffer.applyGain(granulatorModel.getCurrentGain());
@@ -183,20 +183,22 @@ void LaGranaAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    auto state = treeState.copyState();
+   /* auto state = treeState.copyState();
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     copyXmlToBinary(*xml, destData);
+    */
 }
 
 void LaGranaAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    /*std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
 
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName(treeState.state.getType()))
             treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
+            */
 }
 
 AudioProcessorValueTreeState* LaGranaAudioProcessor::getValueTreeState()
