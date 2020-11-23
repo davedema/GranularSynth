@@ -14,10 +14,10 @@ constexpr auto GLOBAL_HEIGHT = 680;
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
     AudioProcessorEditor (&p), audioProcessor (p), valueTreeState(p.getValueTreeState())
-{
+{    
+    this->setLookAndFeel(&CLAF);
     p.setFeatureDrawers(&this->spectrum); 
     xyPlane.setModel(p.getModel());
-
 
     setSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);  
     
@@ -54,12 +54,14 @@ LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor&
 
 LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 {
+    this->setLookAndFeel(nullptr);
+
 }
 
 //==============================================================================
 void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    //g.fillAll(c1);
+    g.fillAll(Colour(0xff325871));
 }
 
 void LaGranaAudioProcessorEditor::resized()

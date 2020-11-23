@@ -40,6 +40,10 @@
               file="fonts/UrbanBrushZone.ttf"/>
       </GROUP>
       <GROUP id="{1B495C45-3CE0-4DCB-85DF-DBF07E5674FF}" name="GUI">
+        <FILE id="nby9Xk" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/CustomLookAndFeel.cpp"/>
+        <FILE id="in1V6S" name="CustomLookAndFeel.h" compile="0" resource="0"
+              file="Source/CustomLookAndFeel.h"/>
         <FILE id="nnW2sE" name="EnvelopeDrawable.cpp" compile="1" resource="0"
               file="Source/EnvelopeDrawable.cpp"/>
         <FILE id="NvtefY" name="EnvelopeDrawable.h" compile="0" resource="0"
@@ -50,10 +54,6 @@
               file="Source/FreqTimeDrawable.cpp"/>
         <FILE id="z3qhfR" name="FreqTimeDrawable.h" compile="0" resource="0"
               file="Source/FreqTimeDrawable.h"/>
-        <FILE id="M2pWGZ" name="KnobLookAndFeel.cpp" compile="1" resource="0"
-              file="Source/KnobLookAndFeel.cpp"/>
-        <FILE id="KxeUyY" name="KnobLookAndFeel.h" compile="0" resource="0"
-              file="Source/KnobLookAndFeel.h"/>
         <FILE id="VDCmMQ" name="KnobSection.cpp" compile="1" resource="0" file="Source/KnobSection.cpp"/>
         <FILE id="s97rVh" name="KnobSection.h" compile="0" resource="0" file="Source/KnobSection.h"/>
         <FILE id="Cb29Me" name="SpectrumDrawable.cpp" compile="1" resource="0"

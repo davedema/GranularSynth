@@ -25,7 +25,7 @@ FreqTimeDrawable::~FreqTimeDrawable()
 
 void FreqTimeDrawable::paint(Graphics&g)
 {
-    g.fillAll(Colours::aliceblue);
+    g.fillAll(Colour(0xffB5B7CF));
     Path path;
 
     if (drawnPoints->size() != 0) {

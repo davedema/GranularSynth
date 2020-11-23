@@ -21,7 +21,7 @@ EnvelopeDrawable::~EnvelopeDrawable()
 
 void EnvelopeDrawable::paint(Graphics&g)
 {
-    g.setColour(juce::Colours::cadetblue);
+    g.setColour(Colour(37, 44, 70));
     //g.drawRect(Rectangle<float>(0, 0, this->getWidth(), this->getHeight()));
     float size_x = this->getWidth();
     if (size_x == 0) return;

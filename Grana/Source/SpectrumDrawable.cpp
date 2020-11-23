@@ -22,7 +22,7 @@ SpectrumDrawable::~SpectrumDrawable()
 
 void SpectrumDrawable::paint(Graphics& g)
 {
-    g.fillAll(Colours::black);
+    g.fillAll(Colour(0xff12141B));
 
     g.setColour(Colours::cadetblue);
 

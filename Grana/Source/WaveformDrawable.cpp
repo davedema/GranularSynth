@@ -41,7 +41,7 @@ void WaveformDrawable::paint(Graphics&g)
         g.setColour(juce::Colours::transparentBlack);
         g.fillRect(thumbnailBounds);
 
-        g.setColour(juce::Colours::cadetblue);
+        g.setColour(Colour(37, 44, 70));
 
         thumbnail->drawChannels(g,
             thumbnailBounds,
@@ -52,7 +52,7 @@ void WaveformDrawable::paint(Graphics&g)
         paintSelected(g);
     }
     else {
-        g.setColour(juce::Colours::cadetblue);
+        g.setColour(Colour(37, 44, 70));
 
         g.drawLine(Line<float>(0, this->getHeight() / 2, this->getWidth(), getHeight() / 2));
     }
@@ -114,7 +114,7 @@ void WaveformDrawable::paintPlayBar(Graphics& g)
 {
     repaint();
     g.setColour(Colours::yellow);
-    int current_pos = round(this->model->getReadPosition() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
+    int current_pos = round(this->model->getCurrentTime() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
 
     g.drawVerticalLine(current_pos, 0, this->getHeight());
     paintGrains(g, current_pos);

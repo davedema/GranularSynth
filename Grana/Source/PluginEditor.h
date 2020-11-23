@@ -16,6 +16,7 @@
 #include "KnobSection.h"
 #include "SpectrumDrawable.h"
 #include "FreqTimeDrawable.h"
+#include "CustomLookAndFeel.h"
 //==============================================================================
 /**
 */
@@ -36,6 +37,7 @@ private:
     // access the processor object that created it.
     LaGranaAudioProcessor& audioProcessor;
     AudioProcessorValueTreeState* valueTreeState;
+    CustomLookAndFeel CLAF;
 
     Slider masterGain;
     Label masterGainlab;
