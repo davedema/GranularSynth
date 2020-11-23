@@ -1,6 +1,6 @@
 <h1 align="center">GRANULATOR</h1>
 
-<h2 align="center"> An application to play with Granular Synthesis </h2>
+<h2 align="center"> A Granular Synthesis playground </h2>
 
 <p>img del plugin</p>
 
@@ -14,15 +14,52 @@ This technique was born with the publishment by Dr. Ing. D. Gabor of the article
 Gabor noticed that any analysis requiring signal windowing (such as STFT), entails a strong relationship between time and frequency. High resolution in frequency requires long time windows, at cost of losing track of when exactly some event occurred. Vice versa, having high temporal resolution (short windows), implies losing frequency precision. This strong connection establish a sort of "uncertainty principle", setting the limits of our comprehension of acoustic quantas.
 
 ### Granulation
-The main technique on which granular synthesis is based on is the granulation, that is a process in which an audio sample is broken down into tiny segments of audio. This original series, in chronological order, is called the “graintable.” Theoretically, if grains were played in this order at the speed of the original sample, the output would play back that original sample.
+The main technique on which granular synthesis is based on is the granulation, that is a process in which an audio file is broken down into tiny segments of audio. This original series, in chronological order, is called the “graintable.” If grains are played in this order at the speed of the original sample, the output will play back that original file. But if grains are played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
+
+Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, and interesting noise layers.
 
 ## The application
-Our goal was to achieve sound granulation, starting from a sample, with independent time-stretching  and frequency shifting using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. 
+The goal of our application is to provide a useful and relatively simple tool to play with granular synthesis and understand it better.
+In this section all the controls are explained one by one.
+
+### File loading
+-------------img con numerini-------------------------
+1. The audio file can be loaded by pressing the "LOAD" button or by directly dropping it. Once the file is loaded the waveform is displayed on the right screen.
+2. Play/Stop the reproduction
+3. Controls the master volume
+4. Change the starting position of the granulated section
+5. Change the duration of the granulated section. Once the end of the section is reached the reproduction will loop back to the starting position
+
+### Envelope
+-------------img con numerini-------------------------
+
+As envelope is intended the window applied to each grain in the playback phase.
+1. Display the envelope
+2. Select the type of envelope between Gaussian, Trapezoidal and Raised Cosine Bell
+3. Change the envelope lobe width
+
+### Parameters
+-------------img con numerini-------------------------
+1. Controls how many grains are generated each second. The range goes from 2 to 200 grains per second
+2. Controls the duration of the grains. The range goes from 5 ms up to 100 ms
+3. Represents the probability of playing back a grain from a random position in a range controlled by the "Random Spread" parameter
+3. Represents the range in which the randomic grain can be selected
+
+### Time-Frequency Pad
+-------------img-------------------------
+This control is a 2-D canvas in which the user can draw a shape that will control the time (in the original audio file) at which the grains are selected to be played back and their frequency shift. 
+In particular the horizontal axis represents the position of the grain to be selected in the active section, while the vertical axis represents the amount of frequency shift (in Hz). The control is enabled by starting to draw and can be disabled by simply clicking on it.
+
+### Spectrum analyzer
+-------------img-------------------------
+Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes.
 
 ### Some math
 Our approach to Gabor's brilliant article and our interpretation of frequency shifting with a parallelism to the quantum mechanical formalism ...
 ( COSE PAZZE JACO)
+
 ## Software implementation
+The application is built in C++ using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. 
 
 ### Architecture
 The project is built around the JUCE framework and its core library. 
