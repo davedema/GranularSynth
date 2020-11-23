@@ -47,15 +47,16 @@ As envelope is intended the window applied to each grain in the playback phase.
 
 ### Time-Frequency Pad
 -------------img-------------------------
+
 This control is a 2-D canvas in which the user can draw a shape that will control the time (in the original audio file) at which the grains are selected to be played back and their frequency shift. 
 In particular the horizontal axis represents the position of the grain to be selected in the active section, while the vertical axis represents the amount of frequency shift (in Hz). The control is enabled by starting to draw and can be disabled by simply clicking on it.
 
 ### Spectrum analyzer
 -------------img-------------------------
+
 Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes.
 
-### Some math
-Our approach to Gabor's brilliant article and our interpretation of frequency shifting with a parallelism to the quantum mechanical formalism ...
+## Frequency shifting
 ( COSE PAZZE JACO)
 
 ## Software implementation
