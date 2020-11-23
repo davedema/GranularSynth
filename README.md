@@ -1,21 +1,66 @@
-# GranularSynth
+<h1 align="center">GRANULATOR</h1>
 
-This project was developed for the course of Sound Analysis Synthesis and Processing (SASP) held by Professor A. Sarti at the Politecnico of Milan.
-Our goal was to achieve sound granulation, starting from a sample, with independent time-stretching  and frequency shifting using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. 
+<h2 align="center"> A Granular Synthesis playground </h2>
 
+<p>img del plugin</p>
 
-## Introduction
-### Brief history of granular synthesis
+## What is Granular Synthesis
+
+### Brief history
 The most common definition of sound is related to the concept of wave propagating in space and time. With the emerging developments in the electro-acoustic technologies raised in the XX century, the British physicist Dennis Gabor published in the late 40s three important papers, where he combines theories from quantum theory with practical experiment. 
 His idea is that any continuous tone can be decomposed into a family of functions obtained by shifting in time and frequency a single acoustic grain. This theory was strongly affected by psychoacoustics since human hearing is not continuous and infinite in resolution.
 So, from a representation of a signal in time domain, s(t), and from one in frequency domain S(f) derived from Fourier analysis, he created a mathematical abstraction able to map a signal and its energy onto an “effective time and effective spectral width”. Gabor’s analysis can be also thought as a series of localized Fourier transforms.[4]
 This technique was born with the publishment by Dr. Ing. D. Gabor of the article "*Theory of communication*" [[1]] in  which, by the use of the [Hilbert Transform](https://en.wikipedia.org/wiki/Hilbert_transform) and its meaning in the Quantum Mechanichal Formalism,  he derived a new two-dimensional representation of signals with time and frequency as coordinates which he called "diagram of information".
 Gabor noticed that any analysis requiring signal windowing (such as STFT), entails a strong relationship between time and frequency. High resolution in frequency requires long time windows, at cost of losing track of when exactly some event occurred. Vice versa, having high temporal resolution (short windows), implies losing frequency precision. This strong connection establish a sort of "uncertainty principle", setting the limits of our comprehension of acoustic quantas.
 
-### Some math
-Our approach to Gabor's brilliant article and our interpretation of frequency shifting with a parallelism to the quantum mechanical formalism ...
+### Granulation
+The main technique on which granular synthesis is based on is the granulation, that is a process in which an audio file is broken down into tiny segments of audio. This original series, in chronological order, is called the “graintable.” If grains are played in this order at the speed of the original sample, the output will play back that original file. But if grains are played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
+
+Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, and interesting noise layers.
+
+## The application
+The goal of our application is to provide a useful and relatively simple tool to play with granular synthesis and understand it better.
+In this section all the controls are explained one by one.
+
+### File loading
+-------------img con numerini-------------------------
+1. The audio file can be loaded by pressing the "LOAD" button or by directly dropping it. Once the file is loaded the waveform is displayed on the right screen.
+2. Play/Stop the reproduction
+3. Controls the master volume
+4. Change the starting position of the granulated section
+5. Change the duration of the granulated section. Once the end of the section is reached the reproduction will loop back to the starting position
+
+### Envelope
+-------------img con numerini-------------------------
+
+As envelope is intended the window applied to each grain in the playback phase.
+1. Display the envelope
+2. Select the type of envelope between Gaussian, Trapezoidal and Raised Cosine Bell
+3. Change the envelope lobe width
+
+### Parameters
+-------------img con numerini-------------------------
+1. Controls how many grains are generated each second. The range goes from 2 to 200 grains per second
+2. Controls the duration of the grains. The range goes from 5 ms up to 100 ms
+3. Represents the probability of playing back a grain from a random position in a range controlled by the "Random Spread" parameter
+3. Represents the range in which the randomic grain can be selected
+
+### Time-Frequency Pad
+-------------img-------------------------
+
+This control is a 2-D canvas in which the user can draw a shape that will control the time (in the original audio file) at which the grains are selected to be played back and their frequency shift. 
+In particular the horizontal axis represents the position of the grain to be selected in the active section, while the vertical axis represents the amount of frequency shift (in Hz). The control is enabled by starting to draw and can be disabled by simply clicking on it.
+
+### Spectrum analyzer
+-------------img-------------------------
+
+Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes.
+
+## Frequency shifting
 ( COSE PAZZE JACO)
+
 ## Software implementation
+The application is built in C++ using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. 
 
 ### Architecture
 The project is built around the JUCE framework and its core library. 
@@ -63,6 +108,12 @@ Douglas L. Jones and Thomas W. Parks
 
 [4] Microsound, Curtis Roads, MIT Press, 2002
 
+[[5]] The Basics of Granular Synthesis, Griffin Brown
+
 [1]: http://www.granularsynthesis.com/pdf/gabor.pdf 
 [2]: https://www.jstor.org/stable/3679939?seq=1
 [3]: https://www.researchgate.net/publication/326316857_Spectral_Granular_Synthesis
+[5]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
+
+## Notes
+This project was developed for the course of Sound Analysis Synthesis and Processing (SASP) held by Professor Augusto Sarti at the Politecnico of Milan.
