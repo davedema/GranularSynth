@@ -85,7 +85,7 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts, WaveformDrawable* wa
     //grain parameters 
     for (int i = 0; i < NUM_CONTROLS; i++) {
         controls[i].setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-        controls[i].setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
+        controls[i].setTextBoxStyle(Slider::TextBoxBelow, false, 50, 20);
 
         labels[i].setText(controlNames[i], dontSendNotification);
         labels[i].setFont(Font(12.0f));
