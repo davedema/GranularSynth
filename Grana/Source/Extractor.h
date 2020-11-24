@@ -33,7 +33,7 @@ public:
     void setTarget(SpectrumDrawable* s);
     void setModel(Model* model);
 
-    void resetTotal();
+    void resetTotal(); //reset shift measurement logic
 
       
 private:
@@ -48,10 +48,10 @@ private:
     bool isBlockReady;
     int write_idx; // writing index - managing a different number of samples per block in processor
 
-    int currentMaximumIndex;
-    int previousMaximumIndex;
-    float currentMaximum;
-    float totalShift;
+    int currentMaximumIndex;      //argmax this->spectrum
+    int previousMaximumIndex;     //argmax of previous spectrum
+    float currentMaximum;         //max this->spectrum
+    float totalShift;             //integrated shift over time
 
     Model* model;
 };

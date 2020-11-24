@@ -72,11 +72,12 @@ void Extractor::computeSpectrum()
 void Extractor::timerCallback()
 {
     if (!this->model->getIsPlaying())
-        resetTotal();
+        resetTotal(); //reset logic if stopped
 
     if (isBlockReady) {
         computeSpectrum();
-        int increment = (this->currentMaximumIndex - this->previousMaximumIndex) * (model->getSampleRate() / (2 * fftSize));
+        int increment = (this->currentMaximumIndex - this->previousMaximumIndex) *   //step
+            (model->getSampleRate() / (2 * fftSize));                                //resolution
 
         if (this->previousMaximumIndex >= 0) 
             this->totalShift += increment;
