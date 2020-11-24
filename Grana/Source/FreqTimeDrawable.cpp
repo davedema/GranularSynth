@@ -25,7 +25,7 @@ FreqTimeDrawable::~FreqTimeDrawable()
 
 void FreqTimeDrawable::paint(Graphics&g)
 {
-    g.fillAll(Colour(0xffB5B7CF));
+    g.fillAll(Colour(ColourPalette::bright_component));
     Path path;
 
     if (drawnPoints->size() != 0) {
@@ -36,7 +36,7 @@ void FreqTimeDrawable::paint(Graphics&g)
         {
             path.lineTo(p.getX() * (float)getWidth(), p.getY() * (float)getHeight());
         }
-        g.setColour(Colours::cadetblue);
+        g.setColour(Colour(ColourPalette::numbers));
         g.strokePath(path, PathStrokeType(3.5f));
     }
 

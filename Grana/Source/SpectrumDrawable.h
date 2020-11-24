@@ -10,6 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Palette.h"
 
 class SpectrumDrawable : public Component {
 public:

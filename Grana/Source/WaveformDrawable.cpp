@@ -38,10 +38,9 @@ void WaveformDrawable::paint(Graphics&g)
 
     if (this->model->getHasLoadedFile())
     {
-        g.setColour(juce::Colours::transparentBlack);
+        g.setColour(Colour(ColourPalette::background).withMultipliedAlpha(0.3));
         g.fillRect(thumbnailBounds);
-
-        g.setColour(Colour(37, 44, 70));
+        g.setColour(Colour(ColourPalette::dark_component));
 
         thumbnail->drawChannels(g,
             thumbnailBounds,
@@ -52,7 +51,7 @@ void WaveformDrawable::paint(Graphics&g)
         paintSelected(g);
     }
     else {
-        g.setColour(Colour(37, 44, 70));
+        g.setColour(Colour(ColourPalette::dark_component));
 
         g.drawLine(Line<float>(0, this->getHeight() / 2, this->getWidth(), getHeight() / 2));
     }
@@ -105,7 +104,7 @@ void WaveformDrawable::paintSelected(Graphics& g)
     else
         selectionBounds = Rectangle<int>(filepos, 0, (this->getWidth() - filepos), this->getHeight());
 
-    g.setColour(Colours::darkred);
+    g.setColour(Colour(ColourPalette::numbers));
     g.setOpacity(0.4);
     g.fillRect(selectionBounds);
 }

@@ -17,6 +17,7 @@
 #include "SpectrumDrawable.h"
 #include "FreqTimeDrawable.h"
 #include "CustomLookAndFeel.h"
+#include "Palette.h"
 //==============================================================================
 /**
 */
@@ -49,12 +50,5 @@ private:
 
     SpectrumDrawable spectrum;
     FreqTimeDrawable xyPlane;
-
-    Colour c1 { Colour(37, 44, 70) };
-    Colour c2 { Colour(98, 102, 150) };
-    Colour c3 { Colour(106, 156, 190) };
-    Colour c4 { Colour(120, 178, 236) };
-    Colour c5{ Colour(151, 158, 243) };
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LaGranaAudioProcessorEditor)
 };

@@ -61,7 +61,7 @@ LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 //==============================================================================
 void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll(Colour(0xff325871));
+    g.fillAll(Colour(ColourPalette::background).darker(0.8));
 }
 
 void LaGranaAudioProcessorEditor::resized()

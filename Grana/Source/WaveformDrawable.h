@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "Model.h"
 #include "FileLoader.h"
+#include "Palette.h"
 
 constexpr auto WAV_WIDTH = 480;
 constexpr auto WAV_HEIGHT = 160;

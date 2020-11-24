@@ -22,9 +22,9 @@ SpectrumDrawable::~SpectrumDrawable()
 
 void SpectrumDrawable::paint(Graphics& g)
 {
-    g.fillAll(Colour(0xff12141B));
+    g.fillAll(Colour(ColourPalette::drawbox));
 
-    g.setColour(Colours::cadetblue);
+    g.setColour(Colour(ColourPalette::bright_component));
 
     if (this->currentFrame != nullptr)
     {
@@ -45,8 +45,8 @@ void SpectrumDrawable::paint(Graphics& g)
         myPath.lineTo(getWidth() - margin, getHeight() - margin);
         g.strokePath(myPath, PathStrokeType(3.0f));
         
-        auto base = Colours::slateblue;
-        ColourGradient* gradient = new ColourGradient(Colours::grey.brighter(0.2), 0, getHeight(), Colours::aliceblue, 0, 0, false);
+        Colour base = Colour(ColourPalette::numbers);
+        ColourGradient* gradient = new ColourGradient(Colour(ColourPalette::bright_component), 0, getHeight(), Colour(ColourPalette::numbers), 0, 0, false);
         gradient->clearColours();
         gradient->addColour(0, base.darker().darker());
         gradient->addColour(0.2, base.darker());

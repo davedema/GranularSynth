@@ -11,6 +11,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "./Model.h"
+#include "Palette.h"
 
 class FreqTimeDrawable : public AnimatedAppComponent, public MouseListener {
 public:

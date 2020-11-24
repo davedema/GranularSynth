@@ -56,6 +56,7 @@
               file="Source/FreqTimeDrawable.h"/>
         <FILE id="VDCmMQ" name="KnobSection.cpp" compile="1" resource="0" file="Source/KnobSection.cpp"/>
         <FILE id="s97rVh" name="KnobSection.h" compile="0" resource="0" file="Source/KnobSection.h"/>
+        <FILE id="vLfiFA" name="Palette.h" compile="0" resource="0" file="Source/Palette.h"/>
         <FILE id="Cb29Me" name="SpectrumDrawable.cpp" compile="1" resource="0"
               file="Source/SpectrumDrawable.cpp"/>
         <FILE id="wc38s4" name="SpectrumDrawable.h" compile="0" resource="0"

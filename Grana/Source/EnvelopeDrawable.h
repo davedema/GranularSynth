@@ -11,6 +11,8 @@
 #pragma once
 #include <JuceHeader.h>
 #include "./GrainEnvelope.h"
+#include "Palette.h"
+
 
 class EnvelopeDrawable : public Component {
 public:

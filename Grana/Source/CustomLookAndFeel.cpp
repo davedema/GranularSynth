@@ -30,11 +30,11 @@ void CustomLookAndFeel::drawRotarySlider(Graphics&g, int x, int y, int width, in
     auto angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
     // fill
-    g.setColour(c1);
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::defaultFill));
     g.fillEllipse(rx, ry, rw, rw);
 
     // outline
-    g.setColour(c2);
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::outline));
     g.drawEllipse(rx, ry, rw, rw, 1.0f);
 
     Path p;
@@ -43,7 +43,7 @@ void CustomLookAndFeel::drawRotarySlider(Graphics&g, int x, int y, int width, in
     p.addRectangle(-pointerThickness * 0.5f, -radius, pointerThickness, pointerLength);
     p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
 
-    g.setColour(c4);
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::widgetBackground));
     g.fillPath(p);
 }
 
@@ -56,7 +56,7 @@ void CustomLookAndFeel::drawButtonBackground(Graphics& g,
         auto cornerSize = 6.0f;
         auto bounds = button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
 
-        auto baseColour = c3.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f)
+        auto baseColour = getCurrentColourScheme().getUIColour(ColourScheme::UIColour::widgetBackground).withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f)
             .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
 
         if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
@@ -82,14 +82,14 @@ void CustomLookAndFeel::drawButtonBackground(Graphics& g,
 
             g.fillPath(path);
 
-            g.setColour(c3);
+            g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::outline));
             g.strokePath(path, PathStrokeType(1.0f));
         }
         else
         {
             g.fillRoundedRectangle(bounds, cornerSize);
 
-            g.setColour(c2);
+            g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::outline));
             g.drawRoundedRectangle(bounds, cornerSize, 1.0f);
         }
     
@@ -97,16 +97,15 @@ void CustomLookAndFeel::drawButtonBackground(Graphics& g,
 
 LookAndFeel_V4::ColourScheme CustomLookAndFeel::getColourScheme()
 {
-    return {
-        0xff151928, //windowbg
-        0xff252C46, // widget bg
-        //0xff626696, 
-        0xff3F4C78, // menu bg
-        0xff78B2EC,  //outline
-        0xffEDEEFD,  //defualt text
-        0xff6A9CBE, // defautkl fill
-        0xf788B2EC, //highlighted text
-        0xEDEEFD, //menu text 
-        0xff6A9CBE // numColours
+    return ColourScheme{
+        0xff3f3847, //windowbg
+        0xffada8b6, // widget bg
+        0xff4c5b61, // menu bg
+        0xffcecfc7,  //outline
+        0xffcecfc7,  //defualt text
+        0xff4c5b61, // defautkl fill
+        0xffada8b6, //highlighted text
+        0xffdb5a42, //menu text 
+        0xffdb5a42 // numColours
     };
 }
