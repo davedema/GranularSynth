@@ -24,7 +24,7 @@ public:
     int getSectionSize();
     float getDensity();
     int getEnvIndex();
-    float getGrainSize();
+    int getGrainSize();
     float getSpeedModule();
     bool getIsPlaying();
     void setIsPlaying(bool val);

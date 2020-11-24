@@ -104,8 +104,8 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
 
             model->setReadPosition(readPosition);
             readPosition = model->getCurrentTime();
-           // if(readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
-             //   readPosition = readPosition + model->getFilePos() - FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+            if(readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
+                readPosition = readPosition + model->getFilePos() - FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
            
             dsp::ProcessSpec spec{ this->processorSampleRate, static_cast<juce::uint32> (this->model->getGrainSize()), FileLoader::getInstance()->getAudioBuffer()->getNumChannels() };
             this->hiPass.prepare(spec);
@@ -115,8 +115,10 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 readPosition += this->model->getSpread();
                 if (readPosition < 0)
                     readPosition += FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
-                else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
+                else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize()) {
+                    readPosition += model->getGrainSize();
                     readPosition = readPosition % FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+                }
             }
             this->model->setRealPosition(readPosition);
    
@@ -132,12 +134,9 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             //If there are active grains do SOLA
             if (!this->activeGrains.isEmpty()) 
             {
-                int lag = 0;
-                // lag = this->computeLag(this->activeGrains.getLast()->getBuffer(), toAdd->getBuffer(), this->nextOnset);
-                int crossfade = this->activeGrains.getLast()->remainingLife() - lag;
+                int crossfade = this->activeGrains.getLast()->remainingLife();
                 toAdd->applyCrossFade(crossfade, true);
-                this->activeGrains.getLast()->applyCrossFade(crossfade, false);
-                toAdd->setLag(lag);                
+                this->activeGrains.getLast()->applyCrossFade(crossfade, false);               
             }
             this->nextOnset = this->processorSampleRate / model->getDensity();
             this->activeGrains.add(toAdd);             
@@ -153,51 +152,5 @@ void Granulator::setModel(Model* model)
 void Granulator::setProcessorSampleRate(double processorSampleRate)
 {
     this->processorSampleRate = processorSampleRate;
-}
-
-int Granulator::computeLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength)
-{
-    int length = jmin(currentBuffer->getNumSamples(), nextBuffer->getNumSamples());
-    if (length <= userLength)
-        return 0;
-  
-    int lag = computeCrossCorrelationLag(
-        currentBuffer,
-        nextBuffer,
-        userLength
-    ); //compute lag
-
-    return lag;
-}
-
-int Granulator::computeCrossCorrelationLag(AudioBuffer<float>* currentBuffer, AudioBuffer<float>* nextBuffer, int userLength)
-{
-    int length = jmin(currentBuffer->getNumSamples(), nextBuffer->getNumSamples());
-    int numChannels = currentBuffer->getNumChannels();
-    float maximum = 0;
-    int lag = 0;
-
-    float tenMilliseconds = 10 * this->processorSampleRate / 1000;
-    int checkedLength = length - userLength;
-    if (length - tenMilliseconds > 0)
-        checkedLength = jmin(length - userLength, (int)tenMilliseconds);
-
-    //begin compute autocorrelation
-    for (int i = 0; i < checkedLength; i++) {
-        float totalValue = 0;
-        float newValue = 0;
-        for (int j = userLength; j < userLength + checkedLength - i; j++) {
-            newValue += currentBuffer->getSample(0, j) * nextBuffer->getSample(0, j - userLength);
-        }
-        newValue /= (float)length;
-        totalValue += newValue;
-        totalValue /= numChannels; //average over channels
-        if (totalValue > maximum) {
-            lag = i;
-            maximum = totalValue;
-        }
-    }
-    //end compute autocorrelation
-    return lag;
 }
 
