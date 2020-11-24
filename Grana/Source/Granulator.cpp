@@ -110,12 +110,16 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
             dsp::ProcessSpec spec{ this->processorSampleRate, static_cast<juce::uint32> (this->model->getGrainSize()), FileLoader::getInstance()->getAudioBuffer()->getNumChannels() };
             this->hiPass.prepare(spec);
 
-            readPosition += this->model->getSpread();
-            if (readPosition < 0)
-                readPosition += FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
-            else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
-                readPosition = readPosition % FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+            // Check if we should randomize the position
+            if (this->model->randomize()) {
+                readPosition += this->model->getSpread();
+                if (readPosition < 0)
+                    readPosition += FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+                else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize())
+                    readPosition = readPosition % FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
+            }
             this->model->setRealPosition(readPosition);
+   
             Grain* toAdd = new Grain(this->model->getGrainSize(),
                                      readPosition,
                                      false,

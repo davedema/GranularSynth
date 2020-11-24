@@ -63,9 +63,13 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     {
         this->currentGain = Decibels::decibelsToGain(newValue);
     }
-    else if (parameterID == "Spread")
+    else if (parameterID == "Random Spread")
     {
         this->spread = newValue * this->fileLength * this->sectionSize;
+    }
+    else if (parameterID == "Random")
+    {
+        this->random = newValue;
     }
 }
 
@@ -218,5 +222,12 @@ float Model::getCurrentGain()
 int Model::getSpread()
 {
     if (this->spread == 0) return 0;
-    return r.nextInt(Range<int>(-this->spread, this->spread));
+    return r_spread.nextInt(Range<int>(-this->spread, this->spread));
 }
+
+bool Model::randomize()
+{
+    return ((r_random.nextFloat() * 100) < this->random);
+}
+
+

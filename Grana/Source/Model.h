@@ -49,11 +49,13 @@ public:
     int getCurrentTime();
     float getCurrentGain();
     int getSpread(); // in samples
+    bool randomize();   //return true if the grain has to be randomized
 
 
 
 private:
-    Random r;
+    Random r_spread;
+    Random r_random;
     float filePos; // [0,1]
     float sectionSize; // [0,1]
     float envWidth;
@@ -73,4 +75,5 @@ private:
     float currentGain;
 
     int spread;
+    float random;
 };
