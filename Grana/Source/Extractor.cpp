@@ -71,6 +71,9 @@ void Extractor::computeSpectrum()
 
 void Extractor::timerCallback()
 {
+    if (!this->model->getIsPlaying())
+        resetTotal();
+
     if (isBlockReady) {
         computeSpectrum();
         int increment = (this->currentMaximumIndex - this->previousMaximumIndex) * (model->getSampleRate() / (2 * fftSize));
