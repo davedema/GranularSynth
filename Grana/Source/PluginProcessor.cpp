@@ -13,7 +13,7 @@
 // define constant values for knobs
 // GRAIN DURATIONS
 #define GRAIN_MIN 5.0f //in ms
-#define GRAIN_MAX 100.0f //in ms
+#define GRAIN_MAX 200.0f //in ms
 
 // GRAIN DENSITY
 #define GRAIN_DENSITY_MIN 2.0f // in grains per second
@@ -28,15 +28,16 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState(*this, nullptr, Identifier("CURRENT_STATE"),
         {
         std::make_unique<AudioParameterFloat>("filepos", "Filepos", 0, 1, 0.0f), // id, name, min,max, initial value
-        std::make_unique< AudioParameterFloat>("Section Size", "Section Size", 0.01f, 1.0f, 0.5f),
+        std::make_unique<AudioParameterFloat>("Section Size", "Section Size", 0.01f, 1.0f, 0.5f),
         std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
         std::make_unique<AudioParameterFloat>("envIndex", "envIndex", 1, 3, 1), // 1 gaussian, 2raised, 3 trapezoidal
         std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.5),
-        std::make_unique< AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
+        std::make_unique<AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), 
-        std::make_unique< AudioParameterFloat>("Speed", "Speed", -2, 2, 1),
-        std::make_unique< AudioParameterFloat>("masterGain", "masterGain", NormalisableRange<float>(-48, 6, 1, 2), 0), // in dB
-        std::make_unique< AudioParameterFloat>("Spread", "Spread", 0.0f, 1.0f, 0.0f),
+        std::make_unique<AudioParameterFloat>("Speed", "Speed", -2, 2, 1),
+        std::make_unique<AudioParameterFloat>("masterGain", "masterGain", NormalisableRange<float>(-48, 6, 1, 2), 0), // in dB
+        std::make_unique<AudioParameterFloat>("Random", "Random", 0.0f, 100.0f, 0.0f),
+        std::make_unique<AudioParameterFloat>("Random Spread", "Random Spread", 0.0f, 1.0f, 0.0f),
         })
 #endif
 { 
@@ -49,7 +50,8 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("envIndex", &granulatorModel);
     treeState.addParameterListener("envWidth", &granulatorModel);
     treeState.addParameterListener("masterGain", &granulatorModel);
-    treeState.addParameterListener("Spread", &granulatorModel);
+    treeState.addParameterListener("Random", &granulatorModel);
+    treeState.addParameterListener("Random Spread", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
     this->sampleRate = 0;
     this->samplesPerBlock = 0;
