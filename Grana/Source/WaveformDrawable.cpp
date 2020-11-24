@@ -143,3 +143,4 @@ void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
                                 
     }
 }
+

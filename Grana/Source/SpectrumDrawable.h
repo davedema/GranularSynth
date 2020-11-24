@@ -19,6 +19,7 @@ public:
     void paint(Graphics&) override;
     void resized() override;
     void drawNextFrame(float* bins);
+    void drawGrid(Graphics&);
 
 private: 
     float* currentFrame;

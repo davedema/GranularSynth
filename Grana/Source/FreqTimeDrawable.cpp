@@ -41,6 +41,8 @@ void FreqTimeDrawable::paint(Graphics&g)
     }
 
     enlightPoint(model->getCurrentxyPosition(), g);
+    this->drawAxis(g);
+
 }
 
 void FreqTimeDrawable::resized()
@@ -70,7 +72,21 @@ void FreqTimeDrawable::setModel(Model* model)
 
 void FreqTimeDrawable::enlightPoint(Point<float> point, Graphics& g)
 {
-    g.setColour(Colours::cadetblue);
+    g.setColour(Colours::navy);
     g.drawEllipse(point.getX() * getWidth(), point.getY() * getHeight(), 3, 3, 1);
+}
+
+void FreqTimeDrawable::drawAxis(Graphics&g)
+{
+    auto margin = 5.0f;
+    Line<float> time_ax(Point<float>(margin, (float)getHeight() - margin),
+        Point<float>((float)getWidth() - margin, (float)getHeight() - margin));
+
+    Line<float> freq_ax(Point<float>(margin, (float)getHeight() - margin),
+        Point<float>(margin, margin));
+    g.setColour(Colours::black);
+    g.drawLine(freq_ax);
+    g.drawLine(time_ax);
+
 }
 

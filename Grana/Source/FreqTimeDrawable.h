@@ -30,8 +30,8 @@ public:
 
 private:
     Model* model;
-    void addPoint(float xpos, float ypos);
     Array<Point<float>>* drawnPoints;
     Point<float> currentxyPlanePosition;
     void enlightPoint(Point<float> point, Graphics& g);
+    void drawAxis(Graphics&);
 };
