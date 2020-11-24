@@ -29,7 +29,6 @@ public:
     void updateIndex();                     //Increment the current sample playing index. Set finish to true if the grain is finished
     bool isFinished();
     AudioBuffer<float>* getBuffer();
-    void setLag(int lag);
     void applyCrossFade(int crossfade, bool atStart);
     int remainingLife();
 
@@ -39,7 +38,6 @@ private:
     int currentPosition;    //current playing sample in the grain
     bool finished;
     double* hilbertTransform; //hilbert transform for each channel
-    int lag;
 
     AudioBuffer<float>* buffer;  
     void channelFreqShift(float freqShift, int channel, int envType, float envWidth, int hostRate); //shifts a channel of freqshift [Hz]

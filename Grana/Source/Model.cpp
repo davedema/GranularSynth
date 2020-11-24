@@ -65,7 +65,7 @@ void Model::parameterChanged(const String& parameterID, float newValue)
     }
     else if (parameterID == "Random Spread")
     {
-        this->spread = newValue * this->fileLength * this->sectionSize;
+        this->spread = newValue * this->fileLength/2 * 0.5;
     }
     else if (parameterID == "Random")
     {
@@ -98,7 +98,7 @@ int Model::getEnvIndex()
     return this->envIndex;
 }
 
-float Model::getGrainSize()
+int Model::getGrainSize()
 {
     return pow(10, -3) * this->grainSize * this->sampleRate;
 }
