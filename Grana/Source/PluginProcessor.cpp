@@ -53,6 +53,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
     treeState.addParameterListener("Random", &granulatorModel);
     treeState.addParameterListener("Random Spread", &granulatorModel);
     this->granulator.setModel(&granulatorModel);
+    this->extractor.setModel(&granulatorModel);
     this->sampleRate = 0;
     this->samplesPerBlock = 0;
 }
@@ -126,6 +127,7 @@ void LaGranaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    this->granulatorModel.setSampleRate(sampleRate);
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
     FileLoader::getInstance()->setHostRate(sampleRate);

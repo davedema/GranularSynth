@@ -12,6 +12,12 @@
 
 Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::hamming)
 {
+    this->model = nullptr;
+    this->currentMaximum = 0;
+    this->currentMaximumIndex = 0;
+    this->previousMaximumIndex = -1;
+    this->totalShift = 0;
+
     this->isBlockReady = false;
     this->write_idx = 0;
     zeromem(bins, sizeof(bins));
@@ -20,6 +26,7 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
 
 Extractor::~Extractor()
 {
+    
 }
 
 void Extractor::pushSample(float sample)
@@ -34,6 +41,7 @@ void Extractor::pushSample(float sample)
 
         write_idx = 0;
     }
+
     input[write_idx] = sample;
     write_idx++;
 }
@@ -53,20 +61,47 @@ void Extractor::computeSpectrum()
             Decibels::gainToDecibels(spectrum[fftDataIndex]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
         bins[i] = level;
-    }
 
+        if (spectrum[fftDataIndex] > this->currentMaximum) {
+            this->currentMaximum = spectrum[fftDataIndex];
+            this->currentMaximumIndex = fftDataIndex;
+        }
+    }
 }
 
 void Extractor::timerCallback()
 {
     if (isBlockReady) {
         computeSpectrum();
-        this->spectrumDrawable->drawNextFrame(bins);
+        int increment = (this->currentMaximumIndex - this->previousMaximumIndex) * (model->getSampleRate() / (2 * fftSize));
+
+        if (this->previousMaximumIndex >= 0) 
+            this->totalShift += increment;
+        else //at the beginning start from the same offset
+            this->totalShift += model->getCurrentFrequencyShift();
+
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift);
         isBlockReady = false;
+        this->previousMaximumIndex = this->currentMaximumIndex;
+        this->currentMaximum = 0;
+        this->currentMaximumIndex = 0;
     }
 }
 
 void Extractor::setTarget(SpectrumDrawable* s)
 {
     this->spectrumDrawable = s;
+}
+
+void Extractor::setModel(Model* model)
+{
+    this->model = model;
+}
+
+void Extractor::resetTotal()
+{
+    this->totalShift = 0;
+    this->currentMaximum = 0;
+    this->currentMaximumIndex = 0;
+    this->previousMaximumIndex = -1;
 }

@@ -29,6 +29,7 @@ Model::Model()
     this->init = false;
     this->currentGain = 0.75;
     this->spread = 0;
+    this->sampleRate = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -231,3 +232,12 @@ bool Model::randomize()
 }
 
 
+int Model::getSampleRate()
+{
+    return this->sampleRate;
+}
+
+void Model::setSampleRate(int sampleRate)
+{
+    this->sampleRate = sampleRate;
+}

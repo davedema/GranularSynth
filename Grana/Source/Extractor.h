@@ -12,7 +12,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "./SpectrumDrawable.h"
-#include <thread>         // std::thread
+#include "Model.h"
 
 enum
 {
@@ -31,6 +31,9 @@ public:
     void computeSpectrum();
     void timerCallback() override;
     void setTarget(SpectrumDrawable* s);
+    void setModel(Model* model);
+
+    void resetTotal();
 
       
 private:
@@ -44,4 +47,11 @@ private:
 
     bool isBlockReady;
     int write_idx; // writing index - managing a different number of samples per block in processor
+
+    int currentMaximumIndex;
+    int previousMaximumIndex;
+    float currentMaximum;
+    float totalShift;
+
+    Model* model;
 };
