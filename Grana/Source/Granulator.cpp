@@ -115,7 +115,7 @@ void Granulator::process(AudioBuffer<float>& outputBuffer, int numSamples, Extra
                 readPosition += this->model->getSpread();
                 if (readPosition < 0)
                     readPosition += FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
-                else if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize()) {
+                if (readPosition > FileLoader::getInstance()->getAudioBuffer()->getNumSamples() - model->getGrainSize()) {
                     readPosition += model->getGrainSize();
                     readPosition = readPosition % FileLoader::getInstance()->getAudioBuffer()->getNumSamples();
                 }
