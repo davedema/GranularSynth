@@ -13,10 +13,11 @@
 Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::hamming)
 {
     this->model = nullptr;
-    this->currentMaximum = 0;
     this->currentMaximumIndex = 0;
     this->previousMaximumIndex = -1;
     this->totalShift = 0;
+    this->averageFrequency = 0;
+    this->averageShift = 0;
 
     this->isBlockReady = false;
     this->write_idx = 0;
@@ -52,6 +53,24 @@ void Extractor::computeSpectrum()
     forwardFFT.performFrequencyOnlyForwardTransform(spectrum); //perform fft on the real part
     auto mindB = -100.0f;
     auto maxdB = 0.0f;
+    auto overallMax = juce::findMaximum(spectrum, fftSize);
+    int i = 0;
+    while (spectrum[i] < overallMax)
+        i++;
+    this->currentMaximumIndex = i;
+
+    float averageFreq = 0, norm = 0;
+    float resolution = model->getSampleRate() / fftSize;
+
+    for (int i = 0; i < fftSize / 2; i++) {
+        averageFreq += i * resolution * spectrum[i];
+        norm += spectrum[i];
+    }
+    if(norm != 0)
+        averageFreq /= norm;
+    if(this->averageFrequency != 0)
+        this->averageShift += averageFreq - this->averageFrequency;
+    this->averageFrequency = averageFreq;
 
     for (int i = 0; i < scopeSize; ++i)
     {
@@ -61,11 +80,6 @@ void Extractor::computeSpectrum()
             Decibels::gainToDecibels(spectrum[fftDataIndex]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
         bins[i] = level;
-
-        if (spectrum[fftDataIndex] > this->currentMaximum) {
-            this->currentMaximum = spectrum[fftDataIndex];
-            this->currentMaximumIndex = fftDataIndex;
-        }
     }
 }
 
@@ -77,17 +91,16 @@ void Extractor::timerCallback()
     if (isBlockReady) {
         computeSpectrum();
         int increment = (this->currentMaximumIndex - this->previousMaximumIndex) *   //step
-            (model->getSampleRate() / (2 * fftSize));                                //resolution
+            (model->getSampleRate() / fftSize);                                //resolution
 
         if (this->previousMaximumIndex >= 0) 
             this->totalShift += increment;
         else //at the beginning start from the same offset
             this->totalShift += model->getCurrentFrequencyShift();
 
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift);
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, model->getInstantaneousFrequency(), this->averageShift);
         isBlockReady = false;
         this->previousMaximumIndex = this->currentMaximumIndex;
-        this->currentMaximum = 0;
         this->currentMaximumIndex = 0;
     }
 }
@@ -105,7 +118,6 @@ void Extractor::setModel(Model* model)
 void Extractor::resetTotal()
 {
     this->totalShift = 0;
-    this->currentMaximum = 0;
     this->currentMaximumIndex = 0;
     this->previousMaximumIndex = -1;
 }

@@ -38,6 +38,9 @@ private:
     int ceiledLength;
     double hostRate;
 
+    int bufferHilbertIndex(int channel, int index);
+    float getPhase(int time);
+
 public:
 
     FileLoader();                               // Constructor
@@ -56,4 +59,6 @@ public:
     double* getHilbertTransform();
     int getCeiledLength();
     void setHostRate(double hostRate);
+
+    float getOriginalInstantaneousFrequency(int currentTime);
 };

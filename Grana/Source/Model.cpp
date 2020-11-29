@@ -199,7 +199,7 @@ float Model::getCurrentFrequencyShift()
     if (xyPlane.isEmpty())
         return 0;
     int pos = getxyArrayPosition();
-    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 2000.0f - 1000.0f;
+    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 4000.0f - 2000.0f;
     return freq;
 }
 
@@ -240,4 +240,9 @@ int Model::getSampleRate()
 void Model::setSampleRate(int sampleRate)
 {
     this->sampleRate = sampleRate;
+}
+
+float Model::getInstantaneousFrequency()
+{
+    return FileLoader::getInstance()->getOriginalInstantaneousFrequency(this->getRealPosition());
 }

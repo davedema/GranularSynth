@@ -155,5 +155,24 @@ void FileLoader::setHostRate(double hostRate)
     this->hostRate = hostRate;
 }
 
+int FileLoader::bufferHilbertIndex(int channel, int index)
+{
+    return 2 * (channel * this->getCeiledLength() + index);
+}
 
+float FileLoader::getPhase(int time)
+{
+    int channels = this->buffer->getNumChannels();
+    int phase = 0;
+    for (int i = 0; i < channels; i++)
+        phase += atan2f(this->hilbertTransform[bufferHilbertIndex(i, time) + 1], this->hilbertTransform[bufferHilbertIndex(i, time)]);
+    return phase / (float)channels;
+}
 
+float FileLoader::getOriginalInstantaneousFrequency(int currentTime)
+{
+    if(currentTime != 0)
+        return (getPhase(currentTime) - getPhase(currentTime - 1)) * this->hostRate;
+    else
+        return (getPhase(currentTime) - getPhase(this->buffer->getNumSamples())) * this->hostRate;
+}

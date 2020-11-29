@@ -50,8 +50,9 @@ private:
 
     int currentMaximumIndex;      //argmax this->spectrum
     int previousMaximumIndex;     //argmax of previous spectrum
-    float currentMaximum;         //max this->spectrum
     float totalShift;             //integrated shift over time
+    float averageFrequency;
+    float averageShift;
 
     Model* model;
 };
