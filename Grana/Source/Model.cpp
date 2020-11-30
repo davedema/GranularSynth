@@ -241,8 +241,3 @@ void Model::setSampleRate(int sampleRate)
 {
     this->sampleRate = sampleRate;
 }
-
-float Model::getInstantaneousFrequency()
-{
-    return FileLoader::getInstance()->getOriginalInstantaneousFrequency(this->getRealPosition());
-}

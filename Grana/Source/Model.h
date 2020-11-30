@@ -54,8 +54,6 @@ public:
     int getSampleRate();
     void setSampleRate(int sampleRate);
 
-    float getInstantaneousFrequency();
-
 private:
     Random r_spread;
     Random r_random;

@@ -17,7 +17,6 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     this->previousMaximumIndex = -1;
     this->totalShift = 0;
     this->averageFrequency = 0;
-    this->averageShift = 0;
 
     this->isBlockReady = false;
     this->write_idx = 0;
@@ -68,8 +67,6 @@ void Extractor::computeSpectrum()
     }
     if(norm != 0)
         averageFreq /= norm;
-    if(this->averageFrequency != 0)
-        this->averageShift += averageFreq - this->averageFrequency;
     this->averageFrequency = averageFreq;
 
     for (int i = 0; i < scopeSize; ++i)
@@ -98,7 +95,7 @@ void Extractor::timerCallback()
         else //at the beginning start from the same offset
             this->totalShift += model->getCurrentFrequencyShift();
 
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, model->getInstantaneousFrequency(), this->averageShift);
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency);
         isBlockReady = false;
         this->previousMaximumIndex = this->currentMaximumIndex;
         this->currentMaximumIndex = 0;
