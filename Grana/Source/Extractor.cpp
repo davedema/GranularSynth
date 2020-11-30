@@ -82,8 +82,11 @@ void Extractor::computeSpectrum()
 
 void Extractor::timerCallback()
 {
-    if (!this->model->getIsPlaying())
+    if (!this->model->getIsPlaying()) {
         resetTotal(); //reset logic if stopped
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency);
+        return;
+    }
 
     if (isBlockReady) {
         computeSpectrum();
@@ -115,6 +118,7 @@ void Extractor::setModel(Model* model)
 void Extractor::resetTotal()
 {
     this->totalShift = 0;
+    this->averageFrequency = 0;
     this->currentMaximumIndex = 0;
     this->previousMaximumIndex = -1;
 }
