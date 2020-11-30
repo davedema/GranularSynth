@@ -61,7 +61,7 @@ void Extractor::computeSpectrum()
     float averageFreq = 0, norm = 0;
     float resolution = model->getSampleRate() / fftSize;
 
-    for (int i = 0; i < fftSize / 2; i++) {
+    for (int i = 0; i < fftSize / 2; i++) { //average frequency over the magnitude spectrum
         averageFreq += i * resolution * spectrum[i];
         norm += spectrum[i];
     }
@@ -90,11 +90,11 @@ void Extractor::timerCallback()
 
     if (isBlockReady) {
         computeSpectrum();
-        int increment = (this->currentMaximumIndex - this->previousMaximumIndex) *   //step
+        float increment = (float)(this->currentMaximumIndex - this->previousMaximumIndex) *   //step
             (model->getSampleRate() / fftSize);                                //resolution
 
-        if (this->previousMaximumIndex >= 0) 
-            this->totalShift += increment;
+        if (this->previousMaximumIndex >= 0) //first iteration handling
+            this->totalShift += increment;   //increment(or decrement, depends on the value) total peak shift
         else //at the beginning start from the same offset
             this->totalShift += model->getCurrentFrequencyShift();
 
