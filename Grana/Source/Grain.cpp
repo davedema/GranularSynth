@@ -68,10 +68,7 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / hostRate;
-        if (freqShift > 0)
-            phaseInc -= floor(phaseInc); //handle phase
-        else
-            phaseInc -= ceil(phaseInc);
+        phaseInc -= ceil(phaseInc);
 
         float theta = TWOPI * phaseInc; //angle
         float newValue = hilbertTransform[bufferHilbertIndex(channel, i)] * cos(theta) -
@@ -85,10 +82,7 @@ void Grain::channelFreqShift(float freqShift, int channel, int envType, float en
 {
     for (int i = 0; i < length; i++) {//freq shift  --->    ref links
         float phaseInc = freqShift * i / hostRate;
-        if (freqShift > 0)
-            phaseInc -= floor(phaseInc); //handle phase
-        else
-            phaseInc -= ceil(phaseInc);
+        phaseInc -= floor(phaseInc); //handle phase
 
         float theta = TWOPI * phaseInc; //angle
         float newValue = this->buffer->getSample(channel, i) * cos(theta) -

@@ -14,6 +14,9 @@ SpectrumDrawable::SpectrumDrawable()
 {
     setSize(200, 100);
     currentFrame = nullptr;
+    this->measuredShift = 0;
+    this->resolution = 0;
+    this->averageFrequency = 0;
 }
 
 SpectrumDrawable::~SpectrumDrawable()
@@ -59,7 +62,12 @@ void SpectrumDrawable::paint(Graphics& g)
 
         delete gradient;
 
+        g.drawFittedText("Peak Shift: " + String(this->measuredShift) + "Hz" + //Print frequency data 
+                         "\nOut Average Freq: " + String(this->averageFrequency) + "Hz" +
+                         "\nResolution: " + String(this->resolution) + "Hz" ,
+                         0, 10, getWidth(), 25, Justification::centred, 3);
     }  
+    
     this->drawGrid(g);
 
 }
@@ -68,9 +76,12 @@ void SpectrumDrawable::resized()
 {
 }
 
-void SpectrumDrawable::drawNextFrame(float* bins)
+void SpectrumDrawable::drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq)
 {
     currentFrame = bins;
+    this->resolution = resolution;
+    this->measuredShift = measuredShift;
+    this->averageFrequency = averageFreq;
     repaint();
 }
 

@@ -29,6 +29,7 @@ Model::Model()
     this->init = false;
     this->currentGain = 0.75;
     this->spread = 0;
+    this->sampleRate = 0;
 }
 
 void Model::parameterChanged(const String& parameterID, float newValue)
@@ -198,7 +199,7 @@ float Model::getCurrentFrequencyShift()
     if (xyPlane.isEmpty())
         return 0;
     int pos = getxyArrayPosition();
-    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 2000.0f - 1000.0f;
+    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 4000.0f - 2000.0f;
     return freq;
 }
 
@@ -231,3 +232,12 @@ bool Model::randomize()
 }
 
 
+int Model::getSampleRate()
+{
+    return this->sampleRate;
+}
+
+void Model::setSampleRate(int sampleRate)
+{
+    this->sampleRate = sampleRate;
+}

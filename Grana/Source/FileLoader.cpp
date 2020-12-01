@@ -154,6 +154,3 @@ void FileLoader::setHostRate(double hostRate)
 {
     this->hostRate = hostRate;
 }
-
-
-

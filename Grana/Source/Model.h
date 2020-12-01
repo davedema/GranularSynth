@@ -44,14 +44,15 @@ public:
     int getFilePos();                                       //get user starting position
     int getxyArrayPosition();                               //get current position in xyArray [0, xyPlane.size()]
     Point<float> getCurrentxyPosition();                    //get current position in xyplane [0, 1] X [0, 1] 
-    float getCurrentFrequencyShift();                       //get current frequency shift
+    float getCurrentFrequencyShift();                       //get current frequency shift mapped from xy plane
 
-    int getCurrentTime();
+    int getCurrentTime();                                   //get current time position mapped from xy plane
     float getCurrentGain();
     int getSpread(); // in samples
     bool randomize();   //return true if the grain has to be randomized
 
-
+    int getSampleRate();
+    void setSampleRate(int sampleRate);
 
 private:
     Random r_spread;
@@ -65,7 +66,6 @@ private:
     float speedModule;
     bool isPlaying;
     bool hasLoadedFile;
-    double sampleRate;
     int fileLength; // in samples
     int speedDirection;
     int readposition; // scanning position in the file
@@ -73,6 +73,7 @@ private:
     Array<Point<float>> xyPlane;
     bool init;
     float currentGain;
+    int sampleRate;
 
     int spread;
     float random;

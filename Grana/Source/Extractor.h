@@ -12,7 +12,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "./SpectrumDrawable.h"
-#include <thread>         // std::thread
+#include "Model.h"
 
 enum
 {
@@ -31,6 +31,9 @@ public:
     void computeSpectrum();
     void timerCallback() override;
     void setTarget(SpectrumDrawable* s);
+    void setModel(Model* model);
+
+    void resetTotal(); //reset shift measurement logic
 
       
 private:
@@ -44,4 +47,11 @@ private:
 
     bool isBlockReady;
     int write_idx; // writing index - managing a different number of samples per block in processor
+
+    int currentMaximumIndex;      //argmax of this->spectrum
+    int previousMaximumIndex;     //argmax of previous spectrum
+    float totalShift;             //integrated peak shift over time
+    float averageFrequency;       //frequency averaged over the magnitude spectrum
+
+    Model* model;
 };
