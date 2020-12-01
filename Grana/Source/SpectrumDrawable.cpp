@@ -17,6 +17,13 @@ SpectrumDrawable::SpectrumDrawable()
     this->measuredShift = 0;
     this->resolution = 0;
     this->averageFrequency = 0;
+    float skewx = 0.0f;
+    for (int i = 0; i < 10; i++) {
+       
+        auto skewx =  -std::log10( (float)(i+1) * (float)10 / (float)100); // skew x-axis onto log scale
+        horizontalLines.add((float)i / (float)10);
+        verticalLines.add(skewx/3);
+    }
 }
 
 SpectrumDrawable::~SpectrumDrawable()
@@ -26,10 +33,11 @@ SpectrumDrawable::~SpectrumDrawable()
 void SpectrumDrawable::paint(Graphics& g)
 {
     g.fillAll(Colour(ColourPalette::drawbox));
+    this->drawGrid(g);
 
-    g.setColour(Colour(ColourPalette::bright_component));
+    g.setColour(Colour(ColourPalette::numbers));
 
-    if (this->currentFrame != nullptr)
+    if (this->currentFrame != nullptr && averageFrequency != 0)
     {
         auto margin = 5;
         auto height = getLocalBounds().getHeight() - margin;
@@ -49,7 +57,7 @@ void SpectrumDrawable::paint(Graphics& g)
         g.strokePath(myPath, PathStrokeType(3.0f));
         
         Colour base = Colour(ColourPalette::numbers);
-        ColourGradient* gradient = new ColourGradient(Colour(ColourPalette::bright_component), 0, getHeight(), Colour(ColourPalette::numbers), 0, 0, false);
+        ColourGradient* gradient = new ColourGradient(Colour(ColourPalette::dark_component), 0, getHeight(), Colour(ColourPalette::numbers), 0, 0, false);
         gradient->clearColours();
         gradient->addColour(0, base.darker().darker());
         gradient->addColour(0.2, base.darker());
@@ -57,7 +65,7 @@ void SpectrumDrawable::paint(Graphics& g)
         gradient->addColour(0.7, base.brighter());
 
         g.setGradientFill(*gradient);
-
+        g.setOpacity(0.7);
         g.fillPath(myPath);
 
         delete gradient;
@@ -65,10 +73,15 @@ void SpectrumDrawable::paint(Graphics& g)
         g.drawFittedText("Peak Shift: " + String(this->measuredShift) + "Hz" + //Print frequency data 
                          "\nOut Average Freq: " + String(this->averageFrequency) + "Hz" +
                          "\nResolution: " + String(this->resolution) + "Hz" ,
-                         0, 10, getWidth(), 25, Justification::centred, 3);
+                         0, 10, getWidth(), 25, Justification::centred, 3); 
+       
+        g.setColour(Colours::yellow);
+        auto prova = -std::log10((float)(1.0f - 2 * this->averageFrequency / (float)this->sampleRate)) * 10  ;
+        DBG(prova);
+        g.drawVerticalLine(prova *getWidth(), margin, getHeight()-margin );
+        
     }  
     
-    this->drawGrid(g);
 
 }
 
@@ -76,12 +89,14 @@ void SpectrumDrawable::resized()
 {
 }
 
-void SpectrumDrawable::drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq)
+void SpectrumDrawable::drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq, float sampleRate)
 {
     currentFrame = bins;
-    this->resolution = resolution;
     this->measuredShift = measuredShift;
     this->averageFrequency = averageFreq;
+    this->resolution = resolution;
+    this->sampleRate = sampleRate;
+
     repaint();
 }
 
@@ -94,7 +109,21 @@ void SpectrumDrawable::drawGrid(Graphics& g)
 
   Line<float> mag_ax(Point<float>(margin, (float)getHeight() - margin),
       Point<float>(margin, margin));
-    g.setColour(Colours::white);
+    g.setColour(Colour(ColourPalette::dark_component));
     g.drawLine(freq_ax); 
     g.drawLine(mag_ax);
+    
+  
+    for (auto line : verticalLines) {
+        g.drawLine((1.0f -line) * getWidth() - margin, margin, (1.0f - line) * getWidth() - margin, this->getHeight() - margin, 0.3);
+        g.drawLine((1.0f - line - 0.33f) * getWidth() - margin, margin, (1.0f - line  - 0.33f) * getWidth() - margin, this->getHeight() - margin, 0.3);
+        g.drawLine((1.0f - line - 0.66f) * getWidth() - margin, margin, (1.0f - line - 0.66f) * getWidth() - margin, this->getHeight() - margin, 0.3);
+
+    }
+
+    for (auto line : horizontalLines)
+    {
+        g.drawLine(margin, line * getHeight(), getWidth() - margin, line * getHeight(), 0.3);
+    }
+
 }

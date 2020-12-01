@@ -124,8 +124,8 @@ void KnobSection::resized()
     FlexBox box2;
     box2.flexDirection = FlexBox::Direction::column;
     box2.justifyContent = FlexBox::JustifyContent::spaceAround;
-    box2.items.add(FlexItem(envelopeList).withHeight(30).withMargin(FlexItem::Margin(4, 0, 40, 0)));
-    box2.items.add(FlexItem(envShapelab).withFlex(0.5));
+    box2.items.add(FlexItem(envelopeList).withHeight(30).withMargin(FlexItem::Margin(4, 0, 30, 0)));
+    box2.items.add(FlexItem(envShapelab).withFlex(1).withMargin(FlexItem::Margin(0, 0, 5, 0)));
     box2.items.add(FlexItem(envShape).withFlex(2).withMargin(FlexItem::Margin(5, 0, 4, 0)));
     envelopeBox.items.add(FlexItem(box2).withFlex(2));
 
@@ -138,12 +138,12 @@ void KnobSection::resized()
     }
 
     level2.flexDirection = FlexBox::Direction::row;
-    level2.items.add(FlexItem(envelopeBox).withFlex(2));
-    level2.items.add(FlexItem(knobBox).withFlex(3));
+    level2.items.add(FlexItem(envelopeBox).withFlex(1).withMargin(FlexItem::Margin(0, 20, 0, 20)));
+    level2.items.add(FlexItem(knobBox).withFlex(1).withMargin(FlexItem::Margin(0, 20, 0, 20)));
     
     layout.flexDirection = FlexBox::Direction::column;
     layout.items.add(FlexItem(positionBox).withFlex(1).withMargin(FlexItem::Margin(0, 0, 10, 0)));
-    layout.items.add(FlexItem(level2).withFlex(2));
+    layout.items.add(FlexItem(level2).withFlex(1));
 
     layout.performLayout(getLocalBounds());
 }

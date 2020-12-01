@@ -30,11 +30,11 @@ void CustomLookAndFeel::drawRotarySlider(Graphics&g, int x, int y, int width, in
     auto angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
     // fill
-    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::defaultFill));
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::menuText));
     g.fillEllipse(rx, ry, rw, rw);
 
     // outline
-    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::outline));
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::widgetBackground));
     g.drawEllipse(rx, ry, rw, rw, 1.0f);
 
     Path p;
@@ -56,7 +56,7 @@ void CustomLookAndFeel::drawButtonBackground(Graphics& g,
         auto cornerSize = 6.0f;
         auto bounds = button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
 
-        auto baseColour = getCurrentColourScheme().getUIColour(ColourScheme::UIColour::widgetBackground).withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f)
+        auto baseColour = getCurrentColourScheme().getUIColour(ColourScheme::UIColour::windowBackground).withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f)
             .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
 
         if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
@@ -99,8 +99,8 @@ LookAndFeel_V4::ColourScheme CustomLookAndFeel::getColourScheme()
 {
     return ColourScheme{
         0xff3f3847, //windowbg
-        0xffada8b6, // widget bg
-        0xff4c5b61, // menu bg
+        0xff12141B, // widget bg ada8b6
+        0xff12141B, // menu bg 4c5b61
         0xffcecfc7,  //outline
         0xffcecfc7,  //defualt text
         0xff4c5b61, // defautkl fill

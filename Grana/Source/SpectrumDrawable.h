@@ -19,14 +19,17 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
-    void drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq);
+    void drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq, float sampleRate);
     void drawGrid(Graphics&);
 
 private: 
     float* currentFrame;
     float measuredShift;
-    float resolution;
     float averageFrequency;
+    float resolution;
+    float sampleRate;
+    Array<float> verticalLines;
+    Array<float> horizontalLines;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SpectrumDrawable)
 };

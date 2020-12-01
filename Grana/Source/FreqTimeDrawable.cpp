@@ -25,7 +25,7 @@ FreqTimeDrawable::~FreqTimeDrawable()
 
 void FreqTimeDrawable::paint(Graphics&g)
 {
-    g.fillAll(Colour(ColourPalette::bright_component));
+    g.fillAll(Colour(ColourPalette::drawbox));
     Path path;
 
     if (drawnPoints->size() != 0) {
@@ -72,8 +72,8 @@ void FreqTimeDrawable::setModel(Model* model)
 
 void FreqTimeDrawable::enlightPoint(Point<float> point, Graphics& g)
 {
-    g.setColour(Colours::navy);
-    g.drawEllipse(point.getX() * getWidth(), point.getY() * getHeight(), 3, 3, 1);
+    g.setColour(Colours::white);
+    g.drawEllipse(point.getX() * getWidth(), point.getY() * getHeight(), 4, 4, 2);
 }
 
 void FreqTimeDrawable::drawAxis(Graphics&g)

@@ -84,7 +84,7 @@ void Extractor::timerCallback()
 {
     if (!this->model->getIsPlaying()) {
         resetTotal(); //reset logic if stopped
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency);
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
         return;
     }
 
@@ -98,7 +98,7 @@ void Extractor::timerCallback()
         else //at the beginning start from the same offset
             this->totalShift += model->getCurrentFrequencyShift();
 
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency);
+        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
         isBlockReady = false;
         this->previousMaximumIndex = this->currentMaximumIndex;
         this->currentMaximumIndex = 0;

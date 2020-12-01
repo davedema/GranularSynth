@@ -25,7 +25,7 @@ void EnvelopeDrawable::paint(Graphics&g)
 
     g.drawRect(Rectangle<float>(0, 0, this->getWidth(), this->getHeight()));
 
-    g.setColour(Colour(ColourPalette::bright_component));
+    g.setColour(Colour(ColourPalette::numbers));
 
     float size_x = this->getWidth();
     if (size_x == 0) return;
