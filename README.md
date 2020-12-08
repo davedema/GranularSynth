@@ -7,19 +7,19 @@
 ## What is Granular Synthesis
 
 ### Brief history
-The most common definition of sound is related to the concept of wave propagating in space and time. With the emerging developments in the electro-acoustic technologies raised in the XX century, the British physicist Dennis Gabor published in the late 40s three important papers, where he combines theories from quantum theory with practical experiment. 
+The most common definition of sound is related to the concept of wave propagating in space and time. With the emerging developments in the electro-acoustic technologies raised in the XX century, the British physicist Dennis Gabor published in the late 40s three important papers, where he combined theory from quantum mechanics with practical experiment. 
 His idea is that any continuous tone can be decomposed into a family of functions obtained by shifting in time and frequency a single acoustic grain. This theory was strongly affected by psychoacoustics since human hearing is not continuous and infinite in resolution.
-So, from a representation of a signal in time domain, s(t), and from one in frequency domain S(f) derived from Fourier analysis, he created a mathematical abstraction able to map a signal and its energy onto an “effective time and effective spectral width”. Gabor’s analysis can be also thought as a series of localized Fourier transforms.[4]
-This technique was born with the publishment by Dr. Ing. D. Gabor of the article "*Theory of communication*" [[1]] in  which, by the use of the [Hilbert Transform](https://en.wikipedia.org/wiki/Hilbert_transform) and its meaning in the Quantum Mechanichal Formalism,  he derived a new two-dimensional representation of signals with time and frequency as coordinates which he called "diagram of information".
+This technique was born with the publishment by Dr. Ing. D. Gabor of the article "*Theory of communication*" [[1]] in  which, by the use of the [Hilbert Transform](https://en.wikipedia.org/wiki/Hilbert_transform) and its meaning in the Quantum Mechanichal Formalism,  he derived a new two-dimensional representation of signals with time and frequency as coordinates which he called "diagram of information": from a representation of a signal in time domain, s(t), and from one in frequency domain S(f) derived from Fourier analysis, he created a mathematical abstraction able to map a signal and its energy onto an “effective time and effective spectral width”. Gabor’s analysis can be also thought as a series of localized Fourier transforms.[4]
 Gabor noticed that any analysis requiring signal windowing (such as STFT), entails a strong relationship between time and frequency. High resolution in frequency requires long time windows, at cost of losing track of when exactly some event occurred. Vice versa, having high temporal resolution (short windows), implies losing frequency precision. This strong connection establish a sort of "uncertainty principle", setting the limits of our comprehension of acoustic quantas.
 
 ### Granulation
-The main technique on which granular synthesis is based on is the granulation, that is a process in which an audio file is broken down into tiny segments of audio. This original series, in chronological order, is called the “graintable.” If grains are played in this order at the speed of the original sample, the output will play back that original file. But if grains are played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
+The main technique on which granular synthesis is based on is granulation, a process in which an audio file is broken down into tiny segments of audio, usually lasting from 5 to 100 ms [[4]]. The sequence of grains in chronological order is called the “graintable”; if grains are played in this order at the speed of the original sample, the output will play back that original file, if one makes sure that amplitude envelopes of overlapping grains sum up to one. If grains are instead played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
 
-Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, and interesting noise layers.
+Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, natural sounds and interesting noise layer.
 
 ## The application
-The goal of our application is to provide a useful and relatively simple tool to play with granular synthesis and understand it better.
+The goal of our application is to provide a useful and relatively simple tool to play with granular synthesis and understand it better, along with providing a software able to 
+make the user easily experience independent time-stretching and frequency shifting. 
 In this section all the controls are explained one by one.
 
 ### File loading
@@ -104,7 +104,6 @@ The horizontal axis represents the position in the active section, while the y a
 [[2]] Generation and Combination of Grains for Music Synthesis,
 Douglas L. Jones and Thomas W. Parks
 
-[[3]] Spectral Granular Synthesis, Stefano Fasciani
 
 [4] Microsound, Curtis Roads, MIT Press, 2002
 
@@ -112,7 +111,6 @@ Douglas L. Jones and Thomas W. Parks
 
 [1]: http://www.granularsynthesis.com/pdf/gabor.pdf 
 [2]: https://www.jstor.org/stable/3679939?seq=1
-[3]: https://www.researchgate.net/publication/326316857_Spectral_Granular_Synthesis
 [5]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
 
 ## Notes
