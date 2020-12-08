@@ -77,7 +77,6 @@ void SpectrumDrawable::paint(Graphics& g)
        
         g.setColour(Colours::yellow);
         auto prova = -std::log10((float)(1.0f - 2 * this->averageFrequency / (float)this->sampleRate)) * 10  ;
-        DBG(prova);
         g.drawVerticalLine(prova *getWidth(), margin, getHeight()-margin );
         
     }  
@@ -109,7 +108,7 @@ void SpectrumDrawable::drawGrid(Graphics& g)
 
   Line<float> mag_ax(Point<float>(margin, (float)getHeight() - margin),
       Point<float>(margin, margin));
-    g.setColour(Colour(ColourPalette::dark_component));
+    g.setColour(Colour(ColourPalette::bright_component));
     g.drawLine(freq_ax); 
     g.drawLine(mag_ax);
     

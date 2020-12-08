@@ -35,12 +35,13 @@ void WaveformDrawable::init(AudioProcessorValueTreeState* apvts, Model* model)
 void WaveformDrawable::paint(Graphics&g)
 {
     juce::Rectangle<int> thumbnailBounds(0, 0, this->getWidth(), this->getHeight());
+    g.setColour(Colour(ColourPalette::dark_component));
+    g.fillRect(thumbnailBounds);
 
     if (this->model->getHasLoadedFile())
     {
-        g.setColour(Colour(ColourPalette::background).withMultipliedAlpha(0.3));
-        g.fillRect(thumbnailBounds);
-        g.setColour(Colour(ColourPalette::dark_component));
+
+        g.setColour(Colour(ColourPalette::numbers));
 
         thumbnail->drawChannels(g,
             thumbnailBounds,
@@ -51,7 +52,7 @@ void WaveformDrawable::paint(Graphics&g)
         paintSelected(g);
     }
     else {
-        g.setColour(Colour(ColourPalette::dark_component));
+        g.setColour(Colour(ColourPalette::numbers));
 
         g.drawLine(Line<float>(0, this->getHeight() / 2, this->getWidth(), getHeight() / 2));
     }
@@ -104,8 +105,8 @@ void WaveformDrawable::paintSelected(Graphics& g)
     else
         selectionBounds = Rectangle<int>(filepos, 0, (this->getWidth() - filepos), this->getHeight());
 
-    g.setColour(Colour(ColourPalette::numbers));
-    g.setOpacity(0.4);
+    g.setColour(Colour(Colours::white));
+    g.setOpacity(0.1);
     g.fillRect(selectionBounds);
 }
 
@@ -138,7 +139,7 @@ void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
         Point<float> grain ( (float) current_pos + r.nextInt(Range<int>(-5,5)),
                               (float)i / n_grains * mid + r.nextInt(Range<int>(-mid, mid)));
 
-        g.fillEllipse(grain.x, grain.y, 8.0f, 8.0f);
+        g.fillRect(grain.x, grain.y, 8.0f, 8.0f);
                                 
     }
 }

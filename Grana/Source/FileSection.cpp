@@ -32,7 +32,7 @@ void FileSection::init(AudioProcessorValueTreeState* apvts, Model* model)
     this->model = model;
     //LOAD FILE BUTTON
     addAndMakeVisible(loadButton);
-    loadButton.setButtonText("Load");
+    loadButton.setButtonText("LOAD");
     loadButton.addListener(this);
 
     //PLAY FILE BUTTON

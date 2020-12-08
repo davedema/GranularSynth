@@ -13,7 +13,7 @@
 
 enum ColourPalette {
     background = 0xff3f3847,
-    dark_component = 0xff4c5b61,
+    dark_component = 0xff12141B,
     bright_component = 0xffada8b6,
     text = 0xffcecfc7,
     numbers = 0xffdb5a42,

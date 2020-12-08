@@ -27,6 +27,9 @@ void FreqTimeDrawable::paint(Graphics&g)
 {
     g.fillAll(Colour(ColourPalette::drawbox));
     Path path;
+    this->drawAxis(g);
+
+
 
     if (drawnPoints->size() != 0) {
         path.startNewSubPath(drawnPoints->getFirst().getX() * (float)getWidth(),
@@ -39,9 +42,22 @@ void FreqTimeDrawable::paint(Graphics&g)
         g.setColour(Colour(ColourPalette::numbers));
         g.strokePath(path, PathStrokeType(3.5f));
     }
+    g.setFont(10);
+
+    g.setColour(Colour(ColourPalette::bright_component));
+    g.drawText("Freq. shift [Hz]", getWidth() / 2 - 3, 5, 100, 6, Justification::centred, false);
+    g.drawText("Time [ms]", getWidth() - 85, getHeight() / 2 + 8, 100, 6, juce::Justification::centred, false);
+
+    g.drawLine(getWidth() / 2 - 3, 5, getWidth() / 2 + 3, 5); //2k tick
+    g.drawText("+2k", getWidth() / 2 - 25, 5, 18, 5, juce::Justification::centred, false);
+    
+    g.drawLine(getWidth() / 2 - 3, getHeight() - 5, getWidth() / 2 + 3, getHeight() - 5); // -2k tick
+    g.drawText("-2k", getWidth() / 2 - 25, getHeight() - 10, 18, 5, juce::Justification::centred, false);
+
+
+    g.drawHorizontalLine(5, 3, 3);
 
     enlightPoint(model->getCurrentxyPosition(), g);
-    this->drawAxis(g);
 
 }
 
@@ -79,12 +95,13 @@ void FreqTimeDrawable::enlightPoint(Point<float> point, Graphics& g)
 void FreqTimeDrawable::drawAxis(Graphics&g)
 {
     auto margin = 5.0f;
-    Line<float> time_ax(Point<float>(margin, (float)getHeight() - margin),
-        Point<float>((float)getWidth() - margin, (float)getHeight() - margin));
+    Line<float> freq_ax(Point<float>(getWidth() / 2, (float)getHeight() - margin),
+        Point<float>((float)getWidth() / 2, margin));
 
-    Line<float> freq_ax(Point<float>(margin, (float)getHeight() - margin),
-        Point<float>(margin, margin));
-    g.setColour(Colours::black);
+    Line<float> time_ax(Point<float>(margin, (float)getHeight() / 2 ),
+        Point<float>((float)getWidth() - margin, (float)getHeight()/2));
+    g.setColour(Colour(ColourPalette::bright_component));
+
     g.drawLine(freq_ax);
     g.drawLine(time_ax);
 

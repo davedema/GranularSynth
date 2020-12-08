@@ -30,7 +30,7 @@ void CustomLookAndFeel::drawRotarySlider(Graphics&g, int x, int y, int width, in
     auto angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
     // fill
-    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::menuText));
+    g.setColour(getCurrentColourScheme().getUIColour(ColourScheme::UIColour::highlightedFill));
     g.fillEllipse(rx, ry, rw, rw);
 
     // outline
@@ -106,6 +106,6 @@ LookAndFeel_V4::ColourScheme CustomLookAndFeel::getColourScheme()
         0xff4c5b61, // defautkl fill
         0xffada8b6, //highlighted text
         0xffdb5a42, //menu text 
-        0xffdb5a42 // numColours
+        0xffcecfc7 // numColours
     };
 }

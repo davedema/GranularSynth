@@ -61,6 +61,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
 LaGranaAudioProcessor::~LaGranaAudioProcessor()
 {
     FileLoader::resetInstance();
+    this->granulatorModel.setIsPlaying(false);
 }
 
 //==============================================================================

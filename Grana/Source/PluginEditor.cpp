@@ -8,8 +8,8 @@
 
 #include "PluginEditor.h"
 
-constexpr auto GLOBAL_WIDTH = 800;
-constexpr auto GLOBAL_HEIGHT = 680;
+constexpr auto GLOBAL_WIDTH = 850;
+constexpr auto GLOBAL_HEIGHT = 700;
 
 //==============================================================================
 LaGranaAudioProcessorEditor::LaGranaAudioProcessorEditor (LaGranaAudioProcessor& p): 
@@ -62,6 +62,7 @@ LaGranaAudioProcessorEditor::~LaGranaAudioProcessorEditor()
 void LaGranaAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll(Colour(ColourPalette::background).darker(0.8));
+
 }
 
 void LaGranaAudioProcessorEditor::resized()

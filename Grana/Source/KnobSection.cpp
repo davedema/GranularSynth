@@ -40,7 +40,7 @@ void KnobSection::init(AudioProcessorValueTreeState& apvts, WaveformDrawable* wa
     filepos.setSliderStyle(Slider::LinearHorizontal);
     filepos.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     filepos.onValueChange = [this] {this->waveform->repaint(); };
-    labfilepos.setText("Filepos", dontSendNotification);
+    labfilepos.setText("Position", dontSendNotification);
     labfilepos.setFont(Font(12.0f));
     labfilepos.setJustificationType(Justification(36));
     labfilepos.attachToComponent(&filepos, true);
