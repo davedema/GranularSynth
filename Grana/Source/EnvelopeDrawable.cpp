@@ -13,6 +13,7 @@
 EnvelopeDrawable::EnvelopeDrawable()
 {
     setSize(200, 50);
+    this->envWidth = 0.125;
 }
 
 EnvelopeDrawable::~EnvelopeDrawable()

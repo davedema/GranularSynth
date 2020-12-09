@@ -17,7 +17,7 @@ Model::Model()
     this->hasLoadedFile = false;
     this->filePos = 0;
     this->envIndex = 1;
-    this->envWidth = 0.5;
+    this->envWidth = 0.125;
     this->sectionSize = 0.5;
     this->density = 25.;
     this->grainSize = 25.;

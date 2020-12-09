@@ -31,7 +31,7 @@ LaGranaAudioProcessor::LaGranaAudioProcessor()
         std::make_unique<AudioParameterFloat>("Section Size", "Section Size", 0.01f, 1.0f, 0.5f),
         std::make_unique<AudioParameterBool>("isPlaying", "isPlaying", false),
         std::make_unique<AudioParameterFloat>("envIndex", "envIndex", 1, 3, 1), // 1 gaussian, 2raised, 3 trapezoidal
-        std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.5),
+        std::make_unique<AudioParameterFloat>("envWidth","envWidth", 0, 1, 0.125),
         std::make_unique<AudioParameterFloat>("Density", "Density", GRAIN_DENSITY_MIN, GRAIN_DENSITY_MAX, 25.0f),
         std::make_unique<AudioParameterFloat>("Grain Size", "Grain Size", GRAIN_MIN, GRAIN_MAX, 25.0f), 
         std::make_unique<AudioParameterFloat>("Speed", "Speed", -2, 2, 1),

@@ -76,8 +76,10 @@ void SpectrumDrawable::paint(Graphics& g)
                          0, 10, getWidth(), 25, Justification::centred, 3); 
        
         g.setColour(Colours::yellow);
-        auto prova = -std::log10((float)(1.0f - 2 * this->averageFrequency / (float)this->sampleRate)) * 10  ;
-        g.drawVerticalLine(prova *getWidth(), margin, getHeight()-margin );
+        //auto prova = std::log10((1 + ((float)this->averageFrequency * 9.0f / (float)20000.0f))) ;
+        //auto prova = (getWidth() - 2 * margin) - std::exp(std::log((1.0f - (float)this->averageFrequency / (float)20000.0f) * 0.2f * (getWidth() - 2 * margin)) ); // skew x-axis onto log scale
+        auto prova = std::log10((float)(this->averageFrequency)) / std::log10((float)this->sampleRate / 2.0f);
+        g.drawVerticalLine(prova * (getWidth() - 2 * margin) + margin, margin, getHeight()-margin );
         
     }  
     
@@ -114,11 +116,13 @@ void SpectrumDrawable::drawGrid(Graphics& g)
     
   
     for (auto line : verticalLines) {
-        g.drawLine((1.0f -line) * getWidth() - margin, margin, (1.0f - line) * getWidth() - margin, this->getHeight() - margin, 0.3);
-        g.drawLine((1.0f - line - 0.33f) * getWidth() - margin, margin, (1.0f - line  - 0.33f) * getWidth() - margin, this->getHeight() - margin, 0.3);
-        g.drawLine((1.0f - line - 0.66f) * getWidth() - margin, margin, (1.0f - line - 0.66f) * getWidth() - margin, this->getHeight() - margin, 0.3);
-
+        g.drawLine((1.0f -line) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
+        g.drawLine((1.0f - line - 0.33f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line  - 0.33f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
+        if (line != verticalLines[0])
+            g.drawLine((1.0f - line - 0.66f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line - 0.66f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
     }
+
+    g.drawLine(getWidth() - margin, margin, getWidth() - margin, this->getHeight() - margin, 0.3);
 
     for (auto line : horizontalLines)
     {
