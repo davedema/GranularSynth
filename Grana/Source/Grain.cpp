@@ -20,9 +20,9 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution,
     this->currentPosition = 0;
     this->finished = false;
 
-    if (freqShift > 0) {
+    if (freqShift > 0) { 
     
-        AudioBuffer<float> *analiticSignal = new AudioBuffer<float>(FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->length);
+        ScopedPointer<AudioBuffer<float>> analiticSignal = new AudioBuffer<float>(FileLoader::getInstance()->getAudioBuffer()->getNumChannels(), this->length);
         for (auto channel = 0; channel < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); channel++) {
             for (auto i = 0; i < length; i++) {
                 analiticSignal->setSample(channel, i, hilbertTransform[bufferHilbertIndex(channel, i) + 1]);
@@ -33,7 +33,7 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution,
         hiPass->setType(dsp::LinkwitzRileyFilterType::highpass);
         dsp::ProcessSpec spec{ hostRate, static_cast<juce::uint32> (grainDuration), static_cast<juce::uint32> (FileLoader::getInstance()->getAudioBuffer()->getNumChannels())};
         hiPass->prepare(spec);
-        hiPass->setCutoffFrequency(freqShift);
+        hiPass->setCutoffFrequency(freqShift + hostRate / (2 * length));
         juce::dsp::AudioBlock<float> block(*this->buffer);
         juce::dsp::ProcessContextReplacing<float> context(block);
         hiPass->process(context);
@@ -44,12 +44,10 @@ Grain::Grain(int grainDuration, int startPos, bool highreSolution,
 
         for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
             channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate, analiticSignal);
-
-        delete analiticSignal;
     }
     else {
         for (int i = 0; i < FileLoader::getInstance()->getAudioBuffer()->getNumChannels(); i++)
-        channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate);
+            channelFreqShift(freqShift, i, envelopeType, envelopeWidth, hostRate);
 
     }
 
