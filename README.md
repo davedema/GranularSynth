@@ -78,30 +78,6 @@ The most important ones are:
 - **Granulator**: this class is the core of the application. It contains a list of active grains. It cycles through all the active grains and writes directly onto the output audio buffer. When a grain is over, it is removed from the stack. The next on-set depends on the grain density defined by the user. It is decremented at each cycles and when it reaches zero, it means that the next grain should be added to the stack and played. 
 - **Model** : model class created to implement a Model-View-Control pattern. The state of the plugin parameters is stored here, and all the other classes can access to it in order to retrieve information about the different controls.
 
-### File controls
-The user can upload a sample, and it will be used as a wavetable to be granulized.
-Also the starting position and the size of the section can be controlled, so that the granulator will reproduce cyclically through the selected area. 
-Also a master gain control is provided.
-### Grain parameters 
-The choice of grain parameters is fundamental to achieve different sonic behaviour of our grain cloud.
-
-- **Grain density**: represents how many grains are generated each second. This parameter must be treated carefully since a great overlap of grains will result in some unpredictable clippings. Low values of density will create rhythmic patterns since the distance between successive grains becomes greater.
-- **Grain size**: typical grain durations are between 5ms and 100ms. Just around 50ms we start hearing some stable pitch-like behaviour, while shorter segmenets will result in impulsive/noise-like sounds. 
-Notice that the spectral bandwidth of the grain is inversely proportional its duration.
-- **Envelope shape**: we created three different possible envelopes. The envelope width can be adjusted through the width slider.
-   - The Gaussian envelope, as originally thought by Gabor to mathematically model its acoustic quantas. 
-   - The raised-cosine envelope.
-   - Trapezoidal envelope.
-
-An interesting aspect related to grain enveloping is that they contribute to an AM effect [4].
-### Grain playback
-
-### Spectral Output
-Extractor class takes a portion of the output buffer and everytime it has been filled an asynchronous call is made in order to plot the spectrum. 
-The FFT size is of 2048 samples. Then it is processed into 256 bins for representation purposes.
-## Time-Frequency plane
-This section is a 2-D canvas where the user can draw. Clicking will enable the control and the user can decide when a grain will be played and how much it will be shifted in frequency. 
-The horizontal axis represents the position in the active section, while the y axis will decide the amount of shift (in Hz).
 ## References
 
 [[1]] Theory of Communication, D.Gabor, 
