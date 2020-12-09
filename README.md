@@ -2,7 +2,9 @@
 
 <h2 align="center"> A Granular Synthesis playground </h2>
 
-<p>img del plugin</p>
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/37587013/101606994-57aa7080-3a04-11eb-8d76-98abef3e62f6.png" width=75%">
+</p>
 
 ## What is Granular Synthesis
 
