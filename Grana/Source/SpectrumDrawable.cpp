@@ -49,9 +49,9 @@ void SpectrumDrawable::paint(Graphics& g)
         for (int i = 0; i < size / 2; ++i)
         {
             myPath.quadraticTo(Point<float>((float)jmap(2 * i, 0, size, margin, width - margin),
-                jmap(*(currentFrame + 2 * i), 0.0f, 1.0f, (float)height - margin, 0.0f)),
+                jmap(*(currentFrame + (size_t)2 * i), 0.0f, 1.0f, (float)height - margin, 0.0f)),
                 Point<float>((float)jmap(2 * i + 1, 0, size, margin, width - margin),
-                    jmap(*(currentFrame + 2 * i + 1), 0.0f, 1.0f, (float)height - margin, 0.0f)));
+                    jmap(*(currentFrame + (size_t)2 * i + 1), 0.0f, 1.0f, (float)height - margin, 0.0f)));
         }
         myPath.lineTo(getWidth() - margin, getHeight() - margin);
         g.strokePath(myPath, PathStrokeType(3.0f));
@@ -78,7 +78,7 @@ void SpectrumDrawable::paint(Graphics& g)
         g.setColour(Colours::yellow);
         //auto prova = std::log10((1 + ((float)this->averageFrequency * 9.0f / (float)20000.0f))) ;
         //auto prova = (getWidth() - 2 * margin) - std::exp(std::log((1.0f - (float)this->averageFrequency / (float)20000.0f) * 0.2f * (getWidth() - 2 * margin)) ); // skew x-axis onto log scale
-        auto prova = std::log10((float)(this->averageFrequency)) / std::log10((float)this->sampleRate / 2.0f);
+        auto prova = std::log10(1.0f + (float)(this->averageFrequency - this->sampleRate / (2.0f * 256.0f))) / std::log10((float)this->sampleRate / 2.0f);
         g.drawVerticalLine(prova * (getWidth() - 2 * margin) + margin, margin, getHeight()-margin );
         
     }  
