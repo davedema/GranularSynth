@@ -20,7 +20,8 @@ The main technique on which granular synthesis is based on is granulation, a pro
 Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, natural sounds and interesting noise layer.
 
 ## The application
-The goal of our application is to provide a useful and relatively simple tool to play with granular synthesis and understand it better, along with easily experiencing independent time-stretching and frequency shifting.
+The application is built in C++ using the [JUCE framework](https://juce.com/) and can be used both as a VST3 in a DAW or as a standalone program.  
+The goal is to provide a useful and relatively simple tool to play with granular synthesis and understand it better, along with easily experiencing independent time-stretching and frequency shifting.
 
 In this section all the controls are explained one by one.
 
@@ -48,7 +49,7 @@ As envelope is intended the window applied to each grain in the playback phase.
 2. Controls the duration of the grains. The range goes from 5 ms up to 100 ms.
 3. Represents the probability of playing back a grain from a random position in a range controlled by the "Random Spread" parameter.
 4. Represents the range in which the randomic grain can be selected.
-5. Controls the playback speed.
+5. Controls the playback speed. In order to obtain slower (or faster) reproduction the grains are created in order to repeat (or skip) certain sections of the audio file. 
 
 ### Time-Frequency Pad
 <img src="https://user-images.githubusercontent.com/37587013/101624676-921f0800-3a1a-11eb-8d21-d0259a1d2767.png" width=40%>
@@ -61,22 +62,11 @@ The control is enabled by starting to draw and can be disabled by simply clickin
 
 Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes.
 
-## Frequency shifting
-( COSE PAZZE JACO)
+## Architecture
+Block diagrams con spiegazione
 
-## Software implementation
-The application is built in C++ using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. 
-
-### Architecture
-The project is built around the JUCE framework and its core library. 
-We created some custom classes to work in an object-oriented paradigm. 
-The most important ones are:
-- **FileLoader**: file loader class manages the sample, storing it into an audio buffer. Also a thumbnail is created to plot the waveform. At load, we compute the Hilbert transform to later processing and pitch shifting.
-- **Grain**: each grain instance is able to manage itself. The grain knows where it starts in the audio buffer, how much will it last, which kind of envelope will be applied to it and is able to delete itself once its life-cycle is over.
-- **GrainEnvelope**: class to manage different types of envelopes. Each grain can access to its methods to get the current value of the envelope to apply at each sample.
-- **SequenceStrategy**: this class manages the time scheduling of grains, based on user-driven parameters. 
-- **Granulator**: this class is the core of the application. It contains a list of active grains. It cycles through all the active grains and writes directly onto the output audio buffer. When a grain is over, it is removed from the stack. The next on-set depends on the grain density defined by the user. It is decremented at each cycles and when it reaches zero, it means that the next grain should be added to the stack and played. 
-- **Model** : model class created to implement a Model-View-Control pattern. The state of the plugin parameters is stored here, and all the other classes can access to it in order to retrieve information about the different controls.
+### Pitch Shifting
+Hilbert stuff
 
 ## References
 
