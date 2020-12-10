@@ -59,7 +59,7 @@ void FileSection::resized()
     loadplay.alignContent = FlexBox::AlignContent::center;
     loadplay.items.add(FlexItem(loadButton).withHeight(60).withWidth(50).withMargin(4));
     loadplay.items.add(FlexItem(playButton).withHeight(60).withWidth(50).withMargin(4));
-    
+
     loadplay.performLayout(getLocalBounds());
 }
 
@@ -89,7 +89,10 @@ void FileSection::buttonClicked(Button* b)
         FileChooser chooser("Select a Wave file to play...",
             {},
             "*.wav");
+        this->model->setIsPlaying(false);
+        this->playButton.setButtonText("PLAY");
 
+        this->playButton.setToggleState(false, dontSendNotification);
         if (chooser.browseForFileToOpen())
         {
             auto file = chooser.getResult();
