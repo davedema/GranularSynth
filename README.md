@@ -28,7 +28,8 @@ Because of its eclectic nature, granular synthesis is best used as a textural te
 Gabor's ideas connect the quantum mechanichal formalism with the signal theory world. More specifically, all the concepts deriving from the usage of quadrature signals
 find their explanation in the quantum world parallelism. 
 
-A very well done introductory article about quadrature signals is found in [[3]]; we will particularly see in this section how frequency shifting done via a Hilbert Transformer [[4]] is nothing else than a representation of the quantum mechanichal frequency shifter operator and consequently wonder about the families of quantum mechanichal transformations that can be achieved using Hilbert transformers.
+A very well done introductory article about quadrature signals is found in [[3]]; what we will particularly see in this section is how frequency shifting done via a Hilbert Transformer [[4]] is nothing else than a representation of the quantum mechanichal frequency shift operator and consequently wonder about the families of quantum mechanichal transformations that can be achieved using Hilbert transformers.
+
 Also, we will give a more straightforward and mathematical interpretation of the frequency shifting operation we're doing, in order to tackle this concept from more viewpoints.
 
 ## The application
