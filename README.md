@@ -34,7 +34,11 @@ Also, we will give a more straightforward and mathematical interpretation of the
 
 To be clear about the meaning of what we're about to say, we want to stress here that with Hilbert transform we intend the complex sum of the real signal along the real axis with its quadrature one along the complex axis H(t) = s(t) + j * a(t) with a(t) being the quadrature signal of s(t). We will not care about if the quadrature signal is the +90 degrees or -90 degrees phase shift version of the original one, being the formalism about taking the real part of the complex signal, operation invariant for complex conjugation.
 
-Starting from the last interpretation mentioned, we understand from [[3]] how the Hilbert transform represents a complex vector evolving in time in such a way that its real part at any moment represents the real signal at that moment.
+Starting from the last interpretation mentioned, we understand from [[3]] how the Hilbert transform represents a complex vector evolving in time in such a way that its real part at any moment represents the real signal at that moment. The following figure represents the Hilbert transform of a sinusoid:
+
+<p align="center">
+   <img src="https://www.dsprelated.com/blogimages/RickLyons/Quad_Signals_Fig6.JPG" width=75% alt="Hilbert transform of a sinusoidal signal">   
+</p>
 
 ## The application
 The application is built in C++ using the [JUCE framework](https://juce.com/) and can be used both as a VST3 in a DAW or as a standalone program.  
