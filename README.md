@@ -41,7 +41,7 @@ Starting from the last interpretation mentioned, we understand from [[3]] how th
 </p>
 
 ## The application
-The application is built in C++ using the [JUCE framework](https://juce.com/) and can be used both as a VST3 in a DAW or as a standalone program.  
+The application is built in C++ using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. It can be used both as a VST3 in a DAW or as a standalone program.  
 The goal is to provide a useful and relatively simple tool to play with granular synthesis and understand it better, along with easily experiencing independent time-stretching and frequency shifting.
 
 In this section all the controls are explained one by one.
