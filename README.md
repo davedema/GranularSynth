@@ -79,6 +79,9 @@ Hilbert stuff
 [[2]] Generation and Combination of Grains for Music Synthesis,
 Douglas L. Jones and Thomas W. Parks
 
+[[3]] A quadrature signals tutorial: complex, but not complicated, Rick Lyons
+
+[[4]] Phase or frequency shifting using a Hilbert transformer, Neil Robertson
 
 [5] Microsound, Curtis Roads, MIT Press, 2002
 
@@ -88,7 +91,7 @@ Douglas L. Jones and Thomas W. Parks
 [2]: https://www.jstor.org/stable/3679939?seq=1
 [3]: https://www.dsprelated.com/showarticle/192.php
 [4]: https://www.dsprelated.com/showarticle/1147.php
-[5]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
+[6]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
 
 ## Notes
 This project was developed for the course of Sound Analysis Synthesis and Processing (SASP) held by Professor Augusto Sarti at the Politecnico of Milan.
