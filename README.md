@@ -14,12 +14,12 @@ His idea is that any continuous tone can be decomposed into a family of function
 was born with the publishment by Dr. Ing. D. Gabor of the article "*Theory of communication*" [[1]] in  which, by the use of the [Hilbert Transform](https://en.wikipedia.org/wiki/Hilbert_transform) and its meaning in the Quantum Mechanical Formalism,  he derived a new two-dimensional representation of signals with time and frequency as coordinates which he called "diagram of information": from a complex representation of a signal in time domain, the Hilbert transform of the original signal, and from one in frequency domain derived from Fourier analysis of the Hilbert transform, he created a mathematical abstraction able to map a signal and its energy onto an “effective time and effective spectral width”, calculated as the mean time and frequency of a signal as intended in quantum mechanics, i.e. the value of the operator averaged over the wave function of the system. 
 This is where the [Hilbert Transform](https://en.wikipedia.org/wiki/Hilbert_transform) comes in handy, giving us the possibility to reconstruct the (collapsed) wave function from the real signal and use it to describe signals with the quantum mechanical formalism and also, as we will see, the possibility of applying quantum mechanical transformations to the signal.
 
-Gabor’s analysis can be also thought as a series of localized Fourier transforms.[4]
+Gabor’s analysis can be also thought as a series of localized Fourier transforms.[5]
 
 Gabor also noticed that any analysis requiring signal windowing (such as STFT), entails a strong relationship between time and frequency. High resolution in frequency requires long time windows, at cost of losing track of when exactly some event occurred. Vice versa, having high temporal resolution (short windows), implies losing frequency precision. This strong connection establish a sort of "uncertainty principle", setting the limits of our comprehension of acoustic quanta, and enforcing once again the quantum mechanichal parallelism in his theory. 
 
 ### Granulation
-The main technique on which granular synthesis is based on is granulation, a process in which an audio file is broken down into tiny segments of audio, usually lasting from 5 to 100 ms [[4]]. The sequence of grains in chronological order is called the “graintable”; if grains are played in this order at the speed of the original sample, the output will play back that original file, if one makes sure that amplitude envelopes of overlapping grains sum up to one. If grains are instead played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
+The main technique on which granular synthesis is based on is granulation, a process in which an audio file is broken down into tiny segments of audio, usually lasting from 5 to 100 ms [[5]]. The sequence of grains in chronological order is called the “graintable”; if grains are played in this order at the speed of the original sample, the output will play back that original file, if one makes sure that amplitude envelopes of overlapping grains sum up to one. If grains are instead played back in a different way (for example by skipping or repeating some of them, by changing their order or applying a frequency shift) different and particular timbres start to emerge.
 
 Because of its eclectic nature, granular synthesis is best used as a textural technique, often for drones, pads, natural sounds and interesting noise layer.
 
@@ -80,12 +80,14 @@ Hilbert stuff
 Douglas L. Jones and Thomas W. Parks
 
 
-[4] Microsound, Curtis Roads, MIT Press, 2002
+[5] Microsound, Curtis Roads, MIT Press, 2002
 
-[[5]] The Basics of Granular Synthesis, Griffin Brown
+[[6]] The Basics of Granular Synthesis, Griffin Brown
 
 [1]: http://www.granularsynthesis.com/pdf/gabor.pdf 
 [2]: https://www.jstor.org/stable/3679939?seq=1
+[3]: https://www.dsprelated.com/showarticle/192.php
+[4]: https://www.dsprelated.com/showarticle/1147.php
 [5]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
 
 ## Notes
