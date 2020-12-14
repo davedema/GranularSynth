@@ -48,12 +48,21 @@ void SpectrumDrawable::paint(Graphics& g)
         int size = 256;
         for (int i = 0; i < size / 2; ++i)
         {
-            myPath.quadraticTo(Point<float>((float)jmap(2 * i, 0, size, margin, width - margin),
-                jmap(*(currentFrame + (size_t)2 * i), 0.0f, 1.0f, (float)height - margin, 0.0f)),
-                Point<float>((float)jmap(2 * i + 1, 0, size, margin, width - margin),
-                    jmap(*(currentFrame + (size_t)2 * i + 1), 0.0f, 1.0f, (float)height - margin, 0.0f)));
+            float logProp = mapToLog10<float>( (float)(2 * i) / (float) size, 10.0f, (float)this->sampleRate / 2.0f);
+            float mapping = jmap(logProp, 10.0f, (float) this->sampleRate / 2.0f, 0.0f, (float)width);
+            DBG(mapping);
+            float logProp2 = mapToLog10<float>((float)(2 * i + 1) / size, 10, this->sampleRate / 2.0f);
+            float mapping2 = jmap(logProp2, 10.0f, (float)(this->sampleRate / 2.0f), 0.0f, (float)width);
+
+            myPath.quadraticTo(Point<float>(
+                (float)mapping, 
+                jmap(*(currentFrame + (size_t)2 * i), 0.0f, 1.0f, (float)height, 0.0f)),
+
+                Point<float>(
+                    (float)mapping2,
+                    jmap(*(currentFrame + (size_t)2 * i + 1), 0.0f, 1.0f, (float)height, 0.0f)));
         }
-        myPath.lineTo(getWidth() - margin, getHeight() - margin);
+        myPath.lineTo(width, height);
         g.strokePath(myPath, PathStrokeType(3.0f));
         
         Colour base = Colour(ColourPalette::numbers);
