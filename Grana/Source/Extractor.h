@@ -44,6 +44,7 @@ private:
     float input[fftSize]; // input block to transform
     float spectrum[2 * fftSize]; //output spectrum
     float bins[scopeSize]; // frequency bins to plot
+    float freqBins[scopeSize];
 
     bool isBlockReady;
     int write_idx; // writing index - managing a different number of samples per block in processor

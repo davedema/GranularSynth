@@ -22,6 +22,8 @@ Extractor::Extractor():forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunct
     this->write_idx = 0;
     zeromem(bins, sizeof(bins));
     startTimerHz(60);
+    zeromem(freqBins, sizeof(freqBins));
+
 }
 
 Extractor::~Extractor()
@@ -59,7 +61,7 @@ void Extractor::computeSpectrum()
     this->currentMaximumIndex = i;
 
     float averageFreq = 0, norm = 0;
-    float resolution = model->getSampleRate() / fftSize;
+    float resolution = model->getSampleRate() / (float)fftSize;
 
     for (int i = 0; i < fftSize/2; i++) { //average frequency over the magnitude spectrum
         averageFreq += i * resolution * spectrum[i];
@@ -79,20 +81,23 @@ void Extractor::computeSpectrum()
        //     mindB, maxdB, 0.0f, 1.0f);
        // bins[i] = level;
 
-
-        auto level = jmap(jlimit(mindB, maxdB, 
-            Decibels::gainToDecibels(spectrum[(i)/scopeSize * fftSize]) - Decibels::gainToDecibels((float)fftSize)),
+        // float resolution = model->getSampleRate() / fftSize;
+        int fftIndex = 1 + (float)i / (float)scopeSize * fftSize;
+        auto level = jmap(jlimit(mindB, maxdB, Decibels::gainToDecibels(spectrum[fftIndex]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
         bins[i] = level;
-
+        this->freqBins[i] = fftIndex * resolution / 2.0f;
+        DBG(fftIndex);
+        
     }
+    this->freqBins[scopeSize - 1] = fftSize / 2 * resolution;
 }
 
 void Extractor::timerCallback()
 {
     if (!this->model->getIsPlaying()) {
         resetTotal(); //reset logic if stopped
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
+        this->spectrumDrawable->drawNextFrame(bins,this->freqBins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
         return;
     }
 
@@ -106,7 +111,7 @@ void Extractor::timerCallback()
         else //at the beginning start from the same offset
             this->totalShift += model->getCurrentFrequencyShift();
 
-        this->spectrumDrawable->drawNextFrame(bins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
+        this->spectrumDrawable->drawNextFrame(bins, this->freqBins, this->totalShift, model->getSampleRate() / fftSize, this->averageFrequency, this->model->getSampleRate());
         isBlockReady = false;
         this->previousMaximumIndex = this->currentMaximumIndex;
         this->currentMaximumIndex = 0;

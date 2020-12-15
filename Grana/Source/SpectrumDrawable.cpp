@@ -67,8 +67,8 @@ void SpectrumDrawable::paint(Graphics& g)
         for (int i = 0; i < size - 1; ++i)
         {
             //DBG(*(currentFrame + i));
-            float freqToX1 = (std::log10(i / size * sampleRate/2 + 1) - 1) * (200 * 1.8 / 3.3f + margin);
-            float freqToX2 = (std::log10((i + 1) / size * sampleRate /2 +1) - 1) * (200 * 1.8 / 3.3f + margin);
+            float freqToX1 = (std::log10(*(freqBins + i)) - 1) * (200 * 1.8 / 3.3f + margin);
+            float freqToX2 = (std::log10(*(freqBins + i + 1)) - 1) * (200 * 1.8 / 3.3f + margin);
             myPath.quadraticTo(Point<float>(
                 (float)freqToX1, 
                 jmap(*(currentFrame + i), 0.0f, 1.0f, (float)height, 0.0f)),
@@ -116,9 +116,10 @@ void SpectrumDrawable::resized()
 {
 }
 
-void SpectrumDrawable::drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq, float sampleRate)
+void SpectrumDrawable::drawNextFrame(float* bins, float* freqBins, float measuredShift, float resolution, float averageFreq, float sampleRate)
 {
     currentFrame = bins;
+    this->freqBins = freqBins;
     this->measuredShift = measuredShift;
     this->averageFrequency = averageFreq;
     this->resolution = resolution;

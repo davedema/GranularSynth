@@ -19,11 +19,12 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
-    void drawNextFrame(float* bins, float measuredShift, float resolution, float averageFreq, float sampleRate);
+    void drawNextFrame(float* bins, float* freqBins, float measuredShift,float resolution, float averageFreq, float sampleRate);
     void drawGrid(Graphics&);
 
 private: 
     float* currentFrame;
+    float* freqBins;
     float measuredShift;
     float averageFrequency;
     float resolution;
