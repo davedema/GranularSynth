@@ -61,7 +61,7 @@ void Extractor::computeSpectrum()
     float averageFreq = 0, norm = 0;
     float resolution = model->getSampleRate() / fftSize;
 
-    for (int i = 0; i < fftSize / 2; i++) { //average frequency over the magnitude spectrum
+    for (int i = 0; i < fftSize/2; i++) { //average frequency over the magnitude spectrum
         averageFreq += i * resolution * spectrum[i];
         norm += spectrum[i];
     }
@@ -71,12 +71,20 @@ void Extractor::computeSpectrum()
 
     for (int i = 0; i < scopeSize; ++i)
     {
-        auto skewedProportionX = 1.0f - std::pow(10, std::log10(1.0f - (float)i / (float)scopeSize) * 0.2f); // skew x-axis onto log scale
-        auto fftDataIndex = jlimit(0, fftSize / 2, (int)(skewedProportionX * (float)fftSize * 0.5f)); //get corresponding index
+       // auto skewedProportionX = 1.0f - std::pow(10, std::log10(1.0f - (float)i / (float)scopeSize)); // skew x-axis onto log scale
+       // DBG(skewedProportionX);
+       // auto fftDataIndex = jlimit(0, fftSize / 2, (int)(skewedProportionX * (float)fftSize * 0.5f)); //get corresponding index
+       // auto level = jmap(jlimit(mindB, maxdB, 
+       //     Decibels::gainToDecibels(spectrum[fftDataIndex]) - Decibels::gainToDecibels((float)fftSize)),
+       //     mindB, maxdB, 0.0f, 1.0f);
+       // bins[i] = level;
+
+
         auto level = jmap(jlimit(mindB, maxdB, 
-            Decibels::gainToDecibels(spectrum[fftDataIndex]) - Decibels::gainToDecibels((float)fftSize)),
+            Decibels::gainToDecibels(spectrum[(i)/scopeSize * fftSize]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
         bins[i] = level;
+
     }
 }
 
