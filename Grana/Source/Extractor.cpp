@@ -82,12 +82,14 @@ void Extractor::computeSpectrum()
        // bins[i] = level;
 
         // float resolution = model->getSampleRate() / fftSize;
-        int fftIndex = 1 + (float)i / (float)scopeSize * fftSize;
+        //int fftIndex = 1 + (float)i / (float)scopeSize * fftSize;
+        auto skewedProportionX = 1.0f - std::pow(10, std::log10(1.0f - (float)(i+1) / (float)scopeSize)*0.2f); // skew x-axis onto log scale
+         auto fftIndex = jlimit(1, fftSize / 2, (int)(skewedProportionX * (float)fftSize * 0.5f)); //get corresponding index
+
         auto level = jmap(jlimit(mindB, maxdB, Decibels::gainToDecibels(spectrum[fftIndex]) - Decibels::gainToDecibels((float)fftSize)),
             mindB, maxdB, 0.0f, 1.0f);
         bins[i] = level;
-        this->freqBins[i] = fftIndex * resolution / 2.0f;
-        DBG(fftIndex);
+        this->freqBins[i] = fftIndex * resolution ;
         
     }
     this->freqBins[scopeSize - 1] = fftSize / 2 * resolution;
