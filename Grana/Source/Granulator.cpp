@@ -23,16 +23,26 @@ Granulator::Granulator()
 
 Granulator::~Granulator()
 {
-    for (auto grain : this->activeGrains) {       
+   /* for (auto grain : this->activeGrains) {       
         delete grain;
         grain = nullptr;
+    }*/
+    for (int i = 0; i < this->activeGrains.size(); ++i)
+    {
+        auto g = this->activeGrains.removeAndReturn(i);
+        delete g;
     }
 }
 
 //Initialize everything, add the first grain and take the onSet time for the next grain. Called when PLAY button is clicked
 void Granulator::initialize(int portionLength)
 {
-    this->activeGrains.clearQuick();
+    for (int i = 0; i < this->activeGrains.size(); ++i)
+    {
+        auto g = this->activeGrains.removeAndReturn(i);
+        delete g;
+    }
+
     this->position = this->model->getFilePos();
     model->setReadPosition(0); 
 

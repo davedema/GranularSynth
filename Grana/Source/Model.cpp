@@ -199,7 +199,7 @@ float Model::getCurrentFrequencyShift()
     if (xyPlane.isEmpty())
         return 0;
     int pos = getxyArrayPosition();
-    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 4000.0f - 2000.0f;
+    float freq = jmax(0.0f, jmin(xyPlane[pos].getY(), 1.0f)) * 400.0f - 200.0f;
     return freq;
 }
 
