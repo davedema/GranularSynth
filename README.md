@@ -44,6 +44,18 @@ as we can see, this vector rotates in the complex plane as time passes. On to th
 
 Now that we understand mathematically what is happening, we can move forward and take a look at this operation from a quantum mechanichal point of view. We will assume background knowledge of quantum mechanics and of theory of groups and representations in this explanation, we otherwise suggest to skip to the **"The application"** section. Our knowledge comes from one of our members which is very happy to be able to suggest for those who want to tackle these concepts references [7] and [8] (any textbook on quantum mechanichs/group theory should anyway be fine). 
 
+We know at this point that, from a quantum mechanichal point of view, exp(j * w * t) is a representation of the frequency shift operator and we are applying on the Hilbert transform of our input signal. Taking the real part of the output of this operation, we obtain our input signal with its spectrum shifted in frequency of the desired amount. We can at the very least say that the fact being of the frequency shift operation having exactly the structure of the quantum shift operator when applied to the Hilbert transform of our real signals, is suspicious. Expecially having knowledge of Gabor's article [[1]], where this parallelism within signal theory and the quantum mechanichs formalism is so well-exposed. It naturally follows asking ourselves two things: 
+
+What does the Hilbert transform of our signal represent from a quantum mechanical point of view? 
+
+What quantum transformations can we apply to our signal using this parallelism?
+
+Trying with our (limited) knowledge to answer to these question, starting from the first, as Gabor brillantly explains in [[1]] the parallelism is all about taking the real part of the quantistic wave function, and what we observe in our "real" world is the collapsed wave function, this last one derived as an eigenfunction of the Hamiltonian operator of the system we are considering as it is represented in our choice of variables used to describe the quantum phase space. Summing up, what we are stating here is that the Hilbert transform of our input signal represents the quantum collapsed wave function. If this is the case, the analytical signal to be a conjugate variable should have, if our input signal is a voltage, dimensions of charge multiplied time [q * t], for the products of the two variables to be an action. We don't have the knowledge about if this is really the case and didn't have enough time to research about it in the time-lapse in which we made this application, anyway what we can say is that everything would be more and more suspicious if the representation of the frequency shift operator with this choice of variables would be the rotation matrix of angle **w * t**, operation that we applied to our Hilbert Transform to get the frequency shift following [[4]]. We are not sure about if what we are saying here is new or already known, but if the first is the case we are putting this out here hoping that someone with a deeper grasp of quantum mechanics clears everything out. Some of us (Jacopo Piccirillo) will further research in this direction also.
+
+To the second question, we understand from [[9]] the importance of canonical transformations and would suggest the subset of physical equivalent transformations to be the family of operations we are wondering about.  About audio in particular, we probably would have to restrict ourselves some more to the transformations of the phase space into itself, to get coherent audio data out of audio input.
+
+In conclusion, all this would maybe give lots of new tools for signal processing. Also, tools (as this granular synthetizer) to experience the impact of quantum mechanics on our everyday world, and with quantum mechanics being so hard to grasp also for the difficulty of experiencing it, this would come in quite handy. Further researchs about this will surely be done, if they have not been made already.
+
 ## The application
 The application is built in C++ using the [JUCE framework](https://juce.com/) and an Hilbert transform implementation taken from  [this software](https://www.cfa.harvard.edu/~spaine/am/)  developed by the Harvard-Smithsonian center for astrophysics. It can be used both as a VST3 in a DAW or as a standalone program.  
 The goal is to provide a useful and relatively simple tool to play with granular synthesis and understand it better, along with easily experiencing independent time-stretching and frequency shifting.
@@ -112,11 +124,14 @@ Douglas L. Jones and Thomas W. Parks
 
 [8] Group theory and its applications to quantum mechanics of atomic spectra, Eugene P. Wigner
 
+[[9]] Canonical Transformations in Quantum Mechanics, Arlen Anderson
+
 [1]: http://www.granularsynthesis.com/pdf/gabor.pdf 
 [2]: https://www.jstor.org/stable/3679939?seq=1
 [3]: https://www.dsprelated.com/showarticle/192.php
 [4]: https://www.dsprelated.com/showarticle/1147.php
 [6]: https://www.izotope.com/en/learn/the-basics-of-granular-synthesis.html
+[9]: https://cds.cern.ch/record/567641/files/9305054.pdf
 
 ## Notes
 This project was developed for the course of Sound Analysis Synthesis and Processing (SASP) held by Professor Augusto Sarti at the Politecnico of Milan.
