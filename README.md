@@ -1,4 +1,4 @@
-<h1 align="center">GRANULATOR</h1>
+<h1 align="center">Microsonum</h1>
 
 <p align="center"> A Granular Synthesis playground <p>
 
