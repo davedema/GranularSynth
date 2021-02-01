@@ -1,4 +1,4 @@
-<h1 align="center">Microsonum</h1>
+<h1 align="center">MicroSonum</h1>
 
 <p align="center"> A Granular Synthesis playground <p>
 
@@ -106,6 +106,14 @@ Getting to practical applications: to get the desired operator, if we are correc
 In conclusion, we started from the development of a granular synthetyzer and we ended up wandering on Gabor's Parallelism, succeeding in developing a tool exploiting this formalism and getting new doubts, ideas and understanding of Hilbert Transforms and analytical signals, which maybe (unfortunately we didn't have the time still to verify these ideas) could translate in new ways to represent operations on signals in the digital domain derived from Gabor's formalism. All this leading to new tools (as this granular synthetizer) to experience the impact of a quantum formalism on our everyday world, and with quantum mechanics being so hard to grasp also for the difficulty of experiencing it, this would come in quite handy. 
 
 Further researchs about this will surely be done, if they have not been made already.
+
+*Jacopo Piccirillo*
+
+*Davide De Marco*
+
+*Gabriele Stucchi*
+
+*Matteo Amerena*
 
 ## References
 
