@@ -20,10 +20,7 @@ SpectrumDrawable::SpectrumDrawable()
     float skewx = 0.0f;
     
     for (int i = 0; i < 10; i++) {
-       
-      //  auto skewx =  -std::log10( (float)(i+1) * (float)10 / (float)100); // skew x-axis onto log scale
         horizontalLines.add((float)i / (float)10);
-    //    verticalLines.add(skewx/3);
     }
     
 
@@ -40,7 +37,6 @@ SpectrumDrawable::SpectrumDrawable()
     for (auto vLine : verticalLinePos) {
         verticalLines.add((std::log10(vLine) -1 ) * (getLocalBounds().getWidth() * 1.8 / 3.3f) + 5);
 
-        //verticalLines.add(jmap((float)std::log10(vLine), (float)verticalLinePos[0], (float)verticalLinePos.back(), 0.0f, (float)(getLocalBounds().getWidth() - 5)));
     }
 }
 
@@ -101,11 +97,7 @@ void SpectrumDrawable::paint(Graphics& g)
                          0, 10, getWidth(), 25, Justification::centred, 3); 
        
         g.setColour(Colours::yellow);
-        //auto prova = std::log10((1 + ((float)this->averageFrequency * 9.0f / (float)20000.0f))) ;
-        //auto prova = (getWidth() - 2 * margin) - std::exp(std::log((1.0f - (float)this->averageFrequency / (float)20000.0f) * 0.2f * (getWidth() - 2 * margin)) ); // skew x-axis onto log scale
         auto freqLine = (std::log10(this->averageFrequency) - 1) * (200 * 1.8 / 3.3f + margin );
-
-        //auto prova = std::log10(1.0f + (float)(this->averageFrequency - this->sampleRate / (2.0f * 256.0f))) / std::log10((float)this->sampleRate / 2.0f);
         g.drawLine(freqLine, 0, freqLine, getHeight() - margin, 0.3);   
     }  
     
@@ -132,34 +124,30 @@ void SpectrumDrawable::drawNextFrame(float* bins, float* freqBins, float measure
 void SpectrumDrawable::drawGrid(Graphics& g)
 {
     auto margin = 5.0f;
-  Line<float> freq_ax(Point<float>(margin, (float)getHeight() - margin),
-                        Point<float>((float)getWidth() - margin, (float)getHeight() - margin));
+  Line<float> freq_ax(Point<float>(margin, (float)getHeight() - 2*margin),
+                        Point<float>((float)getWidth() - margin, (float)getHeight() - 2*margin));
 
-  Line<float> mag_ax(Point<float>(margin, (float)getHeight() - margin),
+  Line<float> mag_ax(Point<float>(margin, (float)getHeight() - 2*margin),
       Point<float>(margin, margin));
     g.setColour(Colour(ColourPalette::bright_component));
     g.drawLine(freq_ax); 
     g.drawLine(mag_ax);
     
-  /*
-    for (auto line : verticalLines) {
-        g.drawLine((1.0f -line) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
-        g.drawLine((1.0f - line - 0.33f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line  - 0.33f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
-        if (line != verticalLines[0])
-            g.drawLine((1.0f - line - 0.66f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, margin, (1.0f - line - 0.66f) * ((getWidth() - 2 * margin) * (9.0f / 10.0f)) + margin, this->getHeight() - margin, 0.3);
-    }
-    */
 
     for (auto line : verticalLines) {
 
-        g.drawLine(line, 0, line, getHeight()-margin, 0.3);
+        g.drawLine(line, 0, line, getHeight()-2*margin, 0.3);
     }
-
-    //g.drawLine(getWidth() - margin, margin, getWidth() - margin, this->getHeight() - margin, 0.3);
 
     for (auto line : horizontalLines)
     {
         g.drawLine(margin, line * getHeight(), getWidth() - margin, line * getHeight(), 0.3);
     }
+
+    g.setFont(10);
+    g.drawText("100", getWidth() / 3 - 4*margin, getHeight() - 2*margin + 3, 20, 6, Justification::left, false);
+    g.drawText("1k", getWidth() / 2 + 6*margin, getHeight() - 2 * margin + 3, 20, 6, Justification::left, false);
+    g.drawText("10k", getWidth() - 55, getHeight() - 2 * margin + 3, 20, 6, Justification::left, false);
+
 
 }

@@ -124,7 +124,6 @@ void WaveformDrawable::paintPlayBar(Graphics& g)
     current_pos = round(this->model->getRealPosition() * this->getWidth() / loader->getAudioBuffer()->getNumSamples());
     g.drawVerticalLine(current_pos, this->getHeight() / 3, this->getHeight() * 2 / 3);
 
-
 }
 
 void WaveformDrawable::paintGrains(Graphics& g, int current_pos)
