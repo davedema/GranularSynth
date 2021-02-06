@@ -49,7 +49,7 @@ void SpectrumDrawable::paint(Graphics& g)
     g.fillAll(Colour(ColourPalette::drawbox));
     this->drawGrid(g);
 
-    g.setColour(Colour(ColourPalette::numbers));
+    g.setColour(Colour(ColourPalette::numbers).darker());
 
     if (this->currentFrame != nullptr && averageFrequency != 0)
     {
@@ -62,8 +62,8 @@ void SpectrumDrawable::paint(Graphics& g)
         int size = 256;
         for (int i = 0; i < size - 1; ++i)
         {
-            float freqToX1 = (std::log10(*(freqBins + i)) - 1) * (width / 3.3f);
-            float freqToX2 = (std::log10(*(freqBins + i + 1)) - 1) * (width / 3.3f);
+            float freqToX1 = (std::log10(*(freqBins + i)) - 1) * (width / 3.33f);
+            float freqToX2 = (std::log10(*(freqBins + i + 1)) - 1) * (width / 3.33f);
             myPath.quadraticTo(Point<float>(
                 (float)freqToX1, 
                 jmap(*(currentFrame + i), 0.0f, 1.0f, (float)height, 0.0f)),
@@ -90,16 +90,19 @@ void SpectrumDrawable::paint(Graphics& g)
 
         delete gradient;
 
-        g.drawFittedText("Peak Shift: " + String(this->measuredShift) + "Hz" + //Print frequency data 
-                         "\nOut Average Freq: " + String(this->averageFrequency) + "Hz" +
-                         "\nResolution: " + String(this->resolution) + "Hz" ,
-                         0, 10, getWidth(), 25, Justification::centred, 3); 
        
         g.setColour(Colours::yellow);
         auto freqLine = (std::log10(this->averageFrequency) - 1) * (200 * 1.8 / 3.3f + margin );
         g.drawLine(freqLine, 0, freqLine, getHeight() - margin, 0.3);   
+        g.setColour(Colour(ColourPalette::numbers));
+
     }  
     
+
+    g.drawFittedText("Peak Shift: " + String(this->measuredShift) + "Hz" + //Print frequency data 
+        "\nOut Average Freq: " + String(this->averageFrequency) + "Hz" +
+        "\nResolution: " + String(this->resolution) + "Hz",
+        0, 10, getWidth(), 25, Justification::centred, 3);
 
 }
 
