@@ -54,15 +54,14 @@ void SpectrumDrawable::paint(Graphics& g)
     if (this->currentFrame != nullptr && averageFrequency != 0)
     {
         auto margin = 5;
-        auto height = getLocalBounds().getHeight() - margin;
-        auto width = getLocalBounds().getWidth() - margin;
+        auto height = getLocalBounds().getHeight() - 2*margin;
+        auto width = getLocalBounds().getWidth() - 2*margin;
 
         Path myPath;
-        myPath.startNewSubPath(margin, getHeight() - margin);
+        myPath.startNewSubPath(margin, getHeight() - 2*margin);
         int size = 256;
         for (int i = 0; i < size - 1; ++i)
         {
-            //DBG(*(currentFrame + i));
             float freqToX1 = (std::log10(*(freqBins + i)) - 1) * (width / 3.3f);
             float freqToX2 = (std::log10(*(freqBins + i + 1)) - 1) * (width / 3.3f);
             myPath.quadraticTo(Point<float>(
