@@ -22,9 +22,7 @@ SpectrumDrawable::SpectrumDrawable()
     for (int i = 0; i < 10; i++) {
         horizontalLines.add((float)i / (float)10);
     }
-    
-
-    
+   
     std::vector<int> verticalLinePos;
     for (int j = 1; j < 4; ++j) {
         for (int i = 1; i < 10; ++i) {
@@ -97,24 +95,17 @@ void SpectrumDrawable::paint(Graphics& g)
         g.setColour(Colour(ColourPalette::numbers));
 
     }  
-    
-
-    g.drawFittedText("Peak Shift: " + String(this->measuredShift) + "Hz" + //Print frequency data 
-        "\nOut Average Freq: " + String(this->averageFrequency) + "Hz" +
-        "\nResolution: " + String(this->resolution) + "Hz",
-        0, 10, getWidth(), 25, Justification::centred, 3);
-
+   
 }
 
 void SpectrumDrawable::resized()
 {
 }
 
-void SpectrumDrawable::drawNextFrame(float* bins, float* freqBins, float measuredShift, float resolution, float averageFreq, float sampleRate)
+void SpectrumDrawable::drawNextFrame(float* bins, float* freqBins, /*float measuredShift, */float resolution, float averageFreq, float sampleRate)
 {
     currentFrame = bins;
     this->freqBins = freqBins;
-    this->measuredShift = measuredShift;
     this->averageFrequency = averageFreq;
     this->resolution = resolution;
     this->sampleRate = sampleRate;

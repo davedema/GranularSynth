@@ -92,9 +92,5 @@ void LaGranaAudioProcessorEditor::resized()
     container.items.add(FlexItem(secondRow).withFlex(2).withMargin(FlexItem::Margin(0, 5, 10, 5)));
     container.items.add(FlexItem(thirdRow).withFlex(2).withMargin(5));
 
-
     container.performLayout(getLocalBounds());
-
-
-
 }
