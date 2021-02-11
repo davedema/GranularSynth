@@ -1,9 +1,9 @@
-<h1 align="center">MicroSonum</h1>
+<h1 align="center">µ-Sonum</h1>
 
 <p align="center"> A Granular Synthesis playground <p>
 
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/37587013/101606994-57aa7080-3a04-11eb-8d76-98abef3e62f6.png" width=75%">
+   <img src="https://user-images.githubusercontent.com/37587013/107656226-3d02ab00-6c84-11eb-86d1-9139cfeb44aa.png" width=75%">
 </p>
 
 ## What is Granular Synthesis
@@ -41,7 +41,7 @@ In this section all the controls are explained one by one.
 ### Envelope
 <img src="https://user-images.githubusercontent.com/37587013/101626476-52a5eb00-3a1d-11eb-8858-4e0f605349f0.png" width=40%>
 
-As envelope is intended the window applied to each grain in the playback phase.
+As envelope is intended the window applied to each of the grain.
 1. Display the envelope.
 2. Select the type of envelope between Gaussian, Trapezoidal and Raised Cosine Bell.
 3. Change the envelope lobe width.
@@ -51,25 +51,32 @@ As envelope is intended the window applied to each grain in the playback phase.
 
 1. Controls how many grains are generated each second. The range goes from 2 to 200 grains per second.
 2. Controls the duration of the grains. The range goes from 5 ms up to 100 ms.
-3. Represents the probability of playing back a grain from a random position in a range controlled by the "Random Spread" parameter.
-4. Represents the range in which the randomic grain can be selected.
-5. Controls the playback speed. In order to obtain slower (or faster) reproduction the grains are created in order to repeat (or skip) certain sections of the audio file. 
+3. Represents the probability of generating a grain from a random position in a range controlled by the "Random Spread" parameter.
+4. Represents the range in which the randomic grain can be generated.
+5. Controls the grain scattering speed. 
 
 ### Time-Frequency Pad
 <img src="https://user-images.githubusercontent.com/37587013/101624676-921f0800-3a1a-11eb-8d21-d0259a1d2767.png" width=40%>
 
-This control is a 2-D canvas in which the user can draw a shape that will control the time (in the original audio file) at which the grains are selected to be played back and their frequency shift. In particular the horizontal axis represents the position of the grain to be selected in the active section, while the vertical axis represents the amount of frequency shift (in Hz).  
+This control is a 2-D canvas in which the user can draw a shape that will control the time (in the original audio file) at which the grains are selected to be played back and their frequency shift. In particular the horizontal axis represents the position of the grain to be selected in the active section, while the vertical axis represents the amount of frequency shift (in Hz) in a range that goes from -2000 Hz to +2000 Hz.  
 The control is enabled by starting to draw and can be disabled by simply clicking on it.
 
 ### Spectrum analyzer
-<img src="https://user-images.githubusercontent.com/37587013/101624710-a236e780-3a1a-11eb-94d2-412d3e09943e.png" width=40%>
+<img src="https://user-images.githubusercontent.com/37587013/107656375-61f71e00-6c84-11eb-9a54-26f89ddca712.png" width=40%>
 
-Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes.
+Display the spectrum of the output signal. The FFT size is of 2048 samples, then it is processed into 256 bins for representation purposes. The vertical line is indicative of the average frequency.
 
 ## Architecture
-Block diagrams con spiegazione
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/37587013/107659669-aa640b00-6c87-11eb-8a27-cd4e2c2c2b69.png" width=75% alt="Architecture">   
+</p>
 
-### The formalism
+This simple diagram shows the architecture that is behind the implementation. 
+
+Following the JUCE structure, there is a PluginProcessor that is in charge of handling the signal processing tasks and a PluginEditor that manages the Graphical User Interface. Upon user interaction the PluginEditor modifies the Model, that is then used in the processor side to retrieve the parameters in real time. Moreover, we decided to add a Granulator class that manages the main granulation algorithm in order to keep it separate and more manageable. In particular, the algorithm dinamically generates the grains according to the parameters retrieved from the Model in real time and deletes them once they have been played. The grains have access to the source file so that they can access the portion that they will contain and can apply the selected envelope to it.
+
+
+## The formalism
 Gabor's ideas connect the quantum mechanichal formalism with the signal theory world. More specifically, all the concepts deriving from the usage of quadrature signals
 find their explanation in the quantum world parallelism. 
 
