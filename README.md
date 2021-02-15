@@ -50,7 +50,7 @@ As envelope is intended the window applied to each of the grain.
 <img src="https://user-images.githubusercontent.com/37587013/101626533-65202480-3a1d-11eb-86a4-af2e2b49a699.png" width=40%>
 
 1. Controls how many grains are generated each second. The range goes from 2 to 200 grains per second.
-2. Controls the duration of the grains. The range goes from 5 ms up to 100 ms.
+2. Controls the duration of the grains. The range goes from 5 ms up to 200 ms.
 3. Represents the probability of generating a grain from a random position in a range controlled by the "Random Spread" parameter.
 4. Represents the range in which the randomic grain can be generated.
 5. Controls the grain scattering speed. 
