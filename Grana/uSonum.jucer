@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uDaQq6" name="Nuvola" projectType="audioplug" useAppConfig="1"
+<JUCERPROJECT id="uDaQq6" name="uSonum" projectType="audioplug" useAppConfig="1"
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
               pluginCharacteristicsValue="pluginIsSynth" includeBinaryInJuceHeader="1">
-  <MAINGROUP id="cZs3we" name="Nuvola">
+  <MAINGROUP id="cZs3we" name="uSonum">
     <GROUP id="{4EE9E4CA-9B00-1A38-A1F3-6A3D6AFD207D}" name="Source">
       <GROUP id="{A4C7E0AD-34FC-B090-3B23-B4AF9936C68E}" name="SmithsoniansTransforms">
         <FILE id="Ng6gHE" name="math_const.h" compile="0" resource="0" file="Source/Smithsonians_Discrete_Hilbert_Fourier_Hartley_Transforms/math_const.h"/>
