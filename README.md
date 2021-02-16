@@ -30,7 +30,7 @@ The goal is to provide a useful and relatively simple tool to play with granular
 In this section all the controls are explained one by one.
 
 ### Source file
-<img src="https://user-images.githubusercontent.com/37587013/101624208-e83f7b80-3a19-11eb-8a17-7e2e7757d77f.png" width=80%>
+<img src="https://user-images.githubusercontent.com/37587013/108088331-9dc12780-7078-11eb-9a37-d52d50e3d96a.png" width=80%>
 
 1. The audio file can be loaded by pressing the "LOAD" button or by directly dropping it into the screen. Once the file is loaded the waveform is displayed.
 2. Play/Stop the reproduction.
