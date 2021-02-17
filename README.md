@@ -6,6 +6,10 @@
    <img src="https://user-images.githubusercontent.com/37587013/107656226-3d02ab00-6c84-11eb-86d1-9139cfeb44aa.png" width=75%">
 </p>
 
+<h4 align="center"> 
+  <a href="https://www.youtube.com/watch?v=u3do4XGSp_0&feature=youtu.be" align="center"> WATCH A DEMO </a>
+</h4>
+
 ## What is Granular Synthesis
 
 ### Brief history
